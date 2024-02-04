@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using UnityEngine;
 
-class Path : Case
+public class Path : Case
 {
+    
+
     #region SerializeField Variable
     [SerializeField]
     private int _id;
@@ -23,7 +25,7 @@ class Path : Case
     private int _numberOfCase;
 
     #region Getter & Setter
-    public Vector3 SelectPos
+    public Vector3 SelectPosPath
     {
         get { return _selectPos; }
         set
@@ -32,7 +34,7 @@ class Path : Case
         }
     }
 
-    public int NumberOfCase
+    public int NumberOfCasePath
     {
         get { return _numberOfCase; }
         set
@@ -44,24 +46,35 @@ class Path : Case
     #endregion
 
 
+    //ajoute le script au dictionnaire de la class mere 
+    private void Awake()
+    {
+        Case _case = GameObject.FindObjectOfType<Case>();
+
+        _case.AddToDictionnary(1, this);
+    }
 
     private void Start()
     {
-        AddToList(_id, this);
         SetPath();
     }
 
+
+
+    //permet d'instancier un certain nombre d'objet definit par la variables NumberOfCase
     private void SetPath()
     {
-        if (NumberOfCase == 1)
+        if (NumberOfCasePath == 1)
         {
-            _path.transform.position = SelectPos;
+            _path.transform.position = SelectPosPath;
             Instantiate(_path);
+            Debug.Log("Path as been Created");
         }
         else
         {
-            _path.transform.position = SelectPos;
-            for (int i = 0; i < NumberOfCase; i++)
+            Debug.Log("Path as been Created");
+            _path.transform.position = SelectPosPath;
+            for (int i = 0; i < NumberOfCasePath; i++)
             {
                 Instantiate(_path);
                 Vector3 PathPos = _path.transform.position;
@@ -70,4 +83,27 @@ class Path : Case
         }
     }
 
+    //Permet de modifier les variables dans le script en passant par la class mere (Case) 
+    public override void VariableChange(int id, string variable, object valeur)
+    {
+        if (id == 1)
+        {
+            if (variable == "SelectPosPath" && valeur is Vector3)
+            {
+                ((Path)scripts[id]).SelectPosPath = (Vector3)valeur;
+            }
+            else if (variable == "NumberOfCasePath" && valeur is int)
+            {
+                ((Path)scripts[id]).NumberOfCasePath = (int)valeur;
+            }
+            else
+            {
+                Debug.LogWarning("La variable ou le type de valeur est incorrect !");
+            }
+        }
+        else
+        {
+            Debug.LogWarning($"Aucun script trouvé avec l'ID {id} !");
+        }
+    }
 }

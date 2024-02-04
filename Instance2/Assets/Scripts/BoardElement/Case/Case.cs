@@ -3,24 +3,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-abstract class Case : MonoBehaviour
+public abstract class Case : MonoBehaviour
 {
-    protected Dictionary<int, MonoBehaviour> scripts = new Dictionary<int, MonoBehaviour>();
+    private static Case instance;
 
-    protected void AddToList(int id, MonoBehaviour script)
+    //dictionnaire des script pour les case
+    protected Dictionary<int, Case> scripts = new Dictionary<int, Case>();
+
+    protected static Case GetInstance() { return instance; }
+
+
+    private void Awake()
     {
-        scripts.Add(id, script);
+        if (instance == null)
+            instance = this;
+        else if (instance != this)
+            Destroy(gameObject);
     }
 
-    public MonoBehaviour GetScript(int id)
+    //fonction qui ajoute les script au dictionnaire
+    public void AddToDictionnary(int id, Case instance)
     {
-        if (scripts.ContainsKey(id))
+        if (!scripts.ContainsKey(id))
         {
-            return scripts[id];
-
+            scripts.Add(id, instance);
         }
         else
-            return null;
+        {
+            Debug.LogWarning("Il existe deja le script avec cette id");
+        }
+
+        Debug.Log("il y a : " + scripts.Count + " instance dans le dictionnaire");
     }
 
+    public abstract void VariableChange(int id, string variable, object value);
 }

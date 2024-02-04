@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class GameManagerTest : MonoBehaviour
 {
-    [SerializeField]
-    private Case _case;
 
     [SerializeField]
     private int _numberOfCase;
@@ -14,21 +12,23 @@ public class GameManagerTest : MonoBehaviour
     private Vector3 _selectPos;
 
     [SerializeField]
-    private int _id;
+    private int[] _id;
 
 
     private void Start()
     {
+        Case _case = GameObject.FindObjectOfType<Case>();
 
-        MonoBehaviour script = _case.GetScript(_id);
-        if (script != null)
+
+        if (_case != null)
         {
-            // Faites quelque chose avec le script récupéré
-            Debug.Log("Script trouvé !");
+
+            _case.VariableChange(1, "SelectPosWall", _selectPos);
+            _case.VariableChange(1, "NumberOfCaseWall", _numberOfCase);
         }
         else
         {
-            Debug.LogError("Aucun script avec l'identifiant 1 trouvé.");
+            Debug.LogWarning("Instance de la classe mère non trouvée !");
         }
     }
 }
