@@ -167,9 +167,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c1d4a209ce893f43b1a4338a2baea3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _numberOfCase: 8
-  _selectPos: {x: 3, y: 3, z: 0}
-  _id: 0100000000000000
+  _numberOfCase: 5
+  _selectPos: {x: 5, y: 0, z: 0}
+  _id: 0000000001000000
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0

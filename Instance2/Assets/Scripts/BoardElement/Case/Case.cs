@@ -1,40 +1,70 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public abstract class Case : MonoBehaviour
 {
-    private static Case instance;
+    protected List<Tile> _neighbor; // getter, pas moi, a faire dans Case
 
-    //dictionnaire des script pour les case
-    protected Dictionary<int, Case> scripts = new Dictionary<int, Case>();
+    protected bool _isWalkableByDeath; // getter, pas moi, a faire dans case
 
-    protected static Case GetInstance() { return instance; }
+    protected int _area;
+
+    protected Tile _myTile;
+
+    protected bool _isWalkableByPlayer; // getter, pas moi, a faire dans Case
+
+    protected Sprite _defaultSprite; // getter, pas moi, a faire dans Case
 
 
-    private void Awake()
+
+
+    #region Getter & Setter
+
+    #region Getter
+
+    public List<Tile> Neighbor
     {
-        if (instance == null)
-            instance = this;
-        else if (instance != this)
-            Destroy(gameObject);
+        get { return _neighbor; }
     }
 
-    //fonction qui ajoute les script au dictionnaire
-    public void AddToDictionnary(int id, Case instance)
+    public bool IsWalkableByDeath
     {
-        if (!scripts.ContainsKey(id))
-        {
-            scripts.Add(id, instance);
-        }
-        else
-        {
-            Debug.LogWarning("Il existe deja le script avec cette id");
-        }
-
-        Debug.Log("il y a : " + scripts.Count + " instance dans le dictionnaire");
+        get { return _isWalkableByDeath; }
     }
 
-    public abstract void VariableChange(int id, string variable, object value);
+    public Tile MyTile
+    {
+        get { return _myTile; }
+    }
+
+    public bool IsWalkableByPlayer
+    {
+        get { return _isWalkableByPlayer; }
+    }
+
+    public Sprite Sprite
+    {
+        get { return _defaultSprite; }
+    }
+
+    #endregion
+
+
+    #endregion
+
 }
+
+public enum Nature
+{
+    Floor,
+    Fire,
+    Door,
+    Path,
+    Grave,
+    Gravestone,
+    Wall,
+    Beacon
+}
+
