@@ -1,76 +1,112 @@
-using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public class Player : MonoBehaviour
 {
-    /*private Board _board;
-    private Ressources _ressources;
-    private List<Asset> _assets;
-    private int _assetsLimit;
+    private int _keyNumber;
+    private int _assetLimit;
+    private List<Texture> _assetList;
     private bool _canOpenTombs;
     private int _cellOn;
-    private int _selectedAsset;*/
+    private int _selectedAsset;
+    private Vector3 _destination;
+    private PlayerState _myState;
+    [SerializeField] private float _cellSize;
+    [SerializeField] private Ressources _ressources;
+    [SerializeField] private Transform _playerPos;
     void Start()
     {
-       //_cellOn = _board.GetStartCell;
+        _selectedAsset = 0;
+        _assetList = new List<Texture>();
+        _myState = PlayerState.idle;
     }
 
-    void Update()
+    private void FixedUpdate()
     {
-        
-    }
-
-    public void OnMovementEnter(InputAction.CallbackContext context)
-    {
-        /*if (!HasFocus())
+        switch ( _myState )
         {
-            return;
-        }
-        switch (context.ReadValue<Vector2>().x)
-        {
-            case 1f:
-                if (!_board.CellHasSomething())
+            case PlayerState.moving:
+                if (_ressources.SubstractActionPoints(1))
                 {
-                    _cellOn += 1;
-                    _ressources.actionPoints -= 1;
+                    _playerPos.position = _destination;
                 }
+                _myState= PlayerState.idle;
                 break;
-            case -1f:
-                if (!_board.CellHasSomething())
-                {
-                    _cellOn -= 1;
-                    _ressources.actionPoints -= 1;
-                }
+            default: 
                 break;
         }
-        switch (context.ReadValue<Vector2>().y)
-        {
-            case 1f:
-                if (!_board.CellHasSomething())
-                {
-                    _cellOn += 15;
-                    _ressources.actionPoints -= 1;
-                }
-                break;
-            case -1f:
-                if (!_board.CellHasSomething())
-                {
-                    _cellOn -= 15;
-                    _ressources.actionPoints -= 1;
-                }
-                break;
-        }*/
-        print(context.ReadValue<Vector2>());
     }
 
     public void NavigateAssets(InputAction.CallbackContext context)
     {
-        /*if ((_selectedAsset + context.ReadValue<Vector2>().x) <= _assetsLimit)
-          {
-                    _selectedAsset += context.ReadValue<Vector2>().x;  
-          }*/
-        print(context.ReadValue<Vector2>().x);
+        if (_selectedAsset + context.ReadValue<Vector2>().x.ConvertTo<int>() <= _assetList.Count && _selectedAsset + context.ReadValue<Vector2>().x.ConvertTo<int>() >= 1)
+        {
+            if (!_assetList[_selectedAsset + context.ReadValue<Vector2>().x.ConvertTo<int>()].IsUnityNull())
+            {
+                _selectedAsset += context.ReadValue<Vector2>().x.ConvertTo<int>();
+            }
+        }
+        return;
     }
+
+    public bool HasKey()
+    {
+        if (_keyNumber > 0)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public void SetCanOpenTomb(bool value)
+    {
+        _canOpenTombs = value;
+    }
+
+    public void SetAssetLimit(int value)
+    {
+        _assetLimit = value;
+    }
+
+    public void GetDirections(Vector2 direction)
+    {
+        if (_myState == PlayerState.idle) 
+        { 
+        switch (direction.y)
+        {
+            case 1:
+                _destination = _playerPos.position + Vector3.up * _cellSize;
+                break;
+
+            case -1:
+                _destination = _playerPos.position + Vector3.down * _cellSize;
+                break;
+        }
+
+            switch (direction.x)
+            {
+                case 1:
+                    _destination = _playerPos.position + Vector3.right * _cellSize;
+                    break;
+
+                case -1:
+                    _destination = _playerPos.position + Vector3.left * _cellSize;
+                    break;
+            }
+            _myState = PlayerState.moving;
+        }
+    }
+
+    /*private void SetDestination()
+    {
+
+    }*/
+}
+
+public enum PlayerState
+{
+    idle, moving,
 }
