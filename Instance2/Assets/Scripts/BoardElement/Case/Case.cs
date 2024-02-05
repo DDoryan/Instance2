@@ -17,6 +17,7 @@ public abstract class Case : MonoBehaviour
 
     protected bool _isWalkableByPlayer; // getter, pas moi, a faire dans Case
 
+    [SerializeField]
     protected Sprite _defaultSprite; // getter, pas moi, a faire dans Case
 
 
@@ -25,14 +26,10 @@ public abstract class Case : MonoBehaviour
     #region Getter & Setter
 
     #region Getter
+
     public bool IsWalkableByDeath
     {
         get { return _isWalkableByDeath; }
-    }
-
-    public Tile MyTile
-    {
-        get { return _myTile; }
     }
 
     public bool IsWalkableByPlayer
@@ -49,10 +46,25 @@ public abstract class Case : MonoBehaviour
     {
         get { return _caseType; }
     }
+    public int Area
+    {
+        get { return _area; }
+    }
 
     #endregion
 
     #region Setter & Getter    
+
+    public Tile MyTile
+    {
+        get { return _myTile; }
+        set
+        {
+            _myTile = value;
+        }
+    }
+
+
     public List<Tile> Neighbor
     {
         get { return _neighbor; }

@@ -4,15 +4,20 @@ using UnityEngine;
 
 public class Door : Swapable
 {
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-        
+        _caseType = CaseType.Door;
+        _isWalkableByDeath = true;
+        _isWalkableByPlayer = true;
     }
 
-    // Update is called once per frame
-    void Update()
+    protected override void WalkableByDeath(bool IsWalkable)
     {
-        
+        base.WalkableByDeath(IsWalkable);
+    }
+
+    protected override void WalkableByPlayer(bool IsWalkable)
+    {
+        base.WalkableByPlayer(IsWalkable);
     }
 }

@@ -4,15 +4,16 @@ using UnityEngine;
 
 public class GraveStone : Interactible
 {
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-        
+        _canInteract = true;
+        _caseType = CaseType.Gravestone;
+        _isWalkableByPlayer = false;
+        _isWalkableByDeath = false;
     }
 
-    // Update is called once per frame
-    void Update()
+    protected override void Interact()
     {
-        
+        base.Interact();
     }
 }

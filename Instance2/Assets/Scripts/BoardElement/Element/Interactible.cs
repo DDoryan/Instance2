@@ -11,6 +11,11 @@ public abstract class Interactible : Case
 
     protected Sprite _isTrigerredSprite;
 
+
+
+
+
+
     #region Getter
 
     public bool CanInteract

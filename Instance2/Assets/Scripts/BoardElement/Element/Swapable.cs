@@ -11,7 +11,7 @@ public class Swapable : Case
 
     #region Getter
 
-    public Sprite Sprite
+    public Sprite SpriteActive
     {
         get { return _sprite; }
     }

@@ -4,15 +4,32 @@ using UnityEngine;
 
 public class Grave : Interactible
 {
-    // Start is called before the first frame update
-    void Start()
+    private List<int> _graves;
+
+
+
+
+    private void Awake()
     {
-        
+        _canInteract = true;
+        _caseType = CaseType.Grave;
+        _isWalkableByPlayer = false;
+        _isWalkableByDeath = false;
     }
 
-    // Update is called once per frame
-    void Update()
+    protected override void Interact()
     {
-        
+        base.Interact();
+        if (_canInteract)
+        {
+            RandomCard();
+            _canInteract = false;
+        }
+    }
+
+
+    private void RandomCard()
+    {
+
     }
 }

@@ -4,5 +4,13 @@ using UnityEngine;
 
 public class Wall : Case
 {
-
+    private void Awake()
+    {
+        _caseType = CaseType.Wall;
+        _isWalkableByDeath = false;
+        _isWalkableByPlayer = false;
+    }
+    
+    
+    
 }
