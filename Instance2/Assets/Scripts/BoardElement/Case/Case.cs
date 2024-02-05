@@ -11,7 +11,7 @@ public abstract class Case : MonoBehaviour
 
     protected int _area;
 
-    protected Tile _myTile;
+    protected Tile _myTile; // getter, pas moi, a faire dans Case
 
     protected bool _isWalkableByPlayer; // getter, pas moi, a faire dans Case
 

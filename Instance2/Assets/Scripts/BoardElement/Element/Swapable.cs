@@ -9,6 +9,15 @@ public class Swapable : Case
     protected Sprite _sprite;
 
 
+    #region Getter
+
+    public Sprite Sprite
+    {
+        get { return _sprite; }
+    }
+
+    #endregion
+
     protected virtual void WalkableByPlayer(bool IsWalkable)
     {
 

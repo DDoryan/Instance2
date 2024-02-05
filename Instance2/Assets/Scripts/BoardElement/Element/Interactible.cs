@@ -11,6 +11,20 @@ public abstract class Interactible : Case
 
     protected Sprite _isTrigerredSprite;
 
+    #region Getter
+
+    public bool CanInteract
+    {
+        get { return _canInteract; }
+    }
+
+    public bool IsTrigerredSprite
+    {
+        get { return _isTrigerredSprite; }
+    }
+
+    #endregion
+
     protected virtual void Interact()
     {
 
