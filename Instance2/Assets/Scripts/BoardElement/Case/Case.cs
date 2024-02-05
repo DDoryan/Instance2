@@ -5,7 +5,9 @@ using UnityEngine.Tilemaps;
 
 public abstract class Case : MonoBehaviour
 {
-    protected List<Tile> _neighbor; // getter, pas moi, a faire dans Case
+    protected CaseType _caseType;
+
+    protected List<Tile> _neighbor; // getter et setter , pas moi, a faire dans Case
 
     protected bool _isWalkableByDeath; // getter, pas moi, a faire dans case
 
@@ -23,12 +25,6 @@ public abstract class Case : MonoBehaviour
     #region Getter & Setter
 
     #region Getter
-
-    public List<Tile> Neighbor
-    {
-        get { return _neighbor; }
-    }
-
     public bool IsWalkableByDeath
     {
         get { return _isWalkableByDeath; }
@@ -49,6 +45,22 @@ public abstract class Case : MonoBehaviour
         get { return _defaultSprite; }
     }
 
+    public CaseType CaseType
+    {
+        get { return _caseType; }
+    }
+
+    #endregion
+
+    #region Setter & Getter    
+    public List<Tile> Neighbor
+    {
+        get { return _neighbor; }
+        set
+        {
+            _neighbor = value;
+        }
+    }
     #endregion
 
 
@@ -56,7 +68,7 @@ public abstract class Case : MonoBehaviour
 
 }
 
-public enum Nature
+public enum CaseType
 {
     Floor,
     Fire,
