@@ -302,9 +302,9 @@ MonoBehaviour:
     m_ActionName: PlayerInput/CameraZoomOut[/SwitchProControllerHID/rightShoulder]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 519420033}
-        m_TargetAssemblyTypeName: CameraControl, Assembly-CSharp
-        m_MethodName: MoveCam
+      - m_Target: {fileID: 519420035}
+        m_TargetAssemblyTypeName: GetInput, Assembly-CSharp
+        m_MethodName: GetCameraInput
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

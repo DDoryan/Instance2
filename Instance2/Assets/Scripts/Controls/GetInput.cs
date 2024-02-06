@@ -5,9 +5,10 @@ public class GetInput : MonoBehaviour
 {
     [SerializeField] private Player _player;
     [SerializeField] private CameraControl _camera;
-
+    private Vector2 _position;
     private bool _zoomIn;
     private bool _zoomOut;
+    private bool _moveCam;
 
     private void FixedUpdate()
     {
@@ -19,6 +20,10 @@ public class GetInput : MonoBehaviour
         {
             _camera.ZoomCamera(false);
         }
+        if (_moveCam)
+        {
+            _camera.MoveCam(_position);
+        }
     }
 
     public void GetDirectionInput(InputAction.CallbackContext context)
@@ -26,6 +31,19 @@ public class GetInput : MonoBehaviour
         if (context.started)
         {
             _player.GetDirections(context.ReadValue<Vector2>());
+        }
+    }
+
+    public void GetCameraInput(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            _position = context.ReadValue<Vector2>();
+            _moveCam = true;
+        }
+        if (context.canceled)
+        {
+            _moveCam = false;
         }
     }
 

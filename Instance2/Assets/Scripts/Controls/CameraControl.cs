@@ -31,8 +31,8 @@ public class CameraControl : MonoBehaviour
         _cam.orthographicSize += ((_maxZoom-_minZoom)*Time.deltaTime) * InOrOut;
     }
 
-    public void MoveCam(InputAction.CallbackContext context)
+    public void MoveCam(Vector2 value)
     {
-        _camPos.position += (new Vector3(context.ReadValue<Vector2>().x, context.ReadValue<Vector2>().y, 0) / _sensibility);
+        _camPos.position += (new Vector3(value.x, value.y, 0) / _sensibility);
     }
 }
