@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
-using UnityEngine.UI;
+using UnityEngine;
 
 public class ScoreDice : MonoBehaviour
 {
@@ -20,9 +17,9 @@ public class ScoreDice : MonoBehaviour
     {
         if (_dice != null)
         {
-            if (_dice.DiceFaceNum != 0)
+            if (_dice.GetDiceFaceNum() != 0)
             {
-                _scoreText.text = _textBeforeValue + _dice.DiceFaceNum.ToString();
+                _scoreText.text = _textBeforeValue + _dice.GetDiceFaceNum();
             }
         }
     }

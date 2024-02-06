@@ -1,26 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-
-
-public enum Direction
-{
-    Left,
-    Right,
-    Up,
-    Down,
-}
-
 
 public class RollDice : MonoBehaviour
 {
-    private Rigidbody _body;
+    public static RollDice Instance;
 
+    private Rigidbody _body;
+    
     [SerializeField] private float _maxRandomForceValue, _rollingForce;
     private float _forceX, _forceY, _forceZ;
+    private int _diceFaceNum;
     
-    public int DiceFaceNum;
 
     private void Start()
     {
@@ -33,7 +22,8 @@ public class RollDice : MonoBehaviour
         {
             if (Input.GetMouseButton(0))
             {
-                RollingDice();
+                RollDice_GetNumber();
+                //Debug.Log(RollDice_GetNumber());
             }
         }
     }
@@ -55,5 +45,22 @@ public class RollDice : MonoBehaviour
         _body = GetComponent<Rigidbody>();
         _body.isKinematic = true;
         transform.rotation = new Quaternion(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360), 0);
+    }
+
+    public int GetDiceFaceNum()
+    {
+        return _diceFaceNum;
+    }
+
+    public int SetDiceFaceNum(int diceFaceNum) 
+    { 
+        _diceFaceNum = diceFaceNum;
+        return _diceFaceNum; 
+    }
+
+    public int RollDice_GetNumber()
+    {
+        RollingDice();
+        return _diceFaceNum;
     }
 }

@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class FaceDetector : MonoBehaviour
@@ -18,7 +15,7 @@ public class FaceDetector : MonoBehaviour
         {
             if (_dice.GetComponent<Rigidbody>().velocity == Vector3.zero)
             {
-                _dice.DiceFaceNum = int.Parse(other.name);
+                _dice.SetDiceFaceNum(int.Parse(other.name));
             }
         }
     }

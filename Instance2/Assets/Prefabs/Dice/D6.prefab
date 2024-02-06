@@ -180,10 +180,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9920482011605394eb7d2c59683cdcdc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxRandomForceValue: 500
-  _rollingForce: 5
-  _orientation: 0
-  DiceFaceNum: 0
+  _maxRandomForceValue: 1000
+  _rollingForce: 10
 --- !u!54 &3443173146961047746
 Rigidbody:
   m_ObjectHideFlags: 0
