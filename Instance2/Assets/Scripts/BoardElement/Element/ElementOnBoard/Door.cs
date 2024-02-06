@@ -1,14 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class Door : Swapable
 {
-    private void Awake()
+    public Door(CaseType myType, bool walkableDeath, bool walkablePlayer, int area, Tile myTile, Vector3 worldPos) : base(myType, walkableDeath, walkablePlayer, area, myTile, worldPos)
     {
-        _caseType = CaseType.Door;
-        _isWalkableByDeath = true;
-        _isWalkableByPlayer = true;
     }
 
     protected override void WalkableByDeath(bool IsWalkable)

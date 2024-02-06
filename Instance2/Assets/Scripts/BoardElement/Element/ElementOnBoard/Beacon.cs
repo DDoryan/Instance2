@@ -1,13 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class Beacon : Case
 {
-    private void Awake()
+    public Beacon(CaseType myType, bool walkableDeath, bool walkablePlayer, int area, Tile myTile, Vector3 worldPos) : base(myType, walkableDeath, walkablePlayer, area, myTile, worldPos)
     {
-        _caseType = CaseType.Beacon; 
-        _isWalkableByDeath = true;
-        _isWalkableByPlayer = true;
     }
+
 }

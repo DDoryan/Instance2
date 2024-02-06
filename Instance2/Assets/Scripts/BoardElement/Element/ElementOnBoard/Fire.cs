@@ -1,14 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class Fire : Swapable
 {
-    private void Awake()
+    public Fire(CaseType myType, bool walkableDeath, bool walkablePlayer, int area, Tile myTile, Vector3 worldPos) : base(myType, walkableDeath, walkablePlayer, area, myTile, worldPos)
     {
-        _caseType = CaseType.Fire;
-        _isWalkableByDeath = true;
-        _isWalkableByPlayer = true;
     }
 
     protected override void WalkableByPlayer(bool IsWalkable)

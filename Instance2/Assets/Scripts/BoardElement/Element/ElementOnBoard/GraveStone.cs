@@ -1,19 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class GraveStone : Interactible
 {
-    private void Awake()
+    public GraveStone(CaseType myType, bool walkableDeath, bool walkablePlayer, int area, Tile myTile, Vector2 worldPos, Sprite triggerdSprite) : base(myType, walkableDeath, walkablePlayer, area, myTile, worldPos, triggerdSprite)
     {
-        _canInteract = true;
-        _caseType = CaseType.Gravestone;
-        _isWalkableByPlayer = false;
-        _isWalkableByDeath = false;
+
     }
 
-    protected override void Interact()
+    public override void Interact()
     {
-        base.Interact();
+        if (_canInteract)
+        {
+            _canInteract = false;
+        }
     }
 }

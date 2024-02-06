@@ -1,9 +1,11 @@
 // Ignore Spelling: Interactible
 // Ignore Spelling: Trigerred
+// Ignore Spelling: triggerd
 
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public abstract class Interactible : Case
 {
@@ -11,29 +13,51 @@ public abstract class Interactible : Case
 
     protected Sprite _isTrigerredSprite;
 
+    protected Deck _deck;
+
+    protected Inventory _inventory;
 
 
+    protected Interactible(CaseType myType, bool walkableDeath, bool walkablePlayer, int area, Tile myTile, Vector2 worldPos, Sprite triggerdSprite) : base(myType, walkableDeath, walkablePlayer, area, myTile, worldPos)
+    {
+        _canInteract = true;
+        _isTrigerredSprite = triggerdSprite;
+        _deck = Deck.GraveDeck;
+        _inventory = Inventory.InventoryInstance;
+    }
 
 
+    #region Getter & Getter
 
     #region Getter
 
-    public bool CanInteract
-    {
-        get { return _canInteract; }
-    }
 
     public bool IsTrigerredSprite
     {
         get { return _isTrigerredSprite; }
     }
+    #endregion
+
+
+    #region Setter
+
+
+    public bool CanInteract
+    {
+        get { return _canInteract; }
+        set
+        {
+            _canInteract = value;
+        }
+    }
 
     #endregion
 
-    protected virtual void Interact()
+
+    #endregion
+
+    public virtual void Interact()
     {
 
     }
-
-
 }

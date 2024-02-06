@@ -1,35 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class Grave : Interactible
 {
-    private List<int> _graves;
-
-
-
-
-    private void Awake()
+    public Grave(CaseType myType, bool walkableDeath, bool walkablePlayer, int area, Tile myTile, Vector2 worldPos, Sprite triggerdSprite) : base(myType, walkableDeath, walkablePlayer, area, myTile, worldPos, triggerdSprite)
     {
-        _canInteract = true;
-        _caseType = CaseType.Grave;
-        _isWalkableByPlayer = false;
-        _isWalkableByDeath = false;
+
     }
 
-    protected override void Interact()
+    public override void Interact()
     {
-        base.Interact();
         if (_canInteract)
         {
-            RandomCard();
+            CardBaseGrave card = Deck.GraveDeck.GetRandomCard();
+            Inventory.InventoryInstance.AddToInventory(card);
+            Debug.Log("c'est bon");
             _canInteract = false;
         }
-    }
-
-
-    private void RandomCard()
-    {
-
     }
 }

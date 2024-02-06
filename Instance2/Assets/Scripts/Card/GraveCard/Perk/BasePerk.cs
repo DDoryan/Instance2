@@ -1,12 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+[CreateAssetMenu(menuName = "Grave Card/Perk")]
 
 public class BasePerk : CardBaseGrave
 {
-    private void Awake()
+    private int _cost;
+
+    public int Cost
     {
-        _cardType = CardType.Perk;
+        get { return _cost; }
     }
+
 
 }
