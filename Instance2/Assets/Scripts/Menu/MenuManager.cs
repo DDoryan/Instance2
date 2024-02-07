@@ -26,7 +26,7 @@ public class MenuManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.D))
+        if (Input.GetKeyDown(KeyCode.R))
         {
             if (!_victoryBool)
             {
@@ -37,7 +37,7 @@ public class MenuManager : MonoBehaviour
                 _victoryBool = false;
             }
         }
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.E))
         {
             if (!_defeatBool)
             {

@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-   public static GameManager Instance;
-
    private int _currentTurn;
    private int _turnCounter;
 
@@ -21,19 +19,6 @@ public class GameManager : MonoBehaviour
    private Player _player1;
    private Player _player2;
    //private TheDeath theDeath;
-
-
-    void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
 
     private void Start()
     {
@@ -67,6 +52,7 @@ public class GameManager : MonoBehaviour
         if (_currentTurn == 0)
         {
             _turnCounter++;
+            Ressources.Instance.ResetActionPoints();
         }
 
         if ( _turnCounter == 3)
