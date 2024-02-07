@@ -32,5 +32,4 @@ public class Inventory : MonoBehaviour
     {
         _inventoryPlayer1.Add(card);
     }
-
 }
