@@ -6,6 +6,19 @@ public class Ressources : MonoBehaviour
     [SerializeField] public int _magicPoints;
     private int _baseAP;
     private int _baseMP;
+    public static Ressources Instance;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     private void Start()
     {

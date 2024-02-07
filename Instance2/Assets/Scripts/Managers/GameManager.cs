@@ -49,6 +49,8 @@ public class GameManager : MonoBehaviour
         _currentTurn = 0; Debug.Log("CurrentTurn: " + _currentTurn);
 
         _player1.NextTurnEvent += Event_NextTurn;
+        _player2.NextTurnEvent += Event_NextTurn;
+        _pullOrder[_currentTurn].StartRound();
     }
 
     private void Event_NextTurn()
@@ -72,7 +74,7 @@ public class GameManager : MonoBehaviour
             //_pullOrder.Add(_theDeath);
         }
         Debug.Log("CurrentTurn: " + _currentTurn);
-        Debug.Log("CurrentTurn: " + _turnCounter);
+        Debug.Log("TurnCounter: " + _turnCounter);
     }
 
     public int GetCurrentTurn()

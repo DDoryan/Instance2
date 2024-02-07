@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 6718967154611810293}
   - component: {fileID: 5985471861696219639}
   - component: {fileID: 603713758599011400}
-  - component: {fileID: 8704601588031052619}
   - component: {fileID: 2671074284227208900}
   - component: {fileID: 6471653162862624248}
   m_Layer: 0
@@ -51,8 +50,11 @@ MonoBehaviour:
   _perkLimit: 4
   _canOpenTombs: 0
   _cellSize: 5
-  _ressources: {fileID: 8704601588031052619}
+  _ressources: {fileID: 0}
   _playerPos: {fileID: 6718967154611810293}
+  _inventoryPlayer1: []
+  _inventoryPlayer2: []
+  _haveTreasure: 0
 --- !u!114 &603713758599011400
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -127,20 +129,6 @@ MonoBehaviour:
   m_DefaultActionMap: PlayerInput
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &8704601588031052619
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7300155669229468803}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef283721b898dc944bd59cc5063c144d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _actionPoints: 10
-  _magicPoints: 0
 --- !u!114 &2671074284227208900
 MonoBehaviour:
   m_ObjectHideFlags: 0
