@@ -393,6 +393,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inventoryPlayer1: []
   _inventoryPlayer2: []
+  _haveTreasure: 0
 --- !u!1 &2103307318
 GameObject:
   m_ObjectHideFlags: 0
