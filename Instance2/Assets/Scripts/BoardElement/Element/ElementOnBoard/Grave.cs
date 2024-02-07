@@ -10,14 +10,15 @@ public class Grave : Interactible
 
     }
 
-    public override void Interact()
+    public CardBaseGrave Interact()
     {
         if (_canInteract)
         {
             CardBaseGrave card = Deck.GraveDeck.GetRandomCard();
-            Inventory.InventoryInstance.AddToInventory(card);
             Debug.Log("c'est bon");
             _canInteract = false;
+            return card;
         }
+        return null;
     }
 }

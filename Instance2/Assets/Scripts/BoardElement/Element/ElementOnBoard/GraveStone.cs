@@ -15,13 +15,14 @@ public class GraveStone : Interactible
         _worldPos = worldPos;
     }
 
-    public override void Interact()
+    public bool Interact()
     {
         if (_canInteract)
         {
-
-
+            bool _treasure = Deck.GraveDeck.GetRandomTreasure();
             _canInteract = false;
+            return _treasure;
         }
+        return false;
     }
 }
