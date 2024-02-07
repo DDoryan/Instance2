@@ -16,7 +16,7 @@ public class MenuManager : MonoBehaviour
 
     [Header("GameControlleur GamePad")]
     [SerializeField] private Button _buttonVictory;
-    [SerializeField] private Button _buttonDefeat;q
+    [SerializeField] private Button _buttonDefeat;
 
     private void Start()
     {
