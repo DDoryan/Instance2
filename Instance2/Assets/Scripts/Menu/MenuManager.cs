@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -17,7 +16,7 @@ public class MenuManager : MonoBehaviour
 
     [Header("GameControlleur GamePad")]
     [SerializeField] private Button _buttonVictory;
-    [SerializeField] private Button _buttonDefeat;
+    [SerializeField] private Button _buttonDefeat;q
 
     private void Start()
     {
