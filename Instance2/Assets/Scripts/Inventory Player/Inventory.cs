@@ -6,6 +6,7 @@ public class Inventory : MonoBehaviour
 {
     [SerializeField]
     private List<CardBaseGrave> _inventoryPlayer1 = new List<CardBaseGrave>();
+    
     [SerializeField]
     private List<CardBaseGrave> _inventoryPlayer2 = new List<CardBaseGrave>();
 

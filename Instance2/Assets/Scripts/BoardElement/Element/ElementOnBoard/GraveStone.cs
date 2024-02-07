@@ -20,6 +20,7 @@ public class GraveStone : Interactible
         if (_canInteract)
         {
 
+
             _canInteract = false;
         }
     }

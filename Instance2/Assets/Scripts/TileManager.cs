@@ -1,16 +1,35 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
+using Unity.VisualScripting;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+
+
+enum ISpriteType
+{
+    Beacon,
+    Door,
+    Fire,
+    Grave,
+    GraveStone,
+    Path,
+    Wall
+}
 public class TileManager : MonoBehaviour
 {
 
+    [SerializeField]private List<Sprite> _beaconSprites, _doorSprites, _fireSprites,_graveSprites,
+        _graveStoneSprites, _pathSprites, _wallSprites;
+    
+    
+    
     private Dictionary<Vector3, Sprite> _map;
     
     private TileBase[] _tiles;
-    
 
     private Tilemap _tilemap;
 
@@ -29,9 +48,45 @@ public class TileManager : MonoBehaviour
         _tilemap = GetComponent<Tilemap>();
         
         //GetMapSprite();
-        
+
     }
 
+    //Get the type of sprite
+    private ISpriteType GetSpriteType(Sprite sprite)
+    {
+        if (_beaconSprites.Contains(sprite))
+        {
+            return ISpriteType.Beacon;
+        }
+        else if (_doorSprites.Contains(sprite))
+        {
+            return ISpriteType.Door;
+        }
+        else if (_fireSprites.Contains(sprite))
+        {
+            return ISpriteType.Fire;
+        }
+        else if(_graveSprites.Contains(sprite))
+        {
+            return ISpriteType.Grave;
+        }
+        else if(_pathSprites.Contains(sprite))
+        {
+            return ISpriteType.Path;
+        }
+        else if(_wallSprites.Contains(sprite))
+        {
+            return ISpriteType.Wall;
+        }
+        else if(_graveStoneSprites.Contains(sprite))
+        {
+            return ISpriteType.GraveStone;
+        }
+        
+        return ISpriteType.Wall;
+    }
+    
+    
     //Get the local position of each tile and calcul its world position. Then add the world position and the sprite 
     //You can get thanks to the local position of the tile in the tilemap
     private void GetMapSprite()
