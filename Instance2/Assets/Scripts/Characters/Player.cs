@@ -14,7 +14,6 @@ public class Player : Entity
     private Vector3 _destination;
     private PlayerState _myState;
     [SerializeField] private float _cellSize;
-    [SerializeField] private Ressources _ressources;
     [SerializeField] private Transform _playerPos;
     [SerializeField] private List<CardBaseGrave> _inventoryPlayer1 = new List<CardBaseGrave>();
     [SerializeField] private List<CardBaseGrave> _inventoryPlayer2 = new List<CardBaseGrave>();
@@ -40,9 +39,13 @@ public class Player : Entity
         switch ( _myState )
         {
             case PlayerState.moving:
-                if (_ressources.SubstractActionPoints(1))
+                if (Ressources.Instance.SubstractActionPoints(1))
                 {
                     _playerPos.position = _destination;
+                }
+                else
+                {
+                    EndRound();
                 }
                 _myState= PlayerState.idle;
                 break;
@@ -118,7 +121,7 @@ public class Player : Entity
     {
         for (int i = 0; i < _inventoryPlayer1.Count; i++)
         {
-            if (_inventoryPlayer1[i].CardType == CardType.Key)
+            if (_inventoryPlayer1[i].CardType == CardType.key)
             {
                 _inventoryPlayer1.RemoveAt(i);
                 return true;

@@ -1,9 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
-using System;
-using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
 {
@@ -14,13 +10,16 @@ public class GameManager : MonoBehaviour
 
    private List<Entity> _pullOrder;
    private Entity _specialEventPlayer;
-   private Entity _player1;         // a changer par les commentaires en dessous
-   private Entity _player2;
-   private Entity _theDeath;
    private Entity _eventPlayerAfterPlayed;
 
-   //private Player player1;
-   //private Player player2;
+   [SerializeField] public GameObject Player1Prefab;
+   [SerializeField] public GameObject Player2Prefab;
+    
+   [SerializeField] private Transform Player1StartPosition;
+   [SerializeField] private Transform Player2StartPosition;
+
+   private Player _player1;
+   private Player _player2;
    //private TheDeath theDeath;
 
 
@@ -38,15 +37,20 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        _turnCounter = 1;
+        GameObject player1 = Instantiate(Player1Prefab, Player1StartPosition);
+        GameObject player2 = Instantiate(Player2Prefab, Player2StartPosition);
         _pullOrder = new List<Entity>();
+        _player1 = player1.GetComponent<Player>();
+        _player2 = player2.GetComponent<Player>();
         _pullOrder.Add(_player1);
         _pullOrder.Add(_player2);
-        _pullOrder.Add(_theDeath);
 
         _currentTurn = 0; Debug.Log("CurrentTurn: " + _currentTurn);
 
-        _player1 = GameObject.FindGameObjectWithTag("GameManager").GetComponent<Entity>();
-        _player1.OnFloatEvent += Event_NextTurn;
+        _player1.NextTurnEvent += Event_NextTurn;
+        _player2.NextTurnEvent += Event_NextTurn;
+        _pullOrder[_currentTurn].StartRound();
     }
 
     private void Event_NextTurn()
@@ -57,12 +61,20 @@ public class GameManager : MonoBehaviour
     public void NextTurn()
     {
         _currentTurn++;
-        _currentTurn %= 4;
-        //pullOrder[currentTurn] = pullOrder[currentTurn % pullOrder.Count]; //.StartRound()
+        _currentTurn %= _pullOrder.Count;
+        _pullOrder[_currentTurn].StartRound();
 
+        if (_currentTurn == 0)
+        {
+            _turnCounter++;
+        }
+
+        if ( _turnCounter == 3)
+        {
+            //_pullOrder.Add(_theDeath);
+        }
         Debug.Log("CurrentTurn: " + _currentTurn);
-
-        //pullOrder[currentTurn].StartRound();
+        Debug.Log("TurnCounter: " + _turnCounter);
     }
 
     public int GetCurrentTurn()
