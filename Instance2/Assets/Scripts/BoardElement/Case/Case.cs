@@ -5,7 +5,7 @@ using UnityEngine.Tilemaps;
 
 public abstract class Case 
 {
-    public Case (CaseType myType, bool walkableDeath, bool walkablePlayer, int area, Tile myTile, Vector3 worldPos)
+    public Case (CaseType myType, bool walkableDeath, bool walkablePlayer, int area, TileBase myTile, Vector3 worldPos)
     {
         _caseType = myType;
         _isWalkableByDeath = walkableDeath;
@@ -23,7 +23,7 @@ public abstract class Case
 
     protected int _area;
 
-    protected Tile _myTile; // getter, pas moi, a faire dans Case
+    protected TileBase _myTile; // getter, pas moi, a faire dans Case
 
     protected bool _isWalkableByPlayer; // getter, pas moi, a faire dans Case
 
@@ -69,7 +69,7 @@ public abstract class Case
 
     #region Setter & Getter    
 
-    public Tile MyTile
+    public TileBase MyTile
     {
         get { return _myTile; }
         set

@@ -9,7 +9,8 @@ public class Swapable : Case
 {
     protected Sprite _sprite;
 
-    public Swapable(CaseType myType, bool walkableDeath, bool walkablePlayer, int area, Tile myTile, Vector3 worldPos) : base(myType, walkableDeath, walkablePlayer, area, myTile, worldPos)
+
+    public Swapable(CaseType myType, bool walkableDeath, bool walkablePlayer, int area, TileBase myTile, Vector3 worldPos) : base(myType, walkableDeath, walkablePlayer, area, myTile, worldPos)
     {
     }
 

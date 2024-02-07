@@ -5,7 +5,7 @@ using UnityEngine.Tilemaps;
 
 public class Grave : Interactible
 {
-    public Grave(CaseType myType, bool walkableDeath, bool walkablePlayer, int area, Tile myTile, Vector2 worldPos, Sprite triggerdSprite) : base(myType, walkableDeath, walkablePlayer, area, myTile, worldPos, triggerdSprite)
+    public Grave(CaseType myType, bool walkableDeath, bool walkablePlayer, int area, TileBase myTile, Vector2 worldPos, Sprite triggerdSprite) : base(myType, walkableDeath, walkablePlayer, area, myTile, worldPos, triggerdSprite)
     {
 
     }

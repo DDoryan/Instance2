@@ -11,6 +11,4 @@ public class BasePerk : CardBaseGrave
     {
         get { return _cost; }
     }
-
-
 }
