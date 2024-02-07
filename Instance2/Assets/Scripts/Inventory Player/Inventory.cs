@@ -6,6 +6,7 @@ public class Inventory : MonoBehaviour
 {
     [SerializeField]
     private List<CardBaseGrave> _inventoryPlayer1 = new List<CardBaseGrave>();
+    [SerializeField]
     private List<CardBaseGrave> _inventoryPlayer2 = new List<CardBaseGrave>();
 
     public static Inventory InventoryInstance;
@@ -30,6 +31,9 @@ public class Inventory : MonoBehaviour
 
     public void AddToInventory(CardBaseGrave card)
     {
-        _inventoryPlayer1.Add(card);
+        if (GameManager.Instance.GetCurrentTurn() == 0)
+            _inventoryPlayer1.Add(card);
+        else if(GameManager.Instance.GetCurrentTurn() == 1)
+            _inventoryPlayer2.Add(card);
     }
 }
