@@ -27,9 +27,12 @@ public class TileManager : MonoBehaviour
     
     
     
-    private Dictionary<Vector3, Sprite> _map;
+    private Dictionary<Vector3, Sprite> _mapbyposition;
+    private Dictionary<Vector3, TileBase> _tilesbyposition;
+    private Dictionary<Vector3, List<TileBase>> _neighbor; 
+    private Dictionary<Vector3, Case> _map;
     
-    private TileBase[] _tiles;
+    
 
     private Tilemap _tilemap;
 
@@ -51,6 +54,43 @@ public class TileManager : MonoBehaviour
 
     }
 
+
+
+
+    private void SetMapCase()
+    {
+        foreach (var (position, sprite) in _mapbyposition)
+        {
+            switch (GetSpriteType(sprite))
+            {
+                case ISpriteType.Beacon:
+                    //Beacon beacon = new Beacon(CaseType.Beacon, )
+                    break;
+                case ISpriteType.Door:
+                    //Door door = new Door(CaseType.Door, true, false, 0, _tilesbyposition[position], position);
+                    //_map[position] = door;
+                    break;
+                case ISpriteType.Fire:
+                    Fire fire;
+                    break;
+                case ISpriteType.Grave:
+                    break;
+                case ISpriteType.GraveStone:
+                    break;
+                case ISpriteType.Wall:
+                    break;
+                case ISpriteType.Path:
+                    break;
+                default:
+                    Debug.Log("Error while creating case !!");
+                    break;
+            }
+            
+            
+        }
+    }
+    
+    
     //Get the type of sprite
     private ISpriteType GetSpriteType(Sprite sprite)
     {
@@ -99,16 +139,59 @@ public class TileManager : MonoBehaviour
                 Vector3 worldPosition = _tilemap.CellToWorld(localTilePosition);
                 if (_tilemap.HasTile(localTilePosition))
                 {
-                    _map[worldPosition] = _tilemap.GetSprite(localTilePosition);
+                    _mapbyposition[worldPosition] = _tilemap.GetSprite(localTilePosition);
+                    _tilesbyposition[worldPosition] = _tilemap.GetTile(localTilePosition);
+
+                    AddNeighbor(worldPosition, localTilePosition);
                 }
             }
+        }
+    }
+
+    //Add the neighbor for a localposition in a tilemap given and add it to a dictionnary with a world positon as a key 
+    private void AddNeighbor(Vector3 worldposition, Vector3Int localposition)
+    {
+        if (_tilemap.GetTile(new Vector3Int(localposition.x - 1, localposition.y,localposition.z)))
+        {
+            if (!_neighbor.ContainsKey(worldposition))
+            {
+                _neighbor[worldposition] = new List<TileBase>();
+            }
+            _neighbor[worldposition].Add(_tilemap.GetTile(new Vector3Int(localposition.x - 1, localposition.y,localposition.z)));
+        }
+
+        if (_tilemap.GetTile(new Vector3Int(localposition.x + 1, localposition.y,localposition.z)))
+        { 
+            if (!_neighbor.ContainsKey(worldposition))
+            {
+                _neighbor[worldposition] = new List<TileBase>();
+            }
+            _neighbor[worldposition].Add(_tilemap.GetTile(new Vector3Int(localposition.x + 1, localposition.y,localposition.z)));
+        }
+
+        if (_tilemap.GetTile(new Vector3Int(localposition.x, localposition.y - 1,localposition.z)))
+        {
+            if (!_neighbor.ContainsKey(worldposition))
+            {
+                _neighbor[worldposition] = new List<TileBase>();
+            }
+            _neighbor[worldposition].Add(_tilemap.GetTile(new Vector3Int(localposition.x, localposition.y - 1,localposition.z)));
+        }
+
+        if (_tilemap.GetTile(new Vector3Int(localposition.x, localposition.y + 1,localposition.z)))
+        {
+            if (!_neighbor.ContainsKey(worldposition))
+            {
+                _neighbor[worldposition] = new List<TileBase>();
+            }
+            _neighbor[worldposition].Add(_tilemap.GetTile(new Vector3Int(localposition.x, localposition.y + 1,localposition.z)));
         }
     }
     
     //Get The sprite of a World Position
     public Sprite GetSpriteByPosition(Vector3 position)
     {
-        return _map[position];
+        return _mapbyposition[position];
     }
     
     //return TileManger Instance
