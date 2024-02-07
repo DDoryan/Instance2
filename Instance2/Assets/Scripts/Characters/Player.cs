@@ -6,21 +6,21 @@ using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public class Player : MonoBehaviour
 {
-    private int _keyNumber;
-    private int _assetLimit;
-    private List<Texture> _assetList;
-    private bool _canOpenTombs;
+    [SerializeField] private int _perkLimit;
+    private List<CardBaseGrave> _perkList;
+    [SerializeField] private bool _canOpenTombs;
     private int _cellOn;
-    private int _selectedAsset;
+    private int _selectedPerk;
     private Vector3 _destination;
     private PlayerState _myState;
     [SerializeField] private float _cellSize;
     [SerializeField] private Ressources _ressources;
     [SerializeField] private Transform _playerPos;
+
     void Start()
     {
-        _selectedAsset = 0;
-        _assetList = new List<Texture>();
+        _selectedPerk = 0;
+        _perkList = new List<CardBaseGrave>();
         _myState = PlayerState.idle;
     }
 
@@ -42,24 +42,20 @@ public class Player : MonoBehaviour
 
     public void NavigateAssets(InputAction.CallbackContext context)
     {
-        if (_selectedAsset + context.ReadValue<Vector2>().x.ConvertTo<int>() <= _assetList.Count && _selectedAsset + context.ReadValue<Vector2>().x.ConvertTo<int>() >= 1)
+        if (_selectedPerk + context.ReadValue<Vector2>().x.ConvertTo<int>() <= _perkList.Count && _selectedPerk + context.ReadValue<Vector2>().x.ConvertTo<int>() >= 1)
         {
-            if (!_assetList[_selectedAsset + context.ReadValue<Vector2>().x.ConvertTo<int>()].IsUnityNull())
+            if (!_perkList[_selectedPerk + context.ReadValue<Vector2>().x.ConvertTo<int>()].IsUnityNull())
             {
-                _selectedAsset += context.ReadValue<Vector2>().x.ConvertTo<int>();
+                _selectedPerk += context.ReadValue<Vector2>().x.ConvertTo<int>();
             }
         }
         return;
     }
 
-    public bool HasKey()
+    /*public bool HasKey()
     {
-        if (_keyNumber > 0)
-        {
-            return true;
-        }
-        return false;
-    }
+        
+    }*/
 
     public void SetCanOpenTomb(bool value)
     {
@@ -68,7 +64,7 @@ public class Player : MonoBehaviour
 
     public void SetAssetLimit(int value)
     {
-        _assetLimit = value;
+        _perkLimit = value;
     }
 
     public void GetDirections(Vector2 direction)
