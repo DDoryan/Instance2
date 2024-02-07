@@ -8,7 +8,7 @@ using UnityEngine.Events;
 public abstract class Entity : MonoBehaviour
 {
     public delegate void TestEventDelegate();
-    public event TestEventDelegate OnFloatEvent;
+    public event TestEventDelegate NextTurnEvent;
     //public event Action<bool, int> OnActionEvent;
 
     protected bool _isTurn;
@@ -29,6 +29,6 @@ public abstract class Entity : MonoBehaviour
         _isTurn = false;
 
         //Event
-        OnFloatEvent?.Invoke();
+        NextTurnEvent?.Invoke();
     }
 }

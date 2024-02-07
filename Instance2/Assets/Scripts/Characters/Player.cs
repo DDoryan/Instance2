@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using static UnityEditor.Timeline.TimelinePlaybackControls;
 
-public class Player : MonoBehaviour
+public class Player : Entity
 {
     [SerializeField] private int _perkLimit;
     private List<CardBaseGrave> _perkList;
