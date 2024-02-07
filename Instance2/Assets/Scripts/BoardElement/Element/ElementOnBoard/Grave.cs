@@ -1,18 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class Grave : Interactible
 {
-    // Start is called before the first frame update
-    void Start()
+    public Grave(CaseType myType, bool walkableDeath, bool walkablePlayer, int area, Tile myTile, Vector2 worldPos, Sprite triggerdSprite) : base(myType, walkableDeath, walkablePlayer, area, myTile, worldPos, triggerdSprite)
     {
-        
+
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void Interact()
     {
-        
+        if (_canInteract)
+        {
+            CardBaseGrave card = Deck.GraveDeck.GetRandomCard();
+            Inventory.InventoryInstance.AddToInventory(card);
+            Debug.Log("c'est bon");
+            _canInteract = false;
+        }
     }
 }

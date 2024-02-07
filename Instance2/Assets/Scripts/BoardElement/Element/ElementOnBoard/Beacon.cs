@@ -1,18 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class Beacon : Case
 {
-    // Start is called before the first frame update
-    void Start()
+    public Beacon(CaseType myType, bool walkableDeath, bool walkablePlayer, int area, Tile myTile, Vector3 worldPos) : base(myType, walkableDeath, walkablePlayer, area, myTile, worldPos)
     {
-        
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

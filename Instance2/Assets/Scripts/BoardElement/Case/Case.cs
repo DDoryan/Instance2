@@ -3,11 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public abstract class Case : MonoBehaviour
+public abstract class Case 
 {
+    public Case (CaseType myType, bool walkableDeath, bool walkablePlayer, int area, Tile myTile, Vector3 worldPos)
+    {
+        _caseType = myType;
+        _isWalkableByDeath = walkableDeath;
+        _isWalkableByPlayer = walkablePlayer;
+        _area = area;
+        _worldPos = worldPos;
+        _myTile = myTile;
+    }
+
     protected CaseType _caseType;
 
-    protected List<Tile> _neighbor; // getter et setter , pas moi, a faire dans Case
+    protected List<Case> _neighbor; // getter et setter , pas moi, a faire dans Case
 
     protected bool _isWalkableByDeath; // getter, pas moi, a faire dans case
 
@@ -17,6 +27,11 @@ public abstract class Case : MonoBehaviour
 
     protected bool _isWalkableByPlayer; // getter, pas moi, a faire dans Case
 
+    protected Vector3 _worldPos;
+
+
+
+    [SerializeField]
     protected Sprite _defaultSprite; // getter, pas moi, a faire dans Case
 
 
@@ -25,14 +40,10 @@ public abstract class Case : MonoBehaviour
     #region Getter & Setter
 
     #region Getter
+
     public bool IsWalkableByDeath
     {
         get { return _isWalkableByDeath; }
-    }
-
-    public Tile MyTile
-    {
-        get { return _myTile; }
     }
 
     public bool IsWalkableByPlayer
@@ -49,11 +60,26 @@ public abstract class Case : MonoBehaviour
     {
         get { return _caseType; }
     }
+    public int Area
+    {
+        get { return _area; }
+    }
 
     #endregion
 
     #region Setter & Getter    
-    public List<Tile> Neighbor
+
+    public Tile MyTile
+    {
+        get { return _myTile; }
+        set
+        {
+            _myTile = value;
+        }
+    }
+
+
+    public List<Case> Neighbor
     {
         get { return _neighbor; }
         set
