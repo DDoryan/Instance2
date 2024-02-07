@@ -50,7 +50,6 @@ MonoBehaviour:
   _perkLimit: 2
   _canOpenTombs: 1
   _cellSize: 5
-  _ressources: {fileID: 0}
   _playerPos: {fileID: 8302839849869670180}
   _inventoryPlayer1: []
   _inventoryPlayer2: []
@@ -124,6 +123,22 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: d073b033-2376-4b7e-aea1-3269c59e61c2
     m_ActionName: PlayerInput/CameraMove[/SwitchProControllerHID/rightStick/up,/SwitchProControllerHID/rightStick/down,/SwitchProControllerHID/rightStick/left,/SwitchProControllerHID/rightStick/right]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4707077758991008527}
+        m_TargetAssemblyTypeName: GetInput, Assembly-CSharp
+        m_MethodName: GetEndTurn
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 3d4e042d-1060-48a4-a788-520700352882
+    m_ActionName: PlayerInput/EndTurn[/SwitchProControllerHID/buttonEast]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: PlayerInput

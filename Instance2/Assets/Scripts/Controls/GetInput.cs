@@ -70,4 +70,9 @@ public class GetInput : MonoBehaviour
             _zoomOut = false;
         }
     }
+
+    public void GetEndTurn()
+    {
+        _player.EndRound();
+    }
 }
