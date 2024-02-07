@@ -22,7 +22,7 @@ public abstract class CardBaseGrave : ScriptableObject
 }
 public enum CardType
 {
-    Key,
+    key,
     Mob,
     All_in,
     PasseMuraille,

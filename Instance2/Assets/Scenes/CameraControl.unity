@@ -232,6 +232,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxZoom: 5
   _minZoom: 10
+  _limitMax: 7
+  _limitMin: 1
   _sensibility: 10
   _camPos: {fileID: 519420032}
   _cam: {fileID: 519420031}
