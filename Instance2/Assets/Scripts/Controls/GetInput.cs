@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 public class GetInput : MonoBehaviour
 {
-    [SerializeField] private Player _player;
+    [SerializeField] private PlayerManager _playerManager;
     [SerializeField] private CameraControl _camera;
     private Vector2 _position;
     private bool _zoomIn;
@@ -30,7 +30,15 @@ public class GetInput : MonoBehaviour
     {
         if (context.started)
         {
-            _player.GetDirections(context.ReadValue<Vector2>());
+            _playerManager.MovePlayer(context.ReadValue<Vector2>());
+        }
+    }
+
+    public void GetNavigationInput(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            _playerManager.NavigateInventory(context.ReadValue<Vector2>());
         }
     }
 
@@ -71,8 +79,11 @@ public class GetInput : MonoBehaviour
         }
     }
 
-    public void GetEndTurn()
+    public void GetEndTurn(InputAction.CallbackContext context)
     {
-        _player.EndRound();
+        if (context.performed)
+        {
+            _playerManager.PassTurn();
+        }
     }
 }
