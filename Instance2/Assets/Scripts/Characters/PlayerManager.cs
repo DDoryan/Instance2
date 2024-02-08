@@ -1,9 +1,12 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class PlayerManager : Entity
 {
+    public delegate void ActionEventDelegate();
+    public event ActionEventDelegate ActionEvent;
     [SerializeField] public int _actionPoints;
     [SerializeField] public int _magicPoints;
     private int _baseAP;
@@ -57,6 +60,7 @@ public class PlayerManager : Entity
     public void ResetActionPoints () 
     { 
         _actionPoints = _baseAP;
+        ActionEvent?.Invoke();
     }
 
     public bool SubstractActionPoints (int value)
@@ -68,6 +72,7 @@ public class PlayerManager : Entity
         else
         {
             _actionPoints -= value;
+            ActionEvent?.Invoke();
             return true;
         }
     }
@@ -81,6 +86,7 @@ public class PlayerManager : Entity
         else
         {
             _actionPoints += value;
+            ActionEvent?.Invoke();
             return true;
         }
     }
@@ -94,6 +100,7 @@ public class PlayerManager : Entity
         else
         {
             _magicPoints -= value;
+            ActionEvent?.Invoke();
             return true;
         }
     }
@@ -107,6 +114,7 @@ public class PlayerManager : Entity
         else
         {
             _magicPoints += value;
+            ActionEvent?.Invoke();
             return true;
         }
     }
@@ -114,7 +122,12 @@ public class PlayerManager : Entity
     public void NavigateInventory(Vector2 direction)
     {
         if (!_isTurn) { return; }
+        if (_playerList[_currentTurn].IsInventoryEmpty())
+        {
+            return;
+        }
         _playerList[_currentTurn].NavigatePerks(direction);
+        ActionEvent?.Invoke();
     }
 
     public void MovePlayer (Vector2 direction)
@@ -152,5 +165,10 @@ public class PlayerManager : Entity
                 ResetActionPoints();
             }
         }
+    }
+
+    public Player GetPlayer()
+    {
+        return _playerList[_currentTurn];
     }
 }

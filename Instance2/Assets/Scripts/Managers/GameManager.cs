@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
         if (_currentTurn == 0)
         {
             _turnCounter++;
-            Ressources.Instance.ResetActionPoints();
+            _playerManager.ResetActionPoints();
         }
 
         if ( _turnCounter == 3)

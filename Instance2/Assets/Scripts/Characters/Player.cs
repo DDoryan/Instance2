@@ -101,7 +101,7 @@ public class Player : MonoBehaviour
     {
         for (int i = 0; i < _inventoryPlayer.Count; i++)
         {
-            if (_inventoryPlayer[i].CardType == CardType.key)
+            if (_inventoryPlayer[i].CardType == CardType.Key)
             {
                 _inventoryPlayer.RemoveAt(i);
                 return true;
@@ -139,6 +139,18 @@ public class Player : MonoBehaviour
             _haveTreasure = true;
             Debug.Log("Get The Treasure");
         }*/
+    }
+
+    public BasePerk GetPerk(int ind)
+    {
+        return _inventoryPlayer[ind];
+    }
+
+    public int GetSelectedPerk() { return _selectedPerk; }
+
+    public bool IsInventoryEmpty()
+    {
+        return (_inventoryPlayer.Count == 0);
     }
 }
 

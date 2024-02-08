@@ -53,12 +53,12 @@ public class MenuManager : MonoBehaviour
         // game pause
         if (_isGamePaused)
         {
-            Debug.Log("Time.timeScale set to pause");
+            //Debug.Log("Time.timeScale set to pause");
             Time.timeScale = 0f;
         }
         else
         {
-            Debug.Log("Time.timeScale set to play");
+            //Debug.Log("Time.timeScale set to play");
             Time.timeScale = 1f;
         }
     }
