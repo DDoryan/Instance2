@@ -111,6 +111,27 @@ public class PlayerManager : Entity
         }
     }
 
+    public void SelectedArtifact()
+    {
+        _playerList[_currentTurn].SelectArtifact();
+    }
+
+    public void AddToInventory()
+    {
+        _playerList[_currentTurn].AddToInventory();
+    }
+
+    public void KeepArtifact()
+    {
+        _playerList[_currentTurn].KeepArtifact();
+    }
+
+    public void DestroyArtifact()
+    {
+        _playerList[_currentTurn].DestroyArtifact();
+    }
+
+
     public void NavigateInventory(Vector2 direction)
     {
         if (!_isTurn) { return; }
