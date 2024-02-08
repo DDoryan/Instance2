@@ -5,18 +5,20 @@ using UnityEngine.UI;
 public class MenuManager : MonoBehaviour
 {
     [Header("Scene Menu")]
-    [SerializeField] private string _playNameButton   = "Play";
-    [SerializeField] private string _menuNameButton   = "Menu";
+    [SerializeField] private string _playNameButton = "Play";
+    [SerializeField] private string _menuNameButton = "Menu";
 
     [Header("Canvas Button")]
-    private bool _victoryBool  = false;
-    private bool _defeatBool   = false;
+    private bool _victoryBool = false;
+    private bool _defeatBool = false;
     [SerializeField] private GameObject _victoryGameObject;
     [SerializeField] private GameObject _defeatGameObject;
 
     [Header("GameControlleur GamePad")]
     [SerializeField] private Button _buttonVictory;
     [SerializeField] private Button _buttonDefeat;
+
+    private bool _isGamePaused = false;
 
     private void Start()
     {
@@ -28,25 +30,11 @@ public class MenuManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
-            if (!_victoryBool)
-            {
-                _victoryBool = true;
-            }
-            else
-            {
-                _victoryBool = false;
-            }
+            SetVictoryBool(!_victoryBool);
         }
         if (Input.GetKeyDown(KeyCode.E))
         {
-            if (!_defeatBool)
-            {
-                _defeatBool = true;
-            }
-            else
-            {
-                _defeatBool = false;
-            }
+            SetDefeatBool(!_defeatBool);
         }
 
         if (_victoryBool)
@@ -61,6 +49,18 @@ public class MenuManager : MonoBehaviour
         {
             HudMenuDisable();
         }
+
+        // game pause
+        if (_isGamePaused)
+        {
+            Debug.Log("Time.timeScale set to pause");
+            Time.timeScale = 0f;
+        }
+        else
+        {
+            Debug.Log("Time.timeScale set to play");
+            Time.timeScale = 1f;
+        }
     }
 
     public void PlayGame()
@@ -72,7 +72,7 @@ public class MenuManager : MonoBehaviour
     {
         SceneManager.LoadScene("Scenes/" + _menuNameButton);
     }
-    
+
     private void HudVictoryEnable()
     {
         _defeatBool = false;
@@ -84,8 +84,10 @@ public class MenuManager : MonoBehaviour
         {
             _buttonVictory.Select();
         }
+
+        _isGamePaused = true;
     }
-    
+
     private void HudDefeatEnable()
     {
         _victoryBool = false;
@@ -97,6 +99,8 @@ public class MenuManager : MonoBehaviour
         {
             _buttonDefeat.Select();
         }
+
+        _isGamePaused = true;
     }
 
     private void HudMenuDisable()
@@ -112,6 +116,8 @@ public class MenuManager : MonoBehaviour
         {
             _buttonDefeat.OnDeselect(null);
         }
+
+        _isGamePaused = false;
     }
 
     public bool GetVicoryBool()
@@ -119,21 +125,19 @@ public class MenuManager : MonoBehaviour
         return _victoryBool;
     }
 
-    public bool SetVictoryBool(bool victoryArg)
+    public void SetVictoryBool(bool victoryArg)
     {
         _victoryBool = victoryArg;
-        return _victoryBool;
     }
-    
+
     public bool GetDefeatBool()
     {
         return _defeatBool;
     }
 
-    public bool SetDefeatBool(bool defeatArg)
+    public void SetDefeatBool(bool defeatArg)
     {
         _defeatBool = defeatArg;
-        return _defeatBool;
     }
 
     public void ExitGame()
