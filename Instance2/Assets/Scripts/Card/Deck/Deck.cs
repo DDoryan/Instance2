@@ -10,7 +10,7 @@ public class Deck : MonoBehaviour
     private List<bool> _graveStone;
 
     [SerializeField]
-    private List<CardBaseGrave> _cards;
+    private List<Artefacte> _cards;
 
     private int _indexToReturn;
 
@@ -24,10 +24,10 @@ public class Deck : MonoBehaviour
 
         _graveStone = new List<bool> { false, false, true };
     }
-    public CardBaseGrave GetRandomCard()
+    public Artefacte GetRandomCard()
     {
         _indexToReturn = Random.Range(0, _cards.Count);
-        CardBaseGrave card = _cards[_indexToReturn];
+        Artefacte card = _cards[_indexToReturn];
         _cards.RemoveAt(_indexToReturn);
         return card;
     }
