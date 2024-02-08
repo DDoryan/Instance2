@@ -101,7 +101,7 @@ public class Player : MonoBehaviour
     {
         for (int i = 0; i < _inventoryPlayer.Count; i++)
         {
-            if (_inventoryPlayer[i].CardType == CardType.key)
+            if (_inventoryPlayer[i].CardType == CardType.Key)
             {
                 _inventoryPlayer.RemoveAt(i);
                 return true;
