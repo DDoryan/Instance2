@@ -10,13 +10,13 @@ public class Grave : Interactible
 
     }
 
-    public CardBaseGrave Interact()
+    public Artefacte Interact()
     {
         if (_canInteract)
         {
             _defaultSprite = _isTrigerredSprite;
-            CardBaseGrave card = Deck.GraveDeck.GetRandomCard();
-            Debug.Log("c'est bon");
+            Artefacte card = Deck.GraveDeck.GetRandomCard();
+            //Debug.Log("c'est bon");
             _canInteract = false;
             return card;
         }
