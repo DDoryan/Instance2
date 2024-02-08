@@ -11,6 +11,7 @@ public abstract class Entity : MonoBehaviour
     public event TestEventDelegate NextTurnEvent;
     //public event Action<bool, int> OnActionEvent;
 
+    [SerializeField]
     protected bool _isTurn;
 
 

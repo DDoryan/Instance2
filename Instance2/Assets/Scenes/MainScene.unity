@@ -455,8 +455,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxZoom: 5
   _minZoom: 10
-  _limitMax: 0
-  _limitMin: 0
+  _limitMax: 10
+  _limitMin: 1
   _sensibility: 10
   _camPos: {fileID: 519420032}
   _cam: {fileID: 519420031}
@@ -541,6 +541,10 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: d073b033-2376-4b7e-aea1-3269c59e61c2
     m_ActionName: PlayerInput/CameraMove[/SwitchProControllerHID/rightStick/up,/SwitchProControllerHID/rightStick/down,/SwitchProControllerHID/rightStick/left,/SwitchProControllerHID/rightStick/right]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 3d4e042d-1060-48a4-a788-520700352882
+    m_ActionName: PlayerInput/EndTurn[/XInputControllerWindows/buttonEast]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: PlayerInput

@@ -75,6 +75,16 @@ public class Player : Entity
         
     }*/
 
+    public void GetTurnEnd()
+    {
+        if (_isTurn)
+        {
+            EndRound();
+            print("endturn");
+        }
+        return;
+    }
+
     public void GetDirections(Vector2 direction)
     {
         if (_isTurn)

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public class GetInput : MonoBehaviour
 {
@@ -71,8 +72,11 @@ public class GetInput : MonoBehaviour
         }
     }
 
-    public void GetEndTurn()
+    public void GetEndTurn(InputAction.CallbackContext context)
     {
-        _player.EndRound();
+        if (context.canceled)
+        {
+            _player.GetTurnEnd();
+        }
     }
 }

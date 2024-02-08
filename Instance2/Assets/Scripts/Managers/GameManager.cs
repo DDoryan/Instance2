@@ -53,6 +53,7 @@ public class GameManager : MonoBehaviour
         {
             _turnCounter++;
             Ressources.Instance.ResetActionPoints();
+            Debug.Log("TurnCounter: " + _turnCounter);
         }
 
         if ( _turnCounter == 3)
@@ -60,7 +61,6 @@ public class GameManager : MonoBehaviour
             //_pullOrder.Add(_theDeath);
         }
         Debug.Log("CurrentTurn: " + _currentTurn);
-        Debug.Log("TurnCounter: " + _turnCounter);
     }
 
     public int GetCurrentTurn()
