@@ -14,6 +14,7 @@ public class Grave : Interactible
     {
         if (_canInteract)
         {
+            _defaultSprite = _isTrigerredSprite;
             CardBaseGrave card = Deck.GraveDeck.GetRandomCard();
             Debug.Log("c'est bon");
             _canInteract = false;

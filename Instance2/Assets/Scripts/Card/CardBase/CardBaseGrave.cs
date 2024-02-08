@@ -5,6 +5,8 @@ using UnityEngine;
 public abstract class CardBaseGrave : ScriptableObject
 {
     [SerializeField]
+
+
     protected CardType _cardType;
 
     [SerializeField]
@@ -22,7 +24,7 @@ public abstract class CardBaseGrave : ScriptableObject
 }
 public enum CardType
 {
-    key,
+    Key,
     Mob,
     All_in,
     PasseMuraille,
