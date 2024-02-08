@@ -19,6 +19,7 @@ public class GraveStone : Interactible
     {
         if (_canInteract)
         {
+            _defaultSprite = _isTrigerredSprite;
             bool _treasure = Deck.GraveDeck.GetRandomTreasure();
             _canInteract = false;
             return _treasure;
