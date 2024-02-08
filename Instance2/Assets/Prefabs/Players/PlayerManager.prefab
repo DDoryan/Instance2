@@ -1,0 +1,194 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2180610320174863568
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7018851312114314382}
+  - component: {fileID: 3725040841483839002}
+  - component: {fileID: 2021695224775565771}
+  - component: {fileID: 6327305656868139437}
+  m_Layer: 0
+  m_Name: PlayerManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7018851312114314382
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2180610320174863568}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3725040841483839002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2180610320174863568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef283721b898dc944bd59cc5063c144d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _actionPoints: 12
+  _magicPoints: 10
+  Player1Prefab: {fileID: 7300155669229468803, guid: 36719d20640b4c24b9f4af8676947d2f, type: 3}
+  Player2Prefab: {fileID: 3555041622534792813, guid: 114efad8a4ca8e7408963a14e5f75f46, type: 3}
+  Player1StartPosition: {fileID: 0}
+  Player2StartPosition: {fileID: 0}
+--- !u!114 &2021695224775565771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2180610320174863568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a7ffa34fa7401a4685a387ff275753c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerManager: {fileID: 3725040841483839002}
+  _camera: {fileID: 0}
+--- !u!114 &6327305656868139437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2180610320174863568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 0d70a300d6d4a544e88dfa8040ab9829, type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2021695224775565771}
+        m_TargetAssemblyTypeName: GetInput, Assembly-CSharp
+        m_MethodName: GetDirectionInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 786a3f7f-954e-481a-9ed8-5429ddd584b0
+    m_ActionName: PlayerInput/Movement[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d,/SwitchProControllerHID/leftStick/up,/SwitchProControllerHID/leftStick/down,/SwitchProControllerHID/leftStick/left,/SwitchProControllerHID/leftStick/right,/SwitchProControllerHID/dpad/up,/SwitchProControllerHID/dpad/down,/SwitchProControllerHID/dpad/left,/SwitchProControllerHID/dpad/right]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2021695224775565771}
+        m_TargetAssemblyTypeName: GetInput, Assembly-CSharp
+        m_MethodName: GetNavigationInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 1d967906-59e7-4efc-a3c0-8f3ee1bf9dd7
+    m_ActionName: PlayerInput/Inventary[/SwitchProControllerHID/leftShoulder,/SwitchProControllerHID/rightShoulder]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2021695224775565771}
+        m_TargetAssemblyTypeName: GetInput, Assembly-CSharp
+        m_MethodName: GetZoomInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 593b79e9-d360-40af-924c-1525f352c0f8
+    m_ActionName: PlayerInput/CameraZoomIn[/SwitchProControllerHID/leftTrigger]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2021695224775565771}
+        m_TargetAssemblyTypeName: GetInput, Assembly-CSharp
+        m_MethodName: GetZoomOut
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 6fca6358-d7b8-452c-aec7-c1c23d679721
+    m_ActionName: PlayerInput/CameraZoomOut[/SwitchProControllerHID/rightTrigger]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2021695224775565771}
+        m_TargetAssemblyTypeName: GetInput, Assembly-CSharp
+        m_MethodName: GetCameraInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: d073b033-2376-4b7e-aea1-3269c59e61c2
+    m_ActionName: PlayerInput/CameraMove[/SwitchProControllerHID/rightStick/up,/SwitchProControllerHID/rightStick/down,/SwitchProControllerHID/rightStick/left,/SwitchProControllerHID/rightStick/right]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2021695224775565771}
+        m_TargetAssemblyTypeName: GetInput, Assembly-CSharp
+        m_MethodName: GetEndTurn
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 3d4e042d-1060-48a4-a788-520700352882
+    m_ActionName: PlayerInput/EndTurn[/SwitchProControllerHID/buttonEast]
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: PlayerInput
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}

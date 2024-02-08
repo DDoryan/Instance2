@@ -11,15 +11,8 @@ public class GameManager : MonoBehaviour
    private List<Entity> _pullOrder;
    private Entity _specialEventPlayer;
    private Entity _eventPlayerAfterPlayed;
-
-   [SerializeField] public GameObject Player1Prefab;
-   [SerializeField] public GameObject Player2Prefab;
-    
-   [SerializeField] private Transform Player1StartPosition;
-   [SerializeField] private Transform Player2StartPosition;
-
-   private Player _player1;
-   private Player _player2;
+   private PlayerManager _playerManager;
+   
    //private TheDeath theDeath;
 
 
@@ -38,18 +31,13 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         _turnCounter = 1;
-        GameObject player1 = Instantiate(Player1Prefab, Player1StartPosition);
-        GameObject player2 = Instantiate(Player2Prefab, Player2StartPosition);
+        _playerManager = PlayerManager.Instance;
         _pullOrder = new List<Entity>();
-        _player1 = player1.GetComponent<Player>();
-        _player2 = player2.GetComponent<Player>();
-        _pullOrder.Add(_player1);
-        _pullOrder.Add(_player2);
+        _pullOrder.Add(_playerManager);
 
         _currentTurn = 0; Debug.Log("CurrentTurn: " + _currentTurn);
 
-        _player1.NextTurnEvent += Event_NextTurn;
-        _player2.NextTurnEvent += Event_NextTurn;
+        _playerManager.NextTurnEvent += Event_NextTurn;
         _pullOrder[_currentTurn].StartRound();
     }
 

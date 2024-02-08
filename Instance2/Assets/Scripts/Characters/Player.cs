@@ -4,33 +4,27 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using static UnityEditor.Timeline.TimelinePlaybackControls;
 
-public class Player : Entity
+public class Player : MonoBehaviour
 {
     [SerializeField] private int _perkLimit;
-    private List<CardBaseGrave> _perkList;
     [SerializeField] private bool _canOpenTombs;
+    private PlayerManager _playerManager;
     private int _cellOn;
     private int _selectedPerk;
     private Vector3 _destination;
     private PlayerState _myState;
     [SerializeField] private float _cellSize;
     [SerializeField] private Transform _playerPos;
-    [SerializeField] private List<CardBaseGrave> _inventoryPlayer1 = new List<CardBaseGrave>();
-    [SerializeField] private List<CardBaseGrave> _inventoryPlayer2 = new List<CardBaseGrave>();
+    [SerializeField] private List<BasePerk> _inventoryPlayer = new List<BasePerk>();
     [SerializeField] private bool _haveTreasure;
-    public List<CardBaseGrave> InventoryPlayer1
+    public List<BasePerk> InventoryPlayer
     {
-        get { return _inventoryPlayer1; }
-    }
-    public List<CardBaseGrave> InventoryPlayer2
-    {
-        get { return _inventoryPlayer2; }
+        get { return _inventoryPlayer; }
     }
 
     void Start()
     {
         _selectedPerk = 0;
-        _perkList = new List<CardBaseGrave>();
         _myState = PlayerState.idle;
     }
 
@@ -39,14 +33,7 @@ public class Player : Entity
         switch ( _myState )
         {
             case PlayerState.moving:
-                if (Ressources.Instance.SubstractActionPoints(1))
-                {
-                    _playerPos.position = _destination;
-                }
-                else
-                {
-                    EndRound();
-                }
+                _playerPos.position = _destination;
                 _myState= PlayerState.idle;
                 break;
             default: 
@@ -54,17 +41,13 @@ public class Player : Entity
         }
     }
 
-    public void NavigateAssets(InputAction.CallbackContext context)
+    public void NavigatePerks(Vector2 direction)
     {
-        if (!_isTurn) 
-        { 
-            return; 
-        }
-        if (_selectedPerk + context.ReadValue<Vector2>().x.ConvertTo<int>() <= _perkList.Count && _selectedPerk + context.ReadValue<Vector2>().x.ConvertTo<int>() >= 1)
+        if (_selectedPerk + direction.x.ConvertTo<int>() <= _inventoryPlayer.Count && _selectedPerk + direction.x.ConvertTo<int>() >= 1)
         {
-            if (!_perkList[_selectedPerk + context.ReadValue<Vector2>().x.ConvertTo<int>()].IsUnityNull())
+            if (!_inventoryPlayer[_selectedPerk + direction.x.ConvertTo<int>()].IsUnityNull())
             {
-                _selectedPerk += context.ReadValue<Vector2>().x.ConvertTo<int>();
+                _selectedPerk += direction.x.ConvertTo<int>();
             }
         }
         return;
@@ -77,8 +60,6 @@ public class Player : Entity
 
     public void GetDirections(Vector2 direction)
     {
-        if (_isTurn)
-        {
             if (_myState == PlayerState.idle)
             {
                 switch (direction.y)
@@ -104,7 +85,6 @@ public class Player : Entity
                 }
                 _myState = PlayerState.moving;
             }
-        }
     }
 
     /*private void SetDestination()
@@ -119,11 +99,11 @@ public class Player : Entity
 
     public bool GetObject()
     {
-        for (int i = 0; i < _inventoryPlayer1.Count; i++)
+        for (int i = 0; i < _inventoryPlayer.Count; i++)
         {
-            if (_inventoryPlayer1[i].CardType == CardType.key)
+            if (_inventoryPlayer[i].CardType == CardType.key)
             {
-                _inventoryPlayer1.RemoveAt(i);
+                _inventoryPlayer.RemoveAt(i);
                 return true;
             }
             else
@@ -132,6 +112,19 @@ public class Player : Entity
             }
         }
         return false;
+    }
+
+    public int CastSpell(int ressource)
+    {
+        if (ressource - _inventoryPlayer[_selectedPerk].Cost < 0)
+        {
+            return 0;
+        }
+        else
+        {
+            //_inventoryPlayer[_selectedPerk].Use();
+            return _inventoryPlayer[_selectedPerk].Cost;
+        }
     }
 
     public void SetBool()
