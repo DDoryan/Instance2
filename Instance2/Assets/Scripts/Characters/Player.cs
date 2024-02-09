@@ -48,7 +48,7 @@ public class Player : MonoBehaviour
     {
         _selectedPerk = 0;
         _myState = PlayerState.idle;
-        _grave = new Grave(CaseType.Grave, false, false, 1, null, Vector2.zero, null);
+        _grave = new Grave(CaseType.Grave, false, false, 1, null, Vector2.zero, null, 1);
     }
 
     private void FixedUpdate()

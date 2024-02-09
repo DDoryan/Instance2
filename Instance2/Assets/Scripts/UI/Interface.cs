@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class Interface : MonoBehaviour
 {
-    [SerializeField] private PlayerManager _playerManager;
     [SerializeField] private TextMeshProUGUI _textAP;
     [SerializeField] private TextMeshProUGUI _textMP;
     [SerializeField] private List<Image> _perkList;
@@ -19,11 +18,11 @@ public class Interface : MonoBehaviour
         _color = Color.clear;
         _colorWhite = Color.white;
         StartUI();
-        _playerManager.MovementEvent += RefreshAPUI;
-        _playerManager.MovementEvent += RefreshMPUI;
-        _playerManager.ActionEvent += RefreshInventoryUI;
-        _playerManager.NavEvent += RefreshSelectedPerkUI;
-        _playerManager.ChangePlayerEvent += RefreshCurrentInventoryUI;
+        PlayerManager.playerManager.MovementEvent += RefreshAPUI;
+        PlayerManager.playerManager.MovementEvent += RefreshMPUI;
+        PlayerManager.playerManager.ActionEvent += RefreshInventoryUI;
+        PlayerManager.playerManager.NavEvent += RefreshSelectedPerkUI;
+        PlayerManager.playerManager.ChangePlayerEvent += RefreshCurrentInventoryUI;
     }
 
     private void StartUI()
@@ -33,18 +32,19 @@ public class Interface : MonoBehaviour
             _perkList[i].color = _color;
         }
     }
+
     void Update()
     {
-        _player = _playerManager.GetPlayer();
+        _player = PlayerManager.playerManager.GetPlayer();
     }
 
     private void RefreshInventoryUI()
     {
-        for (int i = 0; i < _playerManager.GetPlayerPerkLimit(); i++)
+        for (int i = 0; i < PlayerManager.playerManager.GetPlayerPerkLimit(); i++)
         {
             if (_player.GetPerk(i) != null)
             {
-                _perkList[i].overrideSprite = _player.GetPerk(i).CardSpriteGrave;
+                _perkList[i].sprite = _player.GetPerk(i).CardSpriteGrave;
                 _perkList[i].color = _colorWhite;
             }
         }
@@ -52,17 +52,17 @@ public class Interface : MonoBehaviour
 
     private void RefreshAPUI()
     {
-        _textAP.text = _playerManager._actionPoints.ToString();
+        _textAP.text = PlayerManager.playerManager._actionPoints.ToString();
     }
 
     private void RefreshMPUI()
     {
-        _textMP.text = _playerManager._magicPoints.ToString();
+        _textMP.text = PlayerManager.playerManager._magicPoints.ToString();
     }
 
     private void RefreshSelectedPerkUI()
     {
-        for (int i = 0; i < _playerManager.GetPlayerPerkLimit(); i++)
+        for (int i = 0; i < PlayerManager.playerManager.GetPlayerPerkLimit(); i++)
         {
             if (i == _player.GetSelectedPerk())
             {
@@ -82,7 +82,7 @@ public class Interface : MonoBehaviour
     {
         for (int i = 0; i < _perkList.Count; i++)
         {
-            for (int j = 0; j < _playerManager.GetPlayerPerkLimit(); j++)
+            for (int j = 0; j < PlayerManager.playerManager.GetPlayerPerkLimit(); j++)
             {
                 _perkList[i].color = _color;
             }

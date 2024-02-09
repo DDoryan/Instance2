@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         _turnCounter = 1;
-        _playerManager = PlayerManager.Instance;
+        _playerManager = PlayerManager.playerManager;
         _pullOrder = new List<Entity>();
         _pullOrder.Add(_playerManager);
 

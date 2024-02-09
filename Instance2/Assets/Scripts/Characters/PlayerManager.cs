@@ -10,6 +10,8 @@ public class PlayerManager : Entity
     public event MovementEventDelegate MovementEvent;
     public delegate void ActionEventDelegate();
     public event ActionEventDelegate ActionEvent;
+    public delegate void ExchangeEventDelegate();
+    public event ExchangeEventDelegate ExchangeEvent;
     public delegate void NavEventDelegate();
     public event NavEventDelegate NavEvent;
     public delegate void ChangePlayerEventDelegate();
@@ -27,13 +29,19 @@ public class PlayerManager : Entity
     private Player _player2;
     private bool _gotTheMoula;
     private int _currentTurn;
-    public static PlayerManager Instance;
+    public static PlayerManager playerManager;
+
+    [SerializeField]
+    private GameObject _panelP1;
+    [SerializeField]
+    private GameObject _panelP2;
+
 
     private void Awake()
     {
-        if (Instance == null)
+        if (playerManager == null)
         {
-            Instance = this;
+            playerManager = this;
         }
         else
         {
@@ -59,9 +67,29 @@ public class PlayerManager : Entity
         if (_actionPoints == 0)
         {
             _currentTurn = 0;
+            _panelP1.SetActive(true);
+            _panelP2.SetActive(false);
             EndRound();
             ResetActionPoints();
         }
+    }
+
+    public int CurrentTurn()
+    {
+        if (_currentTurn == 0)
+        {
+            return 0;
+        }
+        else if (_currentTurn == 1)
+        {
+            return 1;
+        }
+        return 2;
+    }
+
+    public void ExchangeStart()
+    {
+        ExchangeEvent?.Invoke();
     }
 
     public void ResetActionPoints()
@@ -190,11 +218,15 @@ public class PlayerManager : Entity
             if (_currentTurn == 0)
             {
                 _currentTurn = 1;
+                _panelP1.SetActive(false);
+                _panelP2.SetActive(true);
                 return;
             }
             if (_currentTurn == 1)
             {
                 _currentTurn = 0;
+                _panelP1.SetActive(true);
+                _panelP2.SetActive(false);
                 EndRound();
                 ResetActionPoints();
             }

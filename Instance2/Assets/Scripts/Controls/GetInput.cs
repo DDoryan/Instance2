@@ -57,6 +57,18 @@ public class GetInput : MonoBehaviour
         }
     }
 
+    public void ExchangeAction(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            PlayerManager.playerManager.ExchangeStart();
+        }
+    }
+
+
+
+
+
     public void OpenGrave(InputAction.CallbackContext context)
     {
         if(context.performed)
