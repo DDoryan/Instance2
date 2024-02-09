@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class Passe_Muraille : BasePerk
 {
-    protected override void Use()
+    public override void Use()
     {
         _cost = 2;
 

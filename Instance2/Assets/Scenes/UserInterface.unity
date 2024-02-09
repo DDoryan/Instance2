@@ -334,6 +334,57 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 78315062}
   m_CullTransparentMesh: 1
+--- !u!1 &103996911
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 103996913}
+  - component: {fileID: 103996912}
+  m_Layer: 0
+  m_Name: deck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &103996912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 103996911}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf0f058d56a760847b87da92aba9606d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cards:
+  - {fileID: 11400000, guid: 74ee7d882d8addf4db2fc48b6ffa8833, type: 2}
+  - {fileID: 11400000, guid: a1c6e04aa41f7114f901601b5bbb7be8, type: 2}
+  - {fileID: 11400000, guid: fe90c438f3e6cf84598aca78a30568cb, type: 2}
+  - {fileID: 11400000, guid: 0aaa319056ea9a84cb75170e86d4ed55, type: 2}
+  - {fileID: 11400000, guid: 5f34a9531e4789243908b37c511f47ad, type: 2}
+  _defaultCard: []
+--- !u!4 &103996913
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 103996911}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &279344186
 GameObject:
   m_ObjectHideFlags: 0
@@ -471,15 +522,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -546,7 +597,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -770,6 +821,38 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 3d4e042d-1060-48a4-a788-520700352882
     m_ActionName: PlayerInput/EndTurn[/SwitchProControllerHID/buttonEast]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 8aea4fdf-d623-4ec7-805e-04559ab8a1f3
+    m_ActionName: PlayerInput/SwitchMap[/SwitchProControllerHID/rightStickPress]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c25e2272-1767-4816-81fa-ecf7c9a8195e
+    m_ActionName: PlayerInput/OpenGrave[/SwitchProControllerHID/buttonWest]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 093c250c-9cc5-438c-bb67-6b92826ca7fe
+    m_ActionName: SelectArtefact/Navigation[/SwitchProControllerHID/leftShoulder,/SwitchProControllerHID/rightShoulder]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e610867a-4624-4cb5-a8fc-aece654521cb
+    m_ActionName: SelectArtefact/SelectAtifact[/SwitchProControllerHID/buttonWest]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 84ee6177-db20-4cc4-b2d5-ed9d621fbd13
+    m_ActionName: SelectArtefact/Cancel Selection[/SwitchProControllerHID/buttonEast]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: cd98af00-18dd-45f6-ac61-10b8e629ca6b
+    m_ActionName: SelectArtefact/DestroyCard[/SwitchProControllerHID/buttonNorth]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0d29796b-f1ff-40bb-aaed-53a215a0eeb1
+    m_ActionName: SelectArtefact/KeepArtifact[/SwitchProControllerHID/buttonSouth]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 018bae09-6630-405a-8634-e2a31072c7bf
+    m_ActionName: SelectArtefact/SwitchMap[/SwitchProControllerHID/rightStickPress]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: PlayerInput
@@ -1263,7 +1346,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1795,6 +1878,106 @@ PrefabInstance:
       propertyPath: Player2StartPosition
       value: 
       objectReference: {fileID: 1738060048}
+    - target: {fileID: 6327305656868139437, guid: a1555db4c1df0e34d85a5cbbf5df0339, type: 3}
+      propertyPath: m_ActionEvents.Array.size
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 6327305656868139437, guid: a1555db4c1df0e34d85a5cbbf5df0339, type: 3}
+      propertyPath: m_ActionEvents.Array.data[6].m_ActionId
+      value: 8aea4fdf-d623-4ec7-805e-04559ab8a1f3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6327305656868139437, guid: a1555db4c1df0e34d85a5cbbf5df0339, type: 3}
+      propertyPath: m_ActionEvents.Array.data[7].m_ActionId
+      value: c25e2272-1767-4816-81fa-ecf7c9a8195e
+      objectReference: {fileID: 0}
+    - target: {fileID: 6327305656868139437, guid: a1555db4c1df0e34d85a5cbbf5df0339, type: 3}
+      propertyPath: m_ActionEvents.Array.data[8].m_ActionId
+      value: 093c250c-9cc5-438c-bb67-6b92826ca7fe
+      objectReference: {fileID: 0}
+    - target: {fileID: 6327305656868139437, guid: a1555db4c1df0e34d85a5cbbf5df0339, type: 3}
+      propertyPath: m_ActionEvents.Array.data[9].m_ActionId
+      value: e610867a-4624-4cb5-a8fc-aece654521cb
+      objectReference: {fileID: 0}
+    - target: {fileID: 6327305656868139437, guid: a1555db4c1df0e34d85a5cbbf5df0339, type: 3}
+      propertyPath: m_ActionEvents.Array.data[10].m_ActionId
+      value: 84ee6177-db20-4cc4-b2d5-ed9d621fbd13
+      objectReference: {fileID: 0}
+    - target: {fileID: 6327305656868139437, guid: a1555db4c1df0e34d85a5cbbf5df0339, type: 3}
+      propertyPath: m_ActionEvents.Array.data[11].m_ActionId
+      value: cd98af00-18dd-45f6-ac61-10b8e629ca6b
+      objectReference: {fileID: 0}
+    - target: {fileID: 6327305656868139437, guid: a1555db4c1df0e34d85a5cbbf5df0339, type: 3}
+      propertyPath: m_ActionEvents.Array.data[12].m_ActionId
+      value: 0d29796b-f1ff-40bb-aaed-53a215a0eeb1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6327305656868139437, guid: a1555db4c1df0e34d85a5cbbf5df0339, type: 3}
+      propertyPath: m_ActionEvents.Array.data[13].m_ActionId
+      value: 018bae09-6630-405a-8634-e2a31072c7bf
+      objectReference: {fileID: 0}
+    - target: {fileID: 6327305656868139437, guid: a1555db4c1df0e34d85a5cbbf5df0339, type: 3}
+      propertyPath: m_ActionEvents.Array.data[6].m_ActionName
+      value: PlayerInput/SwitchMap[/SwitchProControllerHID/rightStickPress]
+      objectReference: {fileID: 0}
+    - target: {fileID: 6327305656868139437, guid: a1555db4c1df0e34d85a5cbbf5df0339, type: 3}
+      propertyPath: m_ActionEvents.Array.data[7].m_ActionName
+      value: PlayerInput/OpenGrave[/SwitchProControllerHID/buttonWest]
+      objectReference: {fileID: 0}
+    - target: {fileID: 6327305656868139437, guid: a1555db4c1df0e34d85a5cbbf5df0339, type: 3}
+      propertyPath: m_ActionEvents.Array.data[8].m_ActionName
+      value: SelectArtefact/Navigation[/SwitchProControllerHID/leftShoulder,/SwitchProControllerHID/rightShoulder]
+      objectReference: {fileID: 0}
+    - target: {fileID: 6327305656868139437, guid: a1555db4c1df0e34d85a5cbbf5df0339, type: 3}
+      propertyPath: m_ActionEvents.Array.data[9].m_ActionName
+      value: SelectArtefact/SelectAtifact[/SwitchProControllerHID/buttonWest]
+      objectReference: {fileID: 0}
+    - target: {fileID: 6327305656868139437, guid: a1555db4c1df0e34d85a5cbbf5df0339, type: 3}
+      propertyPath: m_ActionEvents.Array.data[10].m_ActionName
+      value: SelectArtefact/Cancel Selection[/SwitchProControllerHID/buttonEast]
+      objectReference: {fileID: 0}
+    - target: {fileID: 6327305656868139437, guid: a1555db4c1df0e34d85a5cbbf5df0339, type: 3}
+      propertyPath: m_ActionEvents.Array.data[11].m_ActionName
+      value: SelectArtefact/DestroyCard[/SwitchProControllerHID/buttonNorth]
+      objectReference: {fileID: 0}
+    - target: {fileID: 6327305656868139437, guid: a1555db4c1df0e34d85a5cbbf5df0339, type: 3}
+      propertyPath: m_ActionEvents.Array.data[12].m_ActionName
+      value: SelectArtefact/KeepArtifact[/SwitchProControllerHID/buttonSouth]
+      objectReference: {fileID: 0}
+    - target: {fileID: 6327305656868139437, guid: a1555db4c1df0e34d85a5cbbf5df0339, type: 3}
+      propertyPath: m_ActionEvents.Array.data[13].m_ActionName
+      value: SelectArtefact/SwitchMap[/SwitchProControllerHID/rightStickPress]
+      objectReference: {fileID: 0}
+    - target: {fileID: 6327305656868139437, guid: a1555db4c1df0e34d85a5cbbf5df0339, type: 3}
+      propertyPath: m_ActionEvents.Array.data[6].m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6327305656868139437, guid: a1555db4c1df0e34d85a5cbbf5df0339, type: 3}
+      propertyPath: m_ActionEvents.Array.data[7].m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6327305656868139437, guid: a1555db4c1df0e34d85a5cbbf5df0339, type: 3}
+      propertyPath: m_ActionEvents.Array.data[7].m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6327305656868139437, guid: a1555db4c1df0e34d85a5cbbf5df0339, type: 3}
+      propertyPath: m_ActionEvents.Array.data[7].m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1426094065}
+    - target: {fileID: 6327305656868139437, guid: a1555db4c1df0e34d85a5cbbf5df0339, type: 3}
+      propertyPath: m_ActionEvents.Array.data[7].m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6327305656868139437, guid: a1555db4c1df0e34d85a5cbbf5df0339, type: 3}
+      propertyPath: m_ActionEvents.Array.data[7].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OpenGrave
+      objectReference: {fileID: 0}
+    - target: {fileID: 6327305656868139437, guid: a1555db4c1df0e34d85a5cbbf5df0339, type: 3}
+      propertyPath: m_ActionEvents.Array.data[7].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: GetInput, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6327305656868139437, guid: a1555db4c1df0e34d85a5cbbf5df0339, type: 3}
+      propertyPath: m_ActionEvents.Array.data[7].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 7018851312114314382, guid: a1555db4c1df0e34d85a5cbbf5df0339, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1856,6 +2039,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7018851312114314382, guid: a1555db4c1df0e34d85a5cbbf5df0339, type: 3}
   m_PrefabInstance: {fileID: 1426094061}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1426094065 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2021695224775565771, guid: a1555db4c1df0e34d85a5cbbf5df0339, type: 3}
+  m_PrefabInstance: {fileID: 1426094061}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a7ffa34fa7401a4685a387ff275753c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1430914671
 GameObject:
   m_ObjectHideFlags: 0
@@ -1906,7 +2100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2444,15 +2638,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -2624,7 +2818,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2948,11 +3142,12 @@ MonoBehaviour:
   _playerManager: {fileID: 1426094062}
   _textAP: {fileID: 1342539557}
   _textMP: {fileID: 2046963597}
-  _perkList:
+  _imageList1:
   - {fileID: 306477018}
   - {fileID: 447816272}
   - {fileID: 1931210464}
   - {fileID: 1430914673}
+  _imageList2:
   - {fileID: 1842722152}
   - {fileID: 1022116899}
 --- !u!4 &2110974785
@@ -2982,3 +3177,4 @@ SceneRoots:
   - {fileID: 1738060048}
   - {fileID: 942520048}
   - {fileID: 2110974785}
+  - {fileID: 103996913}

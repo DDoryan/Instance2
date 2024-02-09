@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Don_Du_Ciel : BasePerk
 {
-    protected override void Use()
+    public override void Use()
     {
         _cost = 3;
            

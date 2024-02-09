@@ -5,15 +5,6 @@ using UnityEngine;
 
 public class BasePerk : Artefacte
 {
-    protected int _cost;
 
-    public int Cost
-    {
-        get { return _cost; }
-    }
-
-    protected virtual void Use()
-    {
-
-    }
+    
 }

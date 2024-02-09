@@ -9,19 +9,33 @@ public class Interface : MonoBehaviour
     [SerializeField] private PlayerManager _playerManager;
     [SerializeField] private TextMeshProUGUI _textAP;
     [SerializeField] private TextMeshProUGUI _textMP;
-    [SerializeField] private List<Image> _perkList;
+    [SerializeField] private List<Image> _imageList1;
+    [SerializeField] private List<Image> _imageList2;
+    private List<Image> _perkList;
+    private Color _color;
+    private Color _colorWhite;
     private Player _player;
 
     void Start()
     {
-        _perkList = new List<Image>();
+
+        _color = Color.clear;
+        _colorWhite = Color.white;
+        StartUI();
         _playerManager.MovementEvent += RefreshAPUI;
         _playerManager.MovementEvent += RefreshMPUI;
         _playerManager.ActionEvent += RefreshInventoryUI;
-        _playerManager.ActionEvent += RefreshSelectedPerkUI;
+        _playerManager.NavEvent += RefreshSelectedPerkUI;
+        _playerManager.ChangePlayerEvent += RefreshCurrentInventoryUI;
     }
 
-
+    private void StartUI()
+    {
+        for (int i= 0; i < _perkList.Count; i++)
+        {
+            _perkList[i].color = _color;
+        }
+    }
     void Update()
     {
         _player = _playerManager.GetPlayer();
@@ -34,6 +48,7 @@ public class Interface : MonoBehaviour
             if (_player.GetPerk(i) != null)
             {
                 _perkList[i].overrideSprite = _player.GetPerk(i).CardSpriteGrave;
+                _perkList[i].color = _colorWhite;
             }
         }
     }
@@ -54,8 +69,20 @@ public class Interface : MonoBehaviour
         {
             if (i == _player.GetSelectedPerk())
             {
-                _perkList[i].transform.localScale *= 2;
+                if (_perkList[i].transform.localScale == Vector3.one)
+                {
+                    _perkList[i].transform.localScale *= 2;
+                }
+            }
+            else
+            {
+                _perkList[i].transform.localScale = Vector3.one;
             }
         }
+    }
+
+    private void RefreshCurrentInventoryUI()
+    {
+        
     }
 }
