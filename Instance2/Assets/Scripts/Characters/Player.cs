@@ -66,7 +66,7 @@ public class Player : MonoBehaviour
 
     public void NavigatePerks(Vector2 direction)
     {
-        if (_selectedPerk + direction.x.ConvertTo<int>() <= _inventoryPlayer.Count && _selectedPerk + direction.x.ConvertTo<int>() >= 0)
+        if (_selectedPerk + direction.x.ConvertTo<int>() < _inventoryPlayer.Count && _selectedPerk + direction.x.ConvertTo<int>() >= 0)
         {
             if (!_inventoryPlayer[_selectedPerk + direction.x.ConvertTo<int>()].IsUnityNull())
             {
@@ -123,6 +123,7 @@ public class Player : MonoBehaviour
         if (_inventoryPlayer.Count < _perkLimit)
         {
             _inventoryPlayer.Add(_grave.Interact());
+
         }
         else if (_inventoryPlayer.Count >= _perkLimit && _artefact == null)
         {
@@ -183,7 +184,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-            //_inventoryPlayer[_selectedPerk].Use();
+            _inventoryPlayer[_selectedPerk].Use();
             return _inventoryPlayer[_selectedPerk].Cost;
         }
     }
@@ -202,7 +203,7 @@ public class Player : MonoBehaviour
         }*/
     }
 
-    public BasePerk GetPerk(int ind)
+    public Artefacte GetPerk(int ind)
     {
         if (_inventoryPlayer.Count > ind)
         {

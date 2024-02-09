@@ -10,6 +10,10 @@ public class PlayerManager : Entity
     public event MovementEventDelegate MovementEvent;
     public delegate void ActionEventDelegate();
     public event ActionEventDelegate ActionEvent;
+    public delegate void NavEventDelegate();
+    public event NavEventDelegate NavEvent;
+    public delegate void ChangePlayerEventDelegate();
+    public event ChangePlayerEventDelegate ChangePlayerEvent;
     [SerializeField] public int _actionPoints;
     [SerializeField] public int _magicPoints;
     private int _baseAP;
@@ -131,16 +135,19 @@ public class PlayerManager : Entity
     public void AddToInventory()
     {
         _playerList[_currentTurn].AddToInventory();
+        ActionEvent?.Invoke();
     }
 
     public void KeepArtifact()
     {
         _playerList[_currentTurn].KeepArtifact();
+        ActionEvent?.Invoke();
     }
 
     public void DestroyArtifact()
     {
         _playerList[_currentTurn].DestroyArtifact();
+        ActionEvent?.Invoke();
     }
 
 
@@ -153,7 +160,7 @@ public class PlayerManager : Entity
             return;
         }
         _playerList[_currentTurn].NavigatePerks(direction);
-        ActionEvent?.Invoke();
+        NavEvent?.Invoke();
     }
 
     public void MovePlayer(Vector2 direction)
@@ -191,6 +198,7 @@ public class PlayerManager : Entity
                 EndRound();
                 ResetActionPoints();
             }
+            ChangePlayerEvent?.Invoke();
         }
     }
 

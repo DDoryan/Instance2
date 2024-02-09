@@ -6,5 +6,15 @@ using UnityEngine;
 
 public class Artefacte : CardBaseGrave
 {
-    
+    protected int _cost;
+
+    public int Cost
+    {
+        get { return _cost; }
+    }
+
+    public virtual void Use()
+    {
+
+    }
 }
