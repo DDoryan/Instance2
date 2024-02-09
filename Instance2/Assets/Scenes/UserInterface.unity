@@ -3142,12 +3142,11 @@ MonoBehaviour:
   _playerManager: {fileID: 1426094062}
   _textAP: {fileID: 1342539557}
   _textMP: {fileID: 2046963597}
-  _imageList1:
+  _perkList:
   - {fileID: 306477018}
   - {fileID: 447816272}
   - {fileID: 1931210464}
   - {fileID: 1430914673}
-  _imageList2:
   - {fileID: 1842722152}
   - {fileID: 1022116899}
 --- !u!4 &2110974785

@@ -9,16 +9,13 @@ public class Interface : MonoBehaviour
     [SerializeField] private PlayerManager _playerManager;
     [SerializeField] private TextMeshProUGUI _textAP;
     [SerializeField] private TextMeshProUGUI _textMP;
-    [SerializeField] private List<Image> _imageList1;
-    [SerializeField] private List<Image> _imageList2;
-    private List<Image> _perkList;
+    [SerializeField] private List<Image> _perkList;
     private Color _color;
     private Color _colorWhite;
     private Player _player;
 
     void Start()
     {
-
         _color = Color.clear;
         _colorWhite = Color.white;
         StartUI();
@@ -83,6 +80,16 @@ public class Interface : MonoBehaviour
 
     private void RefreshCurrentInventoryUI()
     {
-        
+        for (int i = 0; i < _perkList.Count; i++)
+        {
+            for (int j = 0; j < _playerManager.GetPlayerPerkLimit(); j++)
+            {
+                _perkList[i].color = _color;
+            }
+            if (_perkList[i].color == _color)
+            {
+                _perkList[i].color = _colorWhite;
+            }
+        }
     }
 }
