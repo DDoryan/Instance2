@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class PlayerManager : Entity
@@ -59,13 +60,14 @@ public class PlayerManager : Entity
         }
     }
 
-    public void ResetActionPoints () 
-    { 
+    public void ResetActionPoints()
+    {
         _actionPoints = _baseAP;
         MovementEvent?.Invoke();
     }
 
-    public bool SubstractActionPoints (int value)
+
+    public bool SubstractActionPoints(int value)
     {
         if ((_actionPoints - value) < 0)
         {
@@ -121,6 +123,27 @@ public class PlayerManager : Entity
         }
     }
 
+    public void SelectedArtifact()
+    {
+        _playerList[_currentTurn].SelectArtifact();
+    }
+
+    public void AddToInventory()
+    {
+        _playerList[_currentTurn].AddToInventory();
+    }
+
+    public void KeepArtifact()
+    {
+        _playerList[_currentTurn].KeepArtifact();
+    }
+
+    public void DestroyArtifact()
+    {
+        _playerList[_currentTurn].DestroyArtifact();
+    }
+
+
     public void NavigateInventory(Vector2 direction)
     {
         if (!_isTurn) { return; }
@@ -133,7 +156,7 @@ public class PlayerManager : Entity
         ActionEvent?.Invoke();
     }
 
-    public void MovePlayer (Vector2 direction)
+    public void MovePlayer(Vector2 direction)
     {
         if (_isTurn)
         {

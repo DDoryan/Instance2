@@ -1,13 +1,23 @@
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public class Player : MonoBehaviour
 {
+
+
+
+
+
     [SerializeField] private int _perkLimit;
     [SerializeField] private bool _canOpenTombs;
+
+    private bool _artefactFull;
+
     private PlayerManager _playerManager;
     private int _cellOn;
     private int _selectedPerk;
@@ -15,39 +25,53 @@ public class Player : MonoBehaviour
     private PlayerState _myState;
     [SerializeField] private float _cellSize;
     [SerializeField] private Transform _playerPos;
-    [SerializeField] private List<BasePerk> _inventoryPlayer = new List<BasePerk>();
+    [SerializeField] private List<Artefacte> _inventoryPlayer = new List<Artefacte>();
     [SerializeField] private bool _haveTreasure;
-    public List<BasePerk> InventoryPlayer
+
+    [SerializeField] private Artefacte _artefact;
+
+    private Artefacte _artefactSelection;
+    [SerializeField] private Artefacte _artefactSelected;
+
+    [SerializeField] private Grave _grave;
+    public List<Artefacte> InventoryPlayer
     {
         get { return _inventoryPlayer; }
+    }
+
+    public int SelectedPerk
+    {
+        get { return _selectedPerk; }
     }
 
     void Start()
     {
         _selectedPerk = 0;
         _myState = PlayerState.idle;
+        _grave = new Grave(CaseType.Grave, false, false, 1, null, Vector2.zero, null);
     }
 
     private void FixedUpdate()
     {
-        switch ( _myState )
+        switch (_myState)
         {
             case PlayerState.moving:
                 _playerPos.position = _destination;
-                _myState= PlayerState.idle;
+                _myState = PlayerState.idle;
                 break;
-            default: 
+            default:
                 break;
         }
     }
 
     public void NavigatePerks(Vector2 direction)
     {
-        if (_selectedPerk + direction.x.ConvertTo<int>() <= _inventoryPlayer.Count && _selectedPerk + direction.x.ConvertTo<int>() >= 1)
+        if (_selectedPerk + direction.x.ConvertTo<int>() <= _inventoryPlayer.Count && _selectedPerk + direction.x.ConvertTo<int>() >= 0)
         {
             if (!_inventoryPlayer[_selectedPerk + direction.x.ConvertTo<int>()].IsUnityNull())
             {
                 _selectedPerk += direction.x.ConvertTo<int>();
+                _artefactSelection = _inventoryPlayer[_selectedPerk];
             }
         }
         return;
@@ -60,31 +84,31 @@ public class Player : MonoBehaviour
 
     public void GetDirections(Vector2 direction)
     {
-            if (_myState == PlayerState.idle)
+        if (_myState == PlayerState.idle)
+        {
+            switch (direction.y)
             {
-                switch (direction.y)
-                {
-                    case 1:
-                        _destination = _playerPos.position + Vector3.up * _cellSize;
-                        break;
+                case 1:
+                    _destination = _playerPos.position + Vector3.up * _cellSize;
+                    break;
 
-                    case -1:
-                        _destination = _playerPos.position + Vector3.down * _cellSize;
-                        break;
-                }
-
-                switch (direction.x)
-                {
-                    case 1:
-                        _destination = _playerPos.position + Vector3.right * _cellSize;
-                        break;
-
-                    case -1:
-                        _destination = _playerPos.position + Vector3.left * _cellSize;
-                        break;
-                }
-                _myState = PlayerState.moving;
+                case -1:
+                    _destination = _playerPos.position + Vector3.down * _cellSize;
+                    break;
             }
+
+            switch (direction.x)
+            {
+                case 1:
+                    _destination = _playerPos.position + Vector3.right * _cellSize;
+                    break;
+
+                case -1:
+                    _destination = _playerPos.position + Vector3.left * _cellSize;
+                    break;
+            }
+            _myState = PlayerState.moving;
+        }
     }
 
     /*private void SetDestination()
@@ -92,9 +116,45 @@ public class Player : MonoBehaviour
 
     }*/
 
+
     public void AddToInventory()
     {
-        //_inventoryPlayer1.Add(_grave.Interact());
+
+        if (_inventoryPlayer.Count < _perkLimit)
+        {
+            _inventoryPlayer.Add(_grave.Interact());
+        }
+        else if (_inventoryPlayer.Count >= _perkLimit && _artefact == null)
+        {
+            _artefactFull = true;
+            _artefact = _grave.Interact();
+        }
+    }
+
+    public void SelectArtifact()
+    {
+        _artefactSelected = _artefactSelection;
+    }
+
+    public void KeepArtifact()
+    {
+        if (_artefactFull)
+        {
+            Deck.GraveDeck.DefaultCard.Add(_artefactSelected);
+            _inventoryPlayer.Remove(_artefactSelected);
+            _inventoryPlayer.Add(_artefact);
+            _artefactSelected = null;
+            _artefact = null;
+        }
+    }
+
+    public void DestroyArtifact()
+    {
+        if (_artefactFull)
+        {
+            Deck.GraveDeck.DefaultCard.Add(_artefact);
+            _artefact = null;
+        }
     }
 
     public bool GetObject()

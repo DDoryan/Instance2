@@ -12,8 +12,13 @@ public class Deck : MonoBehaviour
     [SerializeField]
     private List<Artefacte> _cards;
 
+    [SerializeField]
+    private List<Artefacte> _defaultCard;
+
+
     private int _indexToReturn;
 
+    public List<Artefacte> DefaultCard { get => _defaultCard; }
 
     private void Awake()
     {
@@ -24,6 +29,7 @@ public class Deck : MonoBehaviour
 
         _graveStone = new List<bool> { false, false, true };
     }
+
     public Artefacte GetRandomCard()
     {
         _indexToReturn = Random.Range(0, _cards.Count);
@@ -31,6 +37,7 @@ public class Deck : MonoBehaviour
         _cards.RemoveAt(_indexToReturn);
         return card;
     }
+
     public bool GetRandomTreasure()
     {
         _indexToReturn = Random.Range(0, _graveStone.Count);
@@ -38,4 +45,5 @@ public class Deck : MonoBehaviour
         _graveStone.RemoveAt(_indexToReturn);
         return _treasure;
     }
+
 }

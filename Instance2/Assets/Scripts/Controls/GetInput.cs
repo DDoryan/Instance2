@@ -10,6 +10,17 @@ public class GetInput : MonoBehaviour
     private bool _zoomOut;
     private bool _moveCam;
 
+    private PlayerInput _playerInput;
+
+    private PlayerControls _playerControls;
+
+
+    private void Awake()
+    {
+        _playerInput = GetComponent<PlayerInput>();
+        _playerControls = new PlayerControls();
+    }
+
     private void FixedUpdate()
     {
         if (_zoomIn)
@@ -23,6 +34,60 @@ public class GetInput : MonoBehaviour
         if (_moveCam)
         {
             _camera.MoveCam(_position);
+        }
+    }
+
+    public void SwitchMap(InputAction.CallbackContext context)
+    {
+        if(context.performed)
+        {
+            _playerInput.actions.FindActionMap("SelectArtefact").Enable();
+            _playerInput.actions.FindActionMap("PlayerInput").Disable();
+            Debug.Log("SwitchMap");
+        }
+    }
+    public void SwitchMapInverted(InputAction.CallbackContext context)
+    {
+        if(context.performed)
+        {
+            _playerInput.actions.FindActionMap("SelectArtefact").Disable();
+            _playerInput.actions.FindActionMap("PlayerInput").Enable();
+            Debug.Log("SwitchMap");
+
+        }
+    }
+
+    public void OpenGrave(InputAction.CallbackContext context)
+    {
+        if(context.performed)
+        {
+            _playerManager.AddToInventory();
+        }
+    }
+
+    public void SelectArtifact(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            _playerManager.SelectedArtifact();
+        }
+    }
+
+
+
+    public void AcceptArtifact(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            _playerManager.KeepArtifact();
+        }
+    }
+
+    public void DestroyArtifact(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            _playerManager.DestroyArtifact();
         }
     }
 

@@ -19,7 +19,7 @@ public abstract class Entity : MonoBehaviour
         _isTurn = false;
     }
 
-    public void StartRound()
+    public virtual void StartRound()
     {
         _isTurn = true;
     }
