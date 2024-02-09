@@ -5,19 +5,21 @@ using UnityEngine.Tilemaps;
 
 public class Grave : Interactible
 {
-    public Grave(CaseType myType, bool walkableDeath, bool walkablePlayer, int area, Tile myTile, Vector2 worldPos, Sprite triggerdSprite) : base(myType, walkableDeath, walkablePlayer, area, myTile, worldPos, triggerdSprite)
+    public Grave(CaseType myType, bool walkableDeath, bool walkablePlayer, int area, TileBase myTile, Vector2 worldPos, Sprite triggerdSprite,int posInGrid) : base(myType, walkableDeath, walkablePlayer, area, myTile, worldPos, triggerdSprite, posInGrid)
     {
 
     }
 
-    public override void Interact()
+    public Artefacte Interact()
     {
         if (_canInteract)
         {
-            CardBaseGrave card = Deck.GraveDeck.GetRandomCard();
-            Inventory.InventoryInstance.AddToInventory(card);
-            Debug.Log("c'est bon");
-            _canInteract = false;
+            _defaultSprite = _isTrigerredSprite;
+            Artefacte card = Deck.GraveDeck.GetRandomCard();
+            //Debug.Log("c'est bon");
+            //_canInteract = false;
+            return card;
         }
+        return null;
     }
 }

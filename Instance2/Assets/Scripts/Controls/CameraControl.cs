@@ -10,6 +10,8 @@ public class CameraControl : MonoBehaviour
 {
     [SerializeField] private float _maxZoom;
     [SerializeField] private float _minZoom;
+    [SerializeField] private float _limitMax;
+    [SerializeField] private float _limitMin;
     [SerializeField] private float _sensibility;
     [SerializeField] private Transform _camPos;
     [SerializeField] private Camera _cam;
@@ -28,7 +30,18 @@ public class CameraControl : MonoBehaviour
 
     private void Zoom(int InOrOut)
     {
-        _cam.orthographicSize += ((_maxZoom-_minZoom)*Time.deltaTime) * InOrOut;
+        if(InOrOut > 0 && _cam.orthographicSize <= _limitMin)
+        {
+            return;
+        }
+        else if (InOrOut < 0 && _cam.orthographicSize >= _limitMax)
+        {
+            return;
+        }
+        else
+        {
+            _cam.orthographicSize += ((_maxZoom - _minZoom) * Time.deltaTime) * InOrOut;
+        }
     }
 
     public void MoveCam(Vector2 value)

@@ -15,15 +15,12 @@ public abstract class Interactible : Case
 
     protected Deck _deck;
 
-    protected Inventory _inventory;
 
-
-    protected Interactible(CaseType myType, bool walkableDeath, bool walkablePlayer, int area, Tile myTile, Vector2 worldPos, Sprite triggerdSprite) : base(myType, walkableDeath, walkablePlayer, area, myTile, worldPos)
+    protected Interactible(CaseType myType, bool walkableDeath, bool walkablePlayer, int area, TileBase myTile, Vector2 worldPos, Sprite triggerdSprite, int posInGrid) : base(myType, walkableDeath, walkablePlayer, area, myTile, worldPos, posInGrid)
     {
         _canInteract = true;
         _isTrigerredSprite = triggerdSprite;
         _deck = Deck.GraveDeck;
-        _inventory = Inventory.InventoryInstance;
     }
 
 
@@ -56,8 +53,5 @@ public abstract class Interactible : Case
 
     #endregion
 
-    public virtual void Interact()
-    {
 
-    }
 }

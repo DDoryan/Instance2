@@ -1,90 +1,101 @@
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public class Player : MonoBehaviour
 {
-    private int _keyNumber;
-    private int _assetLimit;
-    private List<Texture> _assetList;
-    private bool _canOpenTombs;
+
+
+
+
+
+    [SerializeField] private int _perkLimit;
+    [SerializeField] private bool _canOpenTombs;
+
+    private bool _artefactFull;
+
+    private PlayerManager _playerManager;
     private int _cellOn;
-    private int _selectedAsset;
+    private int _selectedPerk;
     private Vector3 _destination;
     private PlayerState _myState;
     [SerializeField] private float _cellSize;
-    [SerializeField] private Ressources _ressources;
     [SerializeField] private Transform _playerPos;
+    [SerializeField] private List<Artefacte> _inventoryPlayer = new List<Artefacte>();
+    [SerializeField] private bool _haveTreasure;
+
+    [SerializeField] private Artefacte _artefact;
+
+    private Artefacte _artefactSelection;
+    [SerializeField] private Artefacte _artefactSelected;
+
+    [SerializeField] private Grave _grave;
+    public List<Artefacte> InventoryPlayer
+    {
+        get { return _inventoryPlayer; }
+    }
+
+    public int SelectedPerk
+    {
+        get { return _selectedPerk; }
+    }
+
     void Start()
     {
-        _selectedAsset = 0;
-        _assetList = new List<Texture>();
+        _selectedPerk = 0;
         _myState = PlayerState.idle;
+        _grave = new Grave(CaseType.Grave, false, false, 1, null, Vector2.zero, null);
     }
 
     private void FixedUpdate()
     {
-        switch ( _myState )
+        switch (_myState)
         {
             case PlayerState.moving:
-                if (_ressources.SubstractActionPoints(1))
-                {
-                    _playerPos.position = _destination;
-                }
-                _myState= PlayerState.idle;
+                _playerPos.position = _destination;
+                _myState = PlayerState.idle;
                 break;
-            default: 
+            default:
                 break;
         }
     }
 
-    public void NavigateAssets(InputAction.CallbackContext context)
+    public void NavigatePerks(Vector2 direction)
     {
-        if (_selectedAsset + context.ReadValue<Vector2>().x.ConvertTo<int>() <= _assetList.Count && _selectedAsset + context.ReadValue<Vector2>().x.ConvertTo<int>() >= 1)
+        if (_selectedPerk + direction.x.ConvertTo<int>() < _inventoryPlayer.Count && _selectedPerk + direction.x.ConvertTo<int>() >= 0)
         {
-            if (!_assetList[_selectedAsset + context.ReadValue<Vector2>().x.ConvertTo<int>()].IsUnityNull())
+            if (!_inventoryPlayer[_selectedPerk + direction.x.ConvertTo<int>()].IsUnityNull())
             {
-                _selectedAsset += context.ReadValue<Vector2>().x.ConvertTo<int>();
+                _selectedPerk += direction.x.ConvertTo<int>();
+                _artefactSelection = _inventoryPlayer[_selectedPerk];
             }
         }
         return;
     }
 
-    public bool HasKey()
+    /*public bool HasKey()
     {
-        if (_keyNumber > 0)
-        {
-            return true;
-        }
-        return false;
-    }
-
-    public void SetCanOpenTomb(bool value)
-    {
-        _canOpenTombs = value;
-    }
-
-    public void SetAssetLimit(int value)
-    {
-        _assetLimit = value;
-    }
+        
+    }*/
 
     public void GetDirections(Vector2 direction)
     {
-        if (_myState == PlayerState.idle) 
-        { 
-        switch (direction.y)
+        if (_myState == PlayerState.idle)
         {
-            case 1:
-                _destination = _playerPos.position + Vector3.up * _cellSize;
-                break;
+            switch (direction.y)
+            {
+                case 1:
+                    _destination = _playerPos.position + Vector3.up * _cellSize;
+                    break;
 
-            case -1:
-                _destination = _playerPos.position + Vector3.down * _cellSize;
-                break;
-        }
+                case -1:
+                    _destination = _playerPos.position + Vector3.down * _cellSize;
+                    break;
+            }
 
             switch (direction.x)
             {
@@ -104,6 +115,116 @@ public class Player : MonoBehaviour
     {
 
     }*/
+
+
+    public void AddToInventory()
+    {
+
+        if (_inventoryPlayer.Count < _perkLimit)
+        {
+            _inventoryPlayer.Add(_grave.Interact());
+
+        }
+        else if (_inventoryPlayer.Count >= _perkLimit && _artefact == null)
+        {
+            _artefactFull = true;
+            _artefact = _grave.Interact();
+        }
+    }
+
+    public void SelectArtifact()
+    {
+        _artefactSelected = _artefactSelection;
+    }
+
+    public void KeepArtifact()
+    {
+        if (_artefactFull)
+        {
+            Deck.GraveDeck.DefaultCard.Add(_artefactSelected);
+            _inventoryPlayer.Remove(_artefactSelected);
+            _inventoryPlayer.Add(_artefact);
+            _artefactSelected = null;
+            _artefact = null;
+        }
+    }
+
+    public void DestroyArtifact()
+    {
+        if (_artefactFull)
+        {
+            Deck.GraveDeck.DefaultCard.Add(_artefact);
+            _artefact = null;
+        }
+    }
+
+    public bool GetObject()
+    {
+        for (int i = 0; i < _inventoryPlayer.Count; i++)
+        {
+            if (_inventoryPlayer[i].CardType == CardType.Key)
+            {
+                _inventoryPlayer.RemoveAt(i);
+                return true;
+            }
+            else
+            {
+                Debug.Log("You can't open the graveStone, get a Key");
+            }
+        }
+        return false;
+    }
+
+    public int CastSpell(int ressource)
+    {
+        if (_inventoryPlayer.Count == 0) {  return 0; }
+        if (ressource - _inventoryPlayer[_selectedPerk].Cost < 0)
+        {
+            return 0;
+        }
+        else
+        {
+            _inventoryPlayer[_selectedPerk].Use();
+            return _inventoryPlayer[_selectedPerk].Cost;
+        }
+    }
+
+    public void SetBool()
+    {
+        /*if (_stone.Interact() == false)
+        {
+            _haveTreasure = false;
+            Debug.Log("Sorry Wrong GraveStone");
+        }
+        else if (_stone.Interact() == true)
+        {
+            _haveTreasure = true;
+            Debug.Log("Get The Treasure");
+        }*/
+    }
+
+    public Artefacte GetPerk(int ind)
+    {
+        if (_inventoryPlayer.Count > ind)
+        {
+            return _inventoryPlayer[ind];
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public int GetSelectedPerk() { return _selectedPerk; }
+
+    public bool IsInventoryEmpty()
+    {
+        return (_inventoryPlayer.Count == 0);
+    }
+
+    public int GetCellOn() { return _cellOn; }
+
+    public int GetPerkLimit() { return _perkLimit; }
 }
 
 public enum PlayerState

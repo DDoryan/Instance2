@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 836d09f0891a03c41bb346fa9f8200a1, type: 3}
+  m_Name: "Key_n\xB01 5"
+  m_EditorClassIdentifier: 
+  _cardType: 0
+  _cardSpriteGrave: {fileID: 7482667652216324306, guid: 4556882754830a14189c9983c6d1d87a, type: 3}

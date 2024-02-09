@@ -5,6 +5,8 @@ using UnityEngine;
 public abstract class CardBaseGrave : ScriptableObject
 {
     [SerializeField]
+
+
     protected CardType _cardType;
 
     [SerializeField]
@@ -33,6 +35,5 @@ public enum CardType
     Teleportation,
     Don_du_ciel,
     Entrave,
-    Passe_Passe,
-
+    Passe_Passe
 }
