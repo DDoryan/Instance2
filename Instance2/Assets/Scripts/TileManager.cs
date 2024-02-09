@@ -53,7 +53,7 @@ public class TileManager : MonoBehaviour
 
     private void SetMapCase()
     {
-        foreach (var (position, sprite) in _mapbyposition)
+        /*foreach (var (position, sprite) in _mapbyposition)
         {
             switch (GetSpriteType(sprite))
             {
@@ -91,7 +91,7 @@ public class TileManager : MonoBehaviour
             }
             
             
-        }
+        }*/
     }
     
     
