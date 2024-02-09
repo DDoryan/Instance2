@@ -11,12 +11,13 @@ public class GameManager : MonoBehaviour
    private Entity _eventPlayerAfterPlayed;
    private PlayerManager _playerManager;
    
-   //private TheDeath theDeath;
+   private TheDeath _theDeath;
 
     private void Start()
     {
         _turnCounter = 1;
         _playerManager = PlayerManager.Instance;
+        _theDeath = TheDeath.Instance;
         _pullOrder = new List<Entity>();
         _pullOrder.Add(_playerManager);
 

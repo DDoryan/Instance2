@@ -99,7 +99,7 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    private Case FindNeighbourCell(direction dir, int startCellIndex)
+    public Case FindNeighbourCell(direction dir, int startCellIndex)
     {
         //retourne la case dans la direction indique, ATTENTION, retourne null si la case est hors de la map!!!
         switch (dir) 
