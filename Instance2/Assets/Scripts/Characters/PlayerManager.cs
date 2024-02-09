@@ -1,11 +1,15 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class PlayerManager : Entity
 {
-
+    public delegate void MovementEventDelegate();
+    public event MovementEventDelegate MovementEvent;
+    public delegate void ActionEventDelegate();
+    public event ActionEventDelegate ActionEvent;
     [SerializeField] public int _actionPoints;
     [SerializeField] public int _magicPoints;
     private int _baseAP;
@@ -59,6 +63,7 @@ public class PlayerManager : Entity
     public void ResetActionPoints()
     {
         _actionPoints = _baseAP;
+        MovementEvent?.Invoke();
     }
 
 
@@ -71,6 +76,7 @@ public class PlayerManager : Entity
         else
         {
             _actionPoints -= value;
+            MovementEvent?.Invoke();
             return true;
         }
     }
@@ -84,6 +90,7 @@ public class PlayerManager : Entity
         else
         {
             _actionPoints += value;
+            MovementEvent?.Invoke();
             return true;
         }
     }
@@ -97,6 +104,7 @@ public class PlayerManager : Entity
         else
         {
             _magicPoints -= value;
+            MovementEvent?.Invoke();
             return true;
         }
     }
@@ -110,6 +118,7 @@ public class PlayerManager : Entity
         else
         {
             _magicPoints += value;
+            MovementEvent?.Invoke();
             return true;
         }
     }
@@ -138,7 +147,13 @@ public class PlayerManager : Entity
     public void NavigateInventory(Vector2 direction)
     {
         if (!_isTurn) { return; }
+        if (_playerList[_currentTurn].IsInventoryEmpty())
+        {
+            print("inventory empty");
+            return;
+        }
         _playerList[_currentTurn].NavigatePerks(direction);
+        ActionEvent?.Invoke();
     }
 
     public void MovePlayer(Vector2 direction)
@@ -158,6 +173,7 @@ public class PlayerManager : Entity
             return;
         }
         _playerList[_currentTurn].CastSpell(_magicPoints);
+        MovementEvent?.Invoke();
     }
 
     public void PassTurn()
@@ -176,5 +192,15 @@ public class PlayerManager : Entity
                 ResetActionPoints();
             }
         }
+    }
+
+    public Player GetPlayer()
+    {
+        return _playerList[_currentTurn];
+    }
+
+    public int GetPlayerPerkLimit()
+    {
+        return _playerList[_currentTurn].GetPerkLimit();
     }
 }

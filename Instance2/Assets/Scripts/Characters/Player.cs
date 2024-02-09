@@ -176,16 +176,16 @@ public class Player : MonoBehaviour
 
     public int CastSpell(int ressource)
     {
-        /*if (ressource - _inventoryPlayer[_selectedPerk].Cost < 0)
+        if (_inventoryPlayer.Count == 0) {  return 0; }
+        if (ressource - _inventoryPlayer[_selectedPerk].Cost < 0)
         {
-            */
-        return 0;/*
+            return 0;
         }
         else
         {
             //_inventoryPlayer[_selectedPerk].Use();
             return _inventoryPlayer[_selectedPerk].Cost;
-        }*/
+        }
     }
 
     public void SetBool()
@@ -201,6 +201,29 @@ public class Player : MonoBehaviour
             Debug.Log("Get The Treasure");
         }*/
     }
+
+    public BasePerk GetPerk(int ind)
+    {
+        if (_inventoryPlayer.Count > ind)
+        {
+            return _inventoryPlayer[ind];
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public int GetSelectedPerk() { return _selectedPerk; }
+
+    public bool IsInventoryEmpty()
+    {
+        return (_inventoryPlayer.Count == 0);
+    }
+
+    public int GetCellOn() { return _cellOn; }
+
+    public int GetPerkLimit() { return _perkLimit; }
 }
 
 public enum PlayerState

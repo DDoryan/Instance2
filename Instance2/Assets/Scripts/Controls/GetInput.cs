@@ -151,4 +151,12 @@ public class GetInput : MonoBehaviour
             _playerManager.PassTurn();
         }
     }
+
+    public void GetCastSpell(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            _playerManager.CastSpell();
+        }
+    }
 }
