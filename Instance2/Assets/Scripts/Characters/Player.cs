@@ -30,10 +30,12 @@ public class Player : MonoBehaviour
 
     [SerializeField] private Artefacte _artefact;
 
-    private Artefacte _artefactSelection;
+    private Artefacte _artefactYouLook;
     [SerializeField] private Artefacte _artefactSelected;
 
     [SerializeField] private Grave _grave;
+
+
     public List<Artefacte> InventoryPlayer
     {
         get { return _inventoryPlayer; }
@@ -42,7 +44,14 @@ public class Player : MonoBehaviour
     public int SelectedPerk
     {
         get { return _selectedPerk; }
+        set
+        {
+            _selectedPerk = value;
+        }
     }
+
+    public Artefacte ArtefactYouLook { get => _artefactYouLook; set => _artefactYouLook = value; }
+    public Artefacte ArtefactSelected { get => _artefactSelected; set => _artefactSelected = value; }
 
     void Start()
     {
@@ -64,19 +73,8 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void NavigatePerks(Vector2 direction)
-    {
-        if (_selectedPerk + direction.x.ConvertTo<int>() < _inventoryPlayer.Count && _selectedPerk + direction.x.ConvertTo<int>() >= 0)
-        {
-            if (!_inventoryPlayer[_selectedPerk + direction.x.ConvertTo<int>()].IsUnityNull())
-            {
-                _selectedPerk += direction.x.ConvertTo<int>();
-                _artefactSelection = _inventoryPlayer[_selectedPerk];
-            }
-        }
-        return;
-    }
 
+    
     /*public bool HasKey()
     {
         
@@ -134,7 +132,7 @@ public class Player : MonoBehaviour
 
     public void SelectArtifact()
     {
-        _artefactSelected = _artefactSelection;
+        _artefactSelected = _artefactYouLook;
     }
 
     public void KeepArtifact()

@@ -8,7 +8,8 @@ public class Interface : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _textAP;
     [SerializeField] private TextMeshProUGUI _textMP;
-    [SerializeField] private List<Image> _perkList;
+    [SerializeField] private List<Image> _perkListP1;
+    [SerializeField] private List<Image> _perkListP2;
     private Color _color;
     private Color _colorWhite;
     private Player _player;
@@ -27,9 +28,15 @@ public class Interface : MonoBehaviour
 
     private void StartUI()
     {
-        for (int i= 0; i < _perkList.Count; i++)
+        RefreshAPUI();
+        RefreshMPUI();
+        for (int i = 0; i < _perkListP1.Count; i++)
         {
-            _perkList[i].color = _color;
+            _perkListP1[i].color = _color;
+        }
+        for (int i = 0; i < _perkListP2.Count; i++)
+        {
+            _perkListP2[i].color = _color;
         }
     }
 
@@ -40,12 +47,19 @@ public class Interface : MonoBehaviour
 
     private void RefreshInventoryUI()
     {
-        for (int i = 0; i < PlayerManager.playerManager.GetPlayerPerkLimit(); i++)
+        for (int i = 0; i < PlayerManager.playerManager.InventoryAmmount(0); i++)
         {
-            if (_player.GetPerk(i) != null)
+            if (PlayerManager.playerManager.GetArtifactByIndex(0) != null)
             {
-                _perkList[i].sprite = _player.GetPerk(i).CardSpriteGrave;
-                _perkList[i].color = _colorWhite;
+                _perkListP1[i].sprite = PlayerManager.playerManager.GetInventory(i, 0);
+                _perkListP1[i].color = _colorWhite;
+            }
+        }
+        for (int i = 0; i < PlayerManager.playerManager.InventoryAmmount(1); i++)
+        {
+            {
+                _perkListP2[i].sprite = PlayerManager.playerManager.GetInventory(i, 1);
+                _perkListP2[i].color = _colorWhite;
             }
         }
     }
@@ -62,34 +76,35 @@ public class Interface : MonoBehaviour
 
     private void RefreshSelectedPerkUI()
     {
-        for (int i = 0; i < PlayerManager.playerManager.GetPlayerPerkLimit(); i++)
+        for (int i = 0; i < PlayerManager.playerManager.InventoryAmmount(0); i++)
         {
-            if (i == _player.GetSelectedPerk())
+            if (i == PlayerManager.playerManager.PlayerList[PlayerManager.playerManager.CurrentTurn()].GetSelectedPerk())
             {
-                if (_perkList[i].transform.localScale == Vector3.one)
-                {
-                    _perkList[i].transform.localScale *= 2;
-                }
+                if (_perkListP1[i].transform.position.x != 0)
+                    _perkListP1[i].transform.position = new Vector3(_perkListP1[i].transform.position.x, 125, 0);
             }
             else
             {
-                _perkList[i].transform.localScale = Vector3.one;
+                _perkListP1[i].transform.position = new Vector3(_perkListP1[i].transform.position.x, 0, 0);
+            }
+        }
+
+        for (int i = 0; i < PlayerManager.playerManager.InventoryAmmount(1); i++)
+        {
+            if (i == PlayerManager.playerManager.PlayerList[PlayerManager.playerManager.CurrentTurn()].GetSelectedPerk())
+            {
+                if (_perkListP2[i].transform.position.x != 0)
+                    _perkListP2[i].transform.position = new Vector3(_perkListP2[i].transform.position.x, 125, 0);
+            }
+            else
+            {
+                _perkListP2[i].transform.position = new Vector3(_perkListP2[i].transform.position.x, 0, 0);
             }
         }
     }
 
     private void RefreshCurrentInventoryUI()
     {
-        for (int i = 0; i < _perkList.Count; i++)
-        {
-            for (int j = 0; j < PlayerManager.playerManager.GetPlayerPerkLimit(); j++)
-            {
-                _perkList[i].color = _color;
-            }
-            if (_perkList[i].color == _color)
-            {
-                _perkList[i].color = _colorWhite;
-            }
-        }
+
     }
 }

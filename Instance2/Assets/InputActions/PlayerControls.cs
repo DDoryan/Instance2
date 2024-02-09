@@ -98,6 +98,24 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ExchangeStart"",
+                    ""type"": ""Button"",
+                    ""id"": ""1f7dff14-4729-494a-8797-1244c4fdce63"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""OpenInventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""3a9e7144-9d6c-4d4a-91fa-752a00a531ee"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -423,11 +441,33 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""fa3c5c9a-1030-4a4f-a44a-c1a653d9ddd1"",
-                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""OpenGrave"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b495cb5a-d30c-41be-a754-6cefbc5a5712"",
+                    ""path"": ""<Gamepad>/leftStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ExchangeStart"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6dbd15fe-8c5f-41ce-9141-6de0a5ed1c4b"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenInventory"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -604,6 +644,138 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""ExchangeSystem"",
+            ""id"": ""119f324a-ce69-48ab-aff0-0d3d6c96bafd"",
+            ""actions"": [
+                {
+                    ""name"": ""Navigation"",
+                    ""type"": ""Value"",
+                    ""id"": ""b469575b-b168-48d5-87c7-a6251f37d153"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ExchangeEnd"",
+                    ""type"": ""Button"",
+                    ""id"": ""e0b31908-390a-4139-aa3d-8e103954840d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SelectCardToExchange"",
+                    ""type"": ""Button"",
+                    ""id"": ""7caf9691-6cd0-471d-9363-df0f7d9f2106"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""AccepteExchange"",
+                    ""type"": ""Button"",
+                    ""id"": ""fb005817-1a13-4e5d-a860-a9e284bd01ab"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""f7977295-d217-42ff-9907-eda356e4a7f4"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Navigation"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""7dbe0730-2d6f-4441-a61d-e39e19e5f945"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Navigation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""c77a133d-98ee-4b12-842c-813a55aceffe"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Navigation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""c94880b1-e8a5-4c94-9ac7-3cf36963f15e"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Navigation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""4f3bc46a-02b5-43c5-818d-2de977f7078d"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Navigation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2a81c0e8-cba2-4282-860a-6b3202a05f7e"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectCardToExchange"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cf2b05ab-0701-4c3f-bc36-af89894110d8"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AccepteExchange"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ccb13aa7-8ed9-4b21-9310-5263f45d5c03"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ExchangeEnd"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -618,6 +790,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_PlayerInput_EndTurn = m_PlayerInput.FindAction("EndTurn", throwIfNotFound: true);
         m_PlayerInput_SwitchMap = m_PlayerInput.FindAction("SwitchMap", throwIfNotFound: true);
         m_PlayerInput_OpenGrave = m_PlayerInput.FindAction("OpenGrave", throwIfNotFound: true);
+        m_PlayerInput_ExchangeStart = m_PlayerInput.FindAction("ExchangeStart", throwIfNotFound: true);
+        m_PlayerInput_OpenInventory = m_PlayerInput.FindAction("OpenInventory", throwIfNotFound: true);
         // SelectArtefact
         m_SelectArtefact = asset.FindActionMap("SelectArtefact", throwIfNotFound: true);
         m_SelectArtefact_Navigation = m_SelectArtefact.FindAction("Navigation", throwIfNotFound: true);
@@ -626,6 +800,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_SelectArtefact_DestroyCard = m_SelectArtefact.FindAction("DestroyCard", throwIfNotFound: true);
         m_SelectArtefact_KeepArtifact = m_SelectArtefact.FindAction("KeepArtifact", throwIfNotFound: true);
         m_SelectArtefact_SwitchMap = m_SelectArtefact.FindAction("SwitchMap", throwIfNotFound: true);
+        // ExchangeSystem
+        m_ExchangeSystem = asset.FindActionMap("ExchangeSystem", throwIfNotFound: true);
+        m_ExchangeSystem_Navigation = m_ExchangeSystem.FindAction("Navigation", throwIfNotFound: true);
+        m_ExchangeSystem_ExchangeEnd = m_ExchangeSystem.FindAction("ExchangeEnd", throwIfNotFound: true);
+        m_ExchangeSystem_SelectCardToExchange = m_ExchangeSystem.FindAction("SelectCardToExchange", throwIfNotFound: true);
+        m_ExchangeSystem_AccepteExchange = m_ExchangeSystem.FindAction("AccepteExchange", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -695,6 +875,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerInput_EndTurn;
     private readonly InputAction m_PlayerInput_SwitchMap;
     private readonly InputAction m_PlayerInput_OpenGrave;
+    private readonly InputAction m_PlayerInput_ExchangeStart;
+    private readonly InputAction m_PlayerInput_OpenInventory;
     public struct PlayerInputActions
     {
         private @PlayerControls m_Wrapper;
@@ -707,6 +889,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @EndTurn => m_Wrapper.m_PlayerInput_EndTurn;
         public InputAction @SwitchMap => m_Wrapper.m_PlayerInput_SwitchMap;
         public InputAction @OpenGrave => m_Wrapper.m_PlayerInput_OpenGrave;
+        public InputAction @ExchangeStart => m_Wrapper.m_PlayerInput_ExchangeStart;
+        public InputAction @OpenInventory => m_Wrapper.m_PlayerInput_OpenInventory;
         public InputActionMap Get() { return m_Wrapper.m_PlayerInput; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -740,6 +924,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @OpenGrave.started += instance.OnOpenGrave;
             @OpenGrave.performed += instance.OnOpenGrave;
             @OpenGrave.canceled += instance.OnOpenGrave;
+            @ExchangeStart.started += instance.OnExchangeStart;
+            @ExchangeStart.performed += instance.OnExchangeStart;
+            @ExchangeStart.canceled += instance.OnExchangeStart;
+            @OpenInventory.started += instance.OnOpenInventory;
+            @OpenInventory.performed += instance.OnOpenInventory;
+            @OpenInventory.canceled += instance.OnOpenInventory;
         }
 
         private void UnregisterCallbacks(IPlayerInputActions instance)
@@ -768,6 +958,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @OpenGrave.started -= instance.OnOpenGrave;
             @OpenGrave.performed -= instance.OnOpenGrave;
             @OpenGrave.canceled -= instance.OnOpenGrave;
+            @ExchangeStart.started -= instance.OnExchangeStart;
+            @ExchangeStart.performed -= instance.OnExchangeStart;
+            @ExchangeStart.canceled -= instance.OnExchangeStart;
+            @OpenInventory.started -= instance.OnOpenInventory;
+            @OpenInventory.performed -= instance.OnOpenInventory;
+            @OpenInventory.canceled -= instance.OnOpenInventory;
         }
 
         public void RemoveCallbacks(IPlayerInputActions instance)
@@ -871,6 +1067,76 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         }
     }
     public SelectArtefactActions @SelectArtefact => new SelectArtefactActions(this);
+
+    // ExchangeSystem
+    private readonly InputActionMap m_ExchangeSystem;
+    private List<IExchangeSystemActions> m_ExchangeSystemActionsCallbackInterfaces = new List<IExchangeSystemActions>();
+    private readonly InputAction m_ExchangeSystem_Navigation;
+    private readonly InputAction m_ExchangeSystem_ExchangeEnd;
+    private readonly InputAction m_ExchangeSystem_SelectCardToExchange;
+    private readonly InputAction m_ExchangeSystem_AccepteExchange;
+    public struct ExchangeSystemActions
+    {
+        private @PlayerControls m_Wrapper;
+        public ExchangeSystemActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Navigation => m_Wrapper.m_ExchangeSystem_Navigation;
+        public InputAction @ExchangeEnd => m_Wrapper.m_ExchangeSystem_ExchangeEnd;
+        public InputAction @SelectCardToExchange => m_Wrapper.m_ExchangeSystem_SelectCardToExchange;
+        public InputAction @AccepteExchange => m_Wrapper.m_ExchangeSystem_AccepteExchange;
+        public InputActionMap Get() { return m_Wrapper.m_ExchangeSystem; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(ExchangeSystemActions set) { return set.Get(); }
+        public void AddCallbacks(IExchangeSystemActions instance)
+        {
+            if (instance == null || m_Wrapper.m_ExchangeSystemActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_ExchangeSystemActionsCallbackInterfaces.Add(instance);
+            @Navigation.started += instance.OnNavigation;
+            @Navigation.performed += instance.OnNavigation;
+            @Navigation.canceled += instance.OnNavigation;
+            @ExchangeEnd.started += instance.OnExchangeEnd;
+            @ExchangeEnd.performed += instance.OnExchangeEnd;
+            @ExchangeEnd.canceled += instance.OnExchangeEnd;
+            @SelectCardToExchange.started += instance.OnSelectCardToExchange;
+            @SelectCardToExchange.performed += instance.OnSelectCardToExchange;
+            @SelectCardToExchange.canceled += instance.OnSelectCardToExchange;
+            @AccepteExchange.started += instance.OnAccepteExchange;
+            @AccepteExchange.performed += instance.OnAccepteExchange;
+            @AccepteExchange.canceled += instance.OnAccepteExchange;
+        }
+
+        private void UnregisterCallbacks(IExchangeSystemActions instance)
+        {
+            @Navigation.started -= instance.OnNavigation;
+            @Navigation.performed -= instance.OnNavigation;
+            @Navigation.canceled -= instance.OnNavigation;
+            @ExchangeEnd.started -= instance.OnExchangeEnd;
+            @ExchangeEnd.performed -= instance.OnExchangeEnd;
+            @ExchangeEnd.canceled -= instance.OnExchangeEnd;
+            @SelectCardToExchange.started -= instance.OnSelectCardToExchange;
+            @SelectCardToExchange.performed -= instance.OnSelectCardToExchange;
+            @SelectCardToExchange.canceled -= instance.OnSelectCardToExchange;
+            @AccepteExchange.started -= instance.OnAccepteExchange;
+            @AccepteExchange.performed -= instance.OnAccepteExchange;
+            @AccepteExchange.canceled -= instance.OnAccepteExchange;
+        }
+
+        public void RemoveCallbacks(IExchangeSystemActions instance)
+        {
+            if (m_Wrapper.m_ExchangeSystemActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IExchangeSystemActions instance)
+        {
+            foreach (var item in m_Wrapper.m_ExchangeSystemActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_ExchangeSystemActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public ExchangeSystemActions @ExchangeSystem => new ExchangeSystemActions(this);
     public interface IPlayerInputActions
     {
         void OnMovement(InputAction.CallbackContext context);
@@ -881,6 +1147,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnEndTurn(InputAction.CallbackContext context);
         void OnSwitchMap(InputAction.CallbackContext context);
         void OnOpenGrave(InputAction.CallbackContext context);
+        void OnExchangeStart(InputAction.CallbackContext context);
+        void OnOpenInventory(InputAction.CallbackContext context);
     }
     public interface ISelectArtefactActions
     {
@@ -890,5 +1158,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnDestroyCard(InputAction.CallbackContext context);
         void OnKeepArtifact(InputAction.CallbackContext context);
         void OnSwitchMap(InputAction.CallbackContext context);
+    }
+    public interface IExchangeSystemActions
+    {
+        void OnNavigation(InputAction.CallbackContext context);
+        void OnExchangeEnd(InputAction.CallbackContext context);
+        void OnSelectCardToExchange(InputAction.CallbackContext context);
+        void OnAccepteExchange(InputAction.CallbackContext context);
     }
 }

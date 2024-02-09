@@ -59,12 +59,23 @@ public class GetInput : MonoBehaviour
 
     public void ExchangeAction(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.performed && (PlayerManager.playerManager.InventoryAmmount(0) > 0 || PlayerManager.playerManager.InventoryAmmount(1) > 0))
         {
+            _playerInput.actions.FindActionMap("SelectArtefact").Disable();
+            _playerInput.actions.FindActionMap("PlayerInput").Disable();
+            _playerInput.actions.FindActionMap("ExchangeSystem").Enable();
             PlayerManager.playerManager.ExchangeStart();
+            Debug.Log("Perform");
         }
     }
 
+    public void ActiveInventory(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            PlayerManager.playerManager.ActiveInventory();
+        }
+    }
 
 
 

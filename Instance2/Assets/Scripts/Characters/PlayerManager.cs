@@ -1,8 +1,7 @@
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class PlayerManager : Entity
 {
@@ -31,10 +30,18 @@ public class PlayerManager : Entity
     private int _currentTurn;
     public static PlayerManager playerManager;
 
+
+    [Header("UIElement")]
     [SerializeField]
     private GameObject _panelP1;
     [SerializeField]
     private GameObject _panelP2;
+    [SerializeField] 
+    private GameObject _panelP3;
+    [SerializeField] 
+    private GameObject _textInventory;
+
+    public List<Player> PlayerList {  get { return _playerList; } }
 
 
     private void Awake()
@@ -72,6 +79,41 @@ public class PlayerManager : Entity
             EndRound();
             ResetActionPoints();
         }
+    }
+
+    public void NavigatePerks(Vector2 direction)
+    {
+        if (_playerList[_currentTurn].SelectedPerk + direction.x.ConvertTo<int>() < _playerList[_currentTurn].InventoryPlayer.Count && _playerList[_currentTurn].SelectedPerk + direction.x.ConvertTo<int>() >= 0)
+        {
+            if (!_playerList[_currentTurn].InventoryPlayer[_playerList[_currentTurn].SelectedPerk + direction.x.ConvertTo<int>()].IsUnityNull())
+            {
+                _playerList[_currentTurn].SelectedPerk += direction.x.ConvertTo<int>();
+                _playerList[_currentTurn].ArtefactYouLook = _playerList[_currentTurn].InventoryPlayer[_playerList[_currentTurn].SelectedPerk];
+            }
+        }
+    }
+
+    public void ActiveInventory()
+    {
+        _panelP3.SetActive(!_panelP3.activeSelf);
+        _textInventory.SetActive(!_textInventory.activeSelf);
+    }
+
+
+    public Artefacte GetArtifactByIndex(int i)
+    {
+        return _playerList[_currentTurn].GetPerk(i);
+    }
+
+    public Sprite GetInventory(int index, int playerInventory)
+    {
+            return _playerList[playerInventory].InventoryPlayer[index].CardSpriteGrave;
+    }
+
+    public Artefacte GetArtifactByInput()
+    {
+        Artefacte _artefacteYouChoose = _playerList[_currentTurn].ArtefactYouLook;
+        return _artefacteYouChoose;
     }
 
     public int CurrentTurn()
@@ -187,7 +229,7 @@ public class PlayerManager : Entity
             print("inventory empty");
             return;
         }
-        _playerList[_currentTurn].NavigatePerks(direction);
+        NavigatePerks(direction);
         NavEvent?.Invoke();
     }
 
@@ -218,6 +260,7 @@ public class PlayerManager : Entity
             if (_currentTurn == 0)
             {
                 _currentTurn = 1;
+                _playerList[_currentTurn].SelectedPerk = 0;
                 _panelP1.SetActive(false);
                 _panelP2.SetActive(true);
                 return;
@@ -225,6 +268,7 @@ public class PlayerManager : Entity
             if (_currentTurn == 1)
             {
                 _currentTurn = 0;
+                _playerList[_currentTurn].SelectedPerk = 0;
                 _panelP1.SetActive(true);
                 _panelP2.SetActive(false);
                 EndRound();
@@ -242,5 +286,18 @@ public class PlayerManager : Entity
     public int GetPlayerPerkLimit()
     {
         return _playerList[_currentTurn].GetPerkLimit();
+    }
+
+    public int InventoryAmmount(int j)
+    {
+        if (j == 0)
+        {
+            return _player1.InventoryPlayer.Count;
+        }
+        else if (j == 1)
+        {
+            return _player2.InventoryPlayer.Count;
+        }
+        return 2;
     }
 }
