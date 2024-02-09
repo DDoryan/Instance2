@@ -5,7 +5,7 @@ using UnityEngine.Tilemaps;
 
 public class Fire : Swapable
 {
-    public Fire(CaseType myType, bool walkableDeath, bool walkablePlayer, int area, TileBase myTile, Vector3 worldPos) : base(myType, walkableDeath, walkablePlayer, area, myTile, worldPos)
+    public Fire(CaseType myType, bool walkableDeath, bool walkablePlayer, int area, TileBase myTile, Vector3 worldPos, int indexInGrid) : base(myType, walkableDeath, walkablePlayer, area, myTile, worldPos, indexInGrid)
     {
         _caseType = myType;
         _isWalkableByDeath = walkableDeath;

@@ -5,7 +5,7 @@ using UnityEngine.Tilemaps;
 
 public abstract class Case 
 {
-    public Case (CaseType myType, bool walkableDeath, bool walkablePlayer, int area, TileBase myTile, Vector3 worldPos)
+    public Case (CaseType myType, bool walkableDeath, bool walkablePlayer, int area, TileBase myTile, Vector3 worldPos, int indexInGrid)
     {
         _caseType = myType;
         _isWalkableByDeath = walkableDeath;
@@ -13,11 +13,12 @@ public abstract class Case
         _area = area;
         _worldPos = worldPos;
         _myTile = myTile;
+        _indexInGrid = indexInGrid;
     }
 
     protected CaseType _caseType;
 
-    protected List<Case> _neighbor; // getter et setter , pas moi, a faire dans Case
+    protected List<Case> _neighbor = new List<Case>(); // getter et setter , pas moi, a faire dans Case
 
     protected bool _isWalkableByDeath; // getter, pas moi, a faire dans case
 
@@ -29,12 +30,30 @@ public abstract class Case
 
     protected Vector3 _worldPos;
 
+    protected int _indexInGrid;
+
+
+
 
 
     [SerializeField]
     protected Sprite _defaultSprite; // getter, pas moi, a faire dans Case
 
+    public void AddNeighbor(Case neighbor)
+    {
+        _neighbor.Add(neighbor);
+    }
 
+    public void IntroduceYourself()
+    {
+        Debug.Log("my name is " + _caseType.ToString() + " I got " + _neighbor.Count + " neighbors");
+    }
+
+
+    public int GetPosInGrid()
+    {
+        return _indexInGrid;
+    }
 
 
     #region Getter & Setter

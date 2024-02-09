@@ -58,7 +58,7 @@ public class MenuManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Time.timeScale set to play");
+            //Debug.Log("Time.timeScale set to play");
             Time.timeScale = 1f;
         }
     }
