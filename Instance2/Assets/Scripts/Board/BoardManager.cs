@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TreeEditor;
@@ -9,6 +10,10 @@ public class BoardManager : MonoBehaviour
 {
     [SerializeField] Tilemap tilemap;
     [SerializeField] List<TileData> tilesDatas = new List<TileData>();
+    [SerializeField] List<interactibleSpriteContainer> spriteSwap = new List<interactibleSpriteContainer>();
+
+    private Dictionary<TileBase, interactibleSpriteContainer> tileSwap = new Dictionary<TileBase, interactibleSpriteContainer> { };
+    private Dictionary<int, interactibleSpriteContainer> tileSwapEffectiv = new Dictionary<int, interactibleSpriteContainer> { };
 
     private Dictionary<TileBase, TileData> dataFromTiles = new Dictionary<TileBase, TileData>();
     private Dictionary<Vector3Int, Case> worldToMapInfo = new Dictionary<Vector3Int, Case>();
@@ -29,6 +34,12 @@ public class BoardManager : MonoBehaviour
             }
         }
         // we can now use the tileBase as a way to find the nature of a tile
+        
+        foreach (interactibleSpriteContainer swap in spriteSwap)
+        {
+            tileSwap.Add(swap.defauldTile,swap);
+        }
+            
 
         for (int i = 0; i < 15; i++)
         {
@@ -36,6 +47,9 @@ public class BoardManager : MonoBehaviour
             {
                 pos.Set(i, j, 0);
                 mapInfo[ i * lengthLine + j ] = CreateCase(dataFromTiles[tilemap.GetTile(pos)].id, tilemap.GetTile(pos), tilemap.CellToWorld(pos), i * lengthLine + j);
+
+                if (tileSwap.ContainsKey(tilemap.GetTile(pos)))
+                    tileSwapEffectiv.Add(i * lengthLine + j, tileSwap[tilemap.GetTile(pos)]);
             }
         }
 
@@ -135,6 +149,8 @@ public class BoardManager : MonoBehaviour
         }
         return null;
     }
+
+
 }
 
 public enum direction
@@ -143,4 +159,13 @@ public enum direction
     south,
     west,
     est
+}
+
+
+
+[Serializable]
+public struct interactibleSpriteContainer
+{
+    public TileBase defauldTile;
+    public TileBase usedTile;
 }
