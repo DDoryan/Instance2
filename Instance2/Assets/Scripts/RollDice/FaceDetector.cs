@@ -13,9 +13,11 @@ public class FaceDetector : MonoBehaviour
     {
         if (_dice != null)
         {
-            if (_dice.GetComponent<Rigidbody>().velocity == Vector3.zero)
+            if (_dice.GetComponent<Rigidbody>().velocity.magnitude < 0.01f)
             {
+                _dice.SetBoolIsBlocked(true);
                 _dice.SetDiceFaceNum(int.Parse(other.name));
+                _dice.PrintDiceFace();
             }
         }
     }
