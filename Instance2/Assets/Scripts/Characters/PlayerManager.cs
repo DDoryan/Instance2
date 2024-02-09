@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class PlayerManager : Entity
 {
+
     [SerializeField] public int _actionPoints;
     [SerializeField] public int _magicPoints;
     private int _baseAP;
@@ -54,12 +56,13 @@ public class PlayerManager : Entity
         }
     }
 
-    public void ResetActionPoints () 
-    { 
+    public void ResetActionPoints()
+    {
         _actionPoints = _baseAP;
     }
 
-    public bool SubstractActionPoints (int value)
+
+    public bool SubstractActionPoints(int value)
     {
         if ((_actionPoints - value) < 0)
         {
@@ -138,7 +141,7 @@ public class PlayerManager : Entity
         _playerList[_currentTurn].NavigatePerks(direction);
     }
 
-    public void MovePlayer (Vector2 direction)
+    public void MovePlayer(Vector2 direction)
     {
         if (_isTurn)
         {

@@ -481,6 +481,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SwitchMap"",
+                    ""type"": ""Button"",
+                    ""id"": ""018bae09-6630-405a-8634-e2a31072c7bf"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -582,6 +591,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""KeepArtifact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bd5c274c-e609-4535-89cd-6bdbbd66b12a"",
+                    ""path"": ""<Gamepad>/rightStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchMap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -605,6 +625,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_SelectArtefact_CancelSelection = m_SelectArtefact.FindAction("Cancel Selection", throwIfNotFound: true);
         m_SelectArtefact_DestroyCard = m_SelectArtefact.FindAction("DestroyCard", throwIfNotFound: true);
         m_SelectArtefact_KeepArtifact = m_SelectArtefact.FindAction("KeepArtifact", throwIfNotFound: true);
+        m_SelectArtefact_SwitchMap = m_SelectArtefact.FindAction("SwitchMap", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -773,6 +794,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_SelectArtefact_CancelSelection;
     private readonly InputAction m_SelectArtefact_DestroyCard;
     private readonly InputAction m_SelectArtefact_KeepArtifact;
+    private readonly InputAction m_SelectArtefact_SwitchMap;
     public struct SelectArtefactActions
     {
         private @PlayerControls m_Wrapper;
@@ -782,6 +804,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @CancelSelection => m_Wrapper.m_SelectArtefact_CancelSelection;
         public InputAction @DestroyCard => m_Wrapper.m_SelectArtefact_DestroyCard;
         public InputAction @KeepArtifact => m_Wrapper.m_SelectArtefact_KeepArtifact;
+        public InputAction @SwitchMap => m_Wrapper.m_SelectArtefact_SwitchMap;
         public InputActionMap Get() { return m_Wrapper.m_SelectArtefact; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -806,6 +829,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @KeepArtifact.started += instance.OnKeepArtifact;
             @KeepArtifact.performed += instance.OnKeepArtifact;
             @KeepArtifact.canceled += instance.OnKeepArtifact;
+            @SwitchMap.started += instance.OnSwitchMap;
+            @SwitchMap.performed += instance.OnSwitchMap;
+            @SwitchMap.canceled += instance.OnSwitchMap;
         }
 
         private void UnregisterCallbacks(ISelectArtefactActions instance)
@@ -825,6 +851,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @KeepArtifact.started -= instance.OnKeepArtifact;
             @KeepArtifact.performed -= instance.OnKeepArtifact;
             @KeepArtifact.canceled -= instance.OnKeepArtifact;
+            @SwitchMap.started -= instance.OnSwitchMap;
+            @SwitchMap.performed -= instance.OnSwitchMap;
+            @SwitchMap.canceled -= instance.OnSwitchMap;
         }
 
         public void RemoveCallbacks(ISelectArtefactActions instance)
@@ -860,5 +889,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnCancelSelection(InputAction.CallbackContext context);
         void OnDestroyCard(InputAction.CallbackContext context);
         void OnKeepArtifact(InputAction.CallbackContext context);
+        void OnSwitchMap(InputAction.CallbackContext context);
     }
 }

@@ -459,6 +459,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "SwitchMap",
+                    "type": "Button",
+                    "id": "018bae09-6630-405a-8634-e2a31072c7bf",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -558,6 +567,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "KeepArtifact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bd5c274c-e609-4535-89cd-6bdbbd66b12a",
+                    "path": "<Gamepad>/rightStickPress",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SwitchMap",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

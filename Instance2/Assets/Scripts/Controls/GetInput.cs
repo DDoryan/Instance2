@@ -43,6 +43,17 @@ public class GetInput : MonoBehaviour
         {
             _playerInput.actions.FindActionMap("SelectArtefact").Enable();
             _playerInput.actions.FindActionMap("PlayerInput").Disable();
+            Debug.Log("SwitchMap");
+        }
+    }
+    public void SwitchMapInverted(InputAction.CallbackContext context)
+    {
+        if(context.performed)
+        {
+            _playerInput.actions.FindActionMap("SelectArtefact").Disable();
+            _playerInput.actions.FindActionMap("PlayerInput").Enable();
+            Debug.Log("SwitchMap");
+
         }
     }
 

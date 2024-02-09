@@ -1,11 +1,18 @@
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public class Player : MonoBehaviour
 {
+
+
+
+
+
     [SerializeField] private int _perkLimit;
     [SerializeField] private bool _canOpenTombs;
 
@@ -23,13 +30,18 @@ public class Player : MonoBehaviour
 
     [SerializeField] private Artefacte _artefact;
 
-    [SerializeField] private Artefacte _artefactSelection;
+    private Artefacte _artefactSelection;
     [SerializeField] private Artefacte _artefactSelected;
 
     [SerializeField] private Grave _grave;
     public List<Artefacte> InventoryPlayer
     {
         get { return _inventoryPlayer; }
+    }
+
+    public int SelectedPerk
+    {
+        get { return _selectedPerk; }
     }
 
     void Start()
@@ -104,6 +116,7 @@ public class Player : MonoBehaviour
 
     }*/
 
+
     public void AddToInventory()
     {
 
@@ -111,7 +124,7 @@ public class Player : MonoBehaviour
         {
             _inventoryPlayer.Add(_grave.Interact());
         }
-        else if (_inventoryPlayer.Count >= _perkLimit)
+        else if (_inventoryPlayer.Count >= _perkLimit && _artefact == null)
         {
             _artefactFull = true;
             _artefact = _grave.Interact();
@@ -127,8 +140,11 @@ public class Player : MonoBehaviour
     {
         if (_artefactFull)
         {
+            Deck.GraveDeck.DefaultCard.Add(_artefactSelected);
             _inventoryPlayer.Remove(_artefactSelected);
             _inventoryPlayer.Add(_artefact);
+            _artefactSelected = null;
+            _artefact = null;
         }
     }
 
@@ -136,7 +152,8 @@ public class Player : MonoBehaviour
     {
         if (_artefactFull)
         {
-            Destroy(_artefact);
+            Deck.GraveDeck.DefaultCard.Add(_artefact);
+            _artefact = null;
         }
     }
 
