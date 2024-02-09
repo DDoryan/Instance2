@@ -17,7 +17,7 @@ public class Grave : Interactible
             _defaultSprite = _isTrigerredSprite;
             Artefacte card = Deck.GraveDeck.GetRandomCard();
             //Debug.Log("c'est bon");
-            _canInteract = false;
+            //_canInteract = false;
             return card;
         }
         return null;
