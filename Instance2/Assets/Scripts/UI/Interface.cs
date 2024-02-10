@@ -76,31 +76,38 @@ public class Interface : MonoBehaviour
 
     private void RefreshSelectedPerkUI()
     {
-        for (int i = 0; i < PlayerManager.playerManager.InventoryAmmount(0); i++)
+        if (PlayerManager.playerManager.CurrentTurn() == 0)
         {
-            if (i == PlayerManager.playerManager.PlayerList[PlayerManager.playerManager.CurrentTurn()].GetSelectedPerk())
+
+            for (int i = 0; i < PlayerManager.playerManager.InventoryAmmount(0); i++)
             {
-                if (_perkListP1[i].transform.position.x != 0)
-                    _perkListP1[i].transform.position = new Vector3(_perkListP1[i].transform.position.x, 125, 0);
+                if (i == PlayerManager.playerManager.PlayerList[PlayerManager.playerManager.CurrentTurn()].GetSelectedPerk())
+                {
+                    if (_perkListP1[i].transform.position.y == 0)
+                        _perkListP1[i].transform.position = new Vector3(_perkListP1[i].transform.position.x, 125, 0);
+                }
+                else
+                {
+                    _perkListP1[i].transform.position = new Vector3(_perkListP1[i].transform.position.x, 0, 0);
+                }
             }
-            else
+        }
+        else if (PlayerManager.playerManager.CurrentTurn() == 1)
+        {
+            for (int i = 0; i < PlayerManager.playerManager.InventoryAmmount(1); i++)
             {
-                _perkListP1[i].transform.position = new Vector3(_perkListP1[i].transform.position.x, 0, 0);
+                if (i == PlayerManager.playerManager.PlayerList[PlayerManager.playerManager.CurrentTurn()].GetSelectedPerk())
+                {
+                    if (_perkListP2[i].transform.position.y == 0)
+                        _perkListP2[i].transform.position = new Vector3(_perkListP2[i].transform.position.x, 125, 0);
+                }
+                else
+                {
+                    _perkListP2[i].transform.position = new Vector3(_perkListP2[i].transform.position.x, 0, 0);
+                }
             }
         }
 
-        for (int i = 0; i < PlayerManager.playerManager.InventoryAmmount(1); i++)
-        {
-            if (i == PlayerManager.playerManager.PlayerList[PlayerManager.playerManager.CurrentTurn()].GetSelectedPerk())
-            {
-                if (_perkListP2[i].transform.position.x != 0)
-                    _perkListP2[i].transform.position = new Vector3(_perkListP2[i].transform.position.x, 125, 0);
-            }
-            else
-            {
-                _perkListP2[i].transform.position = new Vector3(_perkListP2[i].transform.position.x, 0, 0);
-            }
-        }
     }
 
     private void RefreshCurrentInventoryUI()

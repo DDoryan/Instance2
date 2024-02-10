@@ -1,3 +1,5 @@
+// Ignore Spelling: Substract Ammount
+
 using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
@@ -5,16 +7,41 @@ using UnityEngine;
 
 public class PlayerManager : Entity
 {
+    #region MouvementEvent
     public delegate void MovementEventDelegate();
     public event MovementEventDelegate MovementEvent;
+    #endregion
+
+    #region ActionEvent
     public delegate void ActionEventDelegate();
     public event ActionEventDelegate ActionEvent;
+    #endregion
+
+    #region ExchangeEvent
     public delegate void ExchangeEventDelegate();
-    public event ExchangeEventDelegate ExchangeEvent;
+    public event ExchangeEventDelegate ExchangeEvent;    
+    public delegate void ExchangeEndEventDelegate();
+    public event ExchangeEventDelegate ExchangeEndEvent;
+    #endregion
+
+    #region NavEvent
     public delegate void NavEventDelegate();
     public event NavEventDelegate NavEvent;
+    #endregion
+
+    #region ChangePlayerEvent
     public delegate void ChangePlayerEventDelegate();
     public event ChangePlayerEventDelegate ChangePlayerEvent;
+    #endregion
+
+    #region Selected Artifact Exchange Event
+
+    public delegate void SelectedArtifactToExchangeDelegate();
+    public event SelectedArtifactToExchangeDelegate SelectedArtifactToExchangeEvent;
+
+
+    #endregion  
+
     [SerializeField] public int _actionPoints;
     [SerializeField] public int _magicPoints;
     private int _baseAP;
@@ -81,25 +108,7 @@ public class PlayerManager : Entity
         }
     }
 
-    public void NavigatePerks(Vector2 direction)
-    {
-        if (_playerList[_currentTurn].SelectedPerk + direction.x.ConvertTo<int>() < _playerList[_currentTurn].InventoryPlayer.Count && _playerList[_currentTurn].SelectedPerk + direction.x.ConvertTo<int>() >= 0)
-        {
-            if (!_playerList[_currentTurn].InventoryPlayer[_playerList[_currentTurn].SelectedPerk + direction.x.ConvertTo<int>()].IsUnityNull())
-            {
-                _playerList[_currentTurn].SelectedPerk += direction.x.ConvertTo<int>();
-                _playerList[_currentTurn].ArtefactYouLook = _playerList[_currentTurn].InventoryPlayer[_playerList[_currentTurn].SelectedPerk];
-            }
-        }
-    }
-
-    public void ActiveInventory()
-    {
-        _panelP3.SetActive(!_panelP3.activeSelf);
-        _textInventory.SetActive(!_textInventory.activeSelf);
-    }
-
-
+    #region Return Somethings
     public Artefacte GetArtifactByIndex(int i)
     {
         return _playerList[_currentTurn].GetPerk(i);
@@ -110,10 +119,9 @@ public class PlayerManager : Entity
             return _playerList[playerInventory].InventoryPlayer[index].CardSpriteGrave;
     }
 
-    public Artefacte GetArtifactByInput()
+    public Player GetPlayer()
     {
-        Artefacte _artefacteYouChoose = _playerList[_currentTurn].ArtefactYouLook;
-        return _artefacteYouChoose;
+        return _playerList[_currentTurn];
     }
 
     public int CurrentTurn()
@@ -128,18 +136,6 @@ public class PlayerManager : Entity
         }
         return 2;
     }
-
-    public void ExchangeStart()
-    {
-        ExchangeEvent?.Invoke();
-    }
-
-    public void ResetActionPoints()
-    {
-        _actionPoints = _baseAP;
-        MovementEvent?.Invoke();
-    }
-
 
     public bool SubstractActionPoints(int value)
     {
@@ -197,15 +193,57 @@ public class PlayerManager : Entity
         }
     }
 
-    public void SelectedArtifact()
+    public int GetPlayerPerkLimit()
     {
-        _playerList[_currentTurn].SelectArtifact();
+        return _playerList[_currentTurn].GetPerkLimit();
+    }
+
+    public int InventoryAmmount(int j)
+    {
+        if (j == 0)
+        {
+            return _player1.InventoryPlayer.Count;
+        }
+        else if (j == 1)
+        {
+            return _player2.InventoryPlayer.Count;
+        }
+        return 2;
+    }
+
+
+    #endregion
+
+    #region Inventory
+    public void NavigatePerks(Vector2 direction)
+    {
+        if (_playerList[_currentTurn].SelectedPerk + direction.x.ConvertTo<int>() < _playerList[_currentTurn].InventoryPlayer.Count && _playerList[_currentTurn].SelectedPerk + direction.x.ConvertTo<int>() >= 0)
+        {
+            if (!_playerList[_currentTurn].InventoryPlayer[_playerList[_currentTurn].SelectedPerk + direction.x.ConvertTo<int>()].IsUnityNull())
+            {
+                _playerList[_currentTurn].SelectedPerk += direction.x.ConvertTo<int>();
+                _playerList[_currentTurn].ArtefactYouLook = _playerList[_currentTurn].InventoryPlayer[_playerList[_currentTurn].SelectedPerk];
+            }
+        }
+    }
+
+
+    public void ActiveInventory()
+    {
+        _panelP3.SetActive(!_panelP3.activeSelf);
+        _textInventory.SetActive(!_textInventory.activeSelf);
     }
 
     public void AddToInventory()
     {
         _playerList[_currentTurn].AddToInventory();
         ActionEvent?.Invoke();
+    }
+
+    public void SelectedArtifact()
+    {
+        _playerList[_currentTurn].SelectArtifact();
+        SelectedArtifactToExchangeEvent?.Invoke();
     }
 
     public void KeepArtifact()
@@ -220,7 +258,6 @@ public class PlayerManager : Entity
         ActionEvent?.Invoke();
     }
 
-
     public void NavigateInventory(Vector2 direction)
     {
         if (!_isTurn) { return; }
@@ -231,6 +268,25 @@ public class PlayerManager : Entity
         }
         NavigatePerks(direction);
         NavEvent?.Invoke();
+    }
+
+    #endregion
+
+
+    public void ExchangeStart()
+    {
+        ExchangeEvent?.Invoke();
+    }
+
+    public void ExchangeEnd()
+    {
+
+    }
+
+    public void ResetActionPoints()
+    {
+        _actionPoints = _baseAP;
+        MovementEvent?.Invoke();
     }
 
     public void MovePlayer(Vector2 direction)
@@ -260,7 +316,7 @@ public class PlayerManager : Entity
             if (_currentTurn == 0)
             {
                 _currentTurn = 1;
-                _playerList[_currentTurn].SelectedPerk = 0;
+                _playerList[_currentTurn].ArtefactYouLook = null;
                 _panelP1.SetActive(false);
                 _panelP2.SetActive(true);
                 return;
@@ -268,7 +324,7 @@ public class PlayerManager : Entity
             if (_currentTurn == 1)
             {
                 _currentTurn = 0;
-                _playerList[_currentTurn].SelectedPerk = 0;
+                _playerList[_currentTurn].ArtefactYouLook = null;
                 _panelP1.SetActive(true);
                 _panelP2.SetActive(false);
                 EndRound();
@@ -276,28 +332,5 @@ public class PlayerManager : Entity
             }
             ChangePlayerEvent?.Invoke();
         }
-    }
-
-    public Player GetPlayer()
-    {
-        return _playerList[_currentTurn];
-    }
-
-    public int GetPlayerPerkLimit()
-    {
-        return _playerList[_currentTurn].GetPerkLimit();
-    }
-
-    public int InventoryAmmount(int j)
-    {
-        if (j == 0)
-        {
-            return _player1.InventoryPlayer.Count;
-        }
-        else if (j == 1)
-        {
-            return _player2.InventoryPlayer.Count;
-        }
-        return 2;
     }
 }

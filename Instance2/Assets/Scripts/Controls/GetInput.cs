@@ -69,6 +69,21 @@ public class GetInput : MonoBehaviour
         }
     }
 
+
+
+    public void SelectionEventStart(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            PlayerManager.playerManager.SelectedArtifact();
+        }
+    }
+
+
+
+
+
+
     public void ActiveInventory(InputAction.CallbackContext context)
     {
         if (context.performed)
