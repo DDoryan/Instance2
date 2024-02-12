@@ -18,12 +18,10 @@ public class Player : MonoBehaviour
 
     private bool _artefactFull;
 
-    private PlayerManager _playerManager;
     private int _cellOn;
     private int _selectedPerk;
     private Vector3 _destination;
     private PlayerState _myState;
-    [SerializeField] private float _cellSize;
     [SerializeField] private Transform _playerPos;
     [SerializeField] private List<Artefacte> _inventoryPlayer = new List<Artefacte>();
     [SerializeField] private bool _haveTreasure;
@@ -87,22 +85,38 @@ public class Player : MonoBehaviour
             switch (direction.y)
             {
                 case 1:
-                    _destination = _playerPos.position + Vector3.up * _cellSize;
+                    if (BoardManager.Instance.FindNeighbourCell(Direction.north, _cellOn) != null && BoardManager.Instance.FindNeighbourCell(Direction.north,_cellOn).IsWalkableByPlayer)
+                    {
+                        _destination = BoardManager.Instance.FindNeighbourCell(Direction.north, _cellOn).WorldPos;
+                        _cellOn = BoardManager.Instance.FindNeighbourCell(Direction.north, _cellOn).GetPosInGrid(); ;
+                    }
                     break;
 
                 case -1:
-                    _destination = _playerPos.position + Vector3.down * _cellSize;
+                    if (BoardManager.Instance.FindNeighbourCell(Direction.south, _cellOn) != null && BoardManager.Instance.FindNeighbourCell(Direction.south, _cellOn).IsWalkableByPlayer)
+                    {
+                        _destination = BoardManager.Instance.FindNeighbourCell(Direction.south, _cellOn).WorldPos;
+                        _cellOn = BoardManager.Instance.FindNeighbourCell(Direction.south, _cellOn).GetPosInGrid(); ;
+                    }
                     break;
             }
 
             switch (direction.x)
             {
                 case 1:
-                    _destination = _playerPos.position + Vector3.right * _cellSize;
+                    if (BoardManager.Instance.FindNeighbourCell(Direction.est, _cellOn) != null && BoardManager.Instance.FindNeighbourCell(Direction.est, _cellOn).IsWalkableByPlayer)
+                    {
+                        _destination = BoardManager.Instance.FindNeighbourCell(Direction.est, _cellOn).WorldPos;
+                        _cellOn = BoardManager.Instance.FindNeighbourCell(Direction.est, _cellOn).GetPosInGrid();
+                    }
                     break;
 
                 case -1:
-                    _destination = _playerPos.position + Vector3.left * _cellSize;
+                    if (BoardManager.Instance.FindNeighbourCell(Direction.west, _cellOn) != null && BoardManager.Instance.FindNeighbourCell(Direction.west, _cellOn).IsWalkableByPlayer)
+                    {
+                        _destination = BoardManager.Instance.FindNeighbourCell(Direction.west, _cellOn).WorldPos;
+                        _cellOn = BoardManager.Instance.FindNeighbourCell(Direction.west, _cellOn).GetPosInGrid();
+                    }
                     break;
             }
             _myState = PlayerState.moving;
@@ -174,7 +188,7 @@ public class Player : MonoBehaviour
 
     public int CastSpell(int ressource)
     {
-        if (_inventoryPlayer.Count == 0) {  return 0; }
+        if (_inventoryPlayer.Count == 0) { return 0; }
         if (ressource - _inventoryPlayer[_selectedPerk].Cost < 0)
         {
             return 0;
@@ -221,7 +235,10 @@ public class Player : MonoBehaviour
 
     public int GetCellOn() { return _cellOn; }
 
+    public void SetCellOn(int newCellPos) { _cellOn = newCellPos; }
+
     public int GetPerkLimit() { return _perkLimit; }
+
 }
 
 public enum PlayerState

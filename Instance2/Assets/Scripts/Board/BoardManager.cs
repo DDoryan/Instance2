@@ -1,56 +1,77 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
-using TreeEditor;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
 
 public class BoardManager : MonoBehaviour
 {
-    [SerializeField] Tilemap tilemap;
-    [SerializeField] List<TileData> tilesDatas = new List<TileData>();
+    [SerializeField] private Tilemap _tilemap;
+    [SerializeField] private List<TileData> _tilesDatas = new List<TileData>();
+    [SerializeField] private List<interactibleSpriteContainer> _spriteSwap = new List<interactibleSpriteContainer>();
 
-    private Dictionary<TileBase, TileData> dataFromTiles = new Dictionary<TileBase, TileData>();
-    private Dictionary<Vector3Int, Case> worldToMapInfo = new Dictionary<Vector3Int, Case>();
+    private Dictionary<TileBase, interactibleSpriteContainer> _tileSwap = new Dictionary<TileBase, interactibleSpriteContainer> { };
+    private Dictionary<int, interactibleSpriteContainer> _tileSwapEffectiv = new Dictionary<int, interactibleSpriteContainer> { };
 
-    private Case[] mapInfo = new Case[225];
+    private Dictionary<TileBase, TileData> _dataFromTiles = new Dictionary<TileBase, TileData>();
+    private Dictionary<Vector3Int, Case> _worldToMapInfo = new Dictionary<Vector3Int, Case>();
 
-    private Vector3Int pos;
+    private Case[] _mapInfo = new Case[225];
 
-    private int lengthLine = 15;
+    private Vector3Int _pos;
+
+    private int _lengthLine = 15;
+
+    public static BoardManager Instance;
 
     private void Awake()
     {
-        foreach (TileData tileData in tilesDatas)
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
+        foreach (TileData tileData in _tilesDatas)
         {
             foreach (TileBase tile in tileData.tiles)
             {
-                dataFromTiles.Add(tile, tileData);
+                _dataFromTiles.Add(tile, tileData);
             }
         }
         // we can now use the tileBase as a way to find the nature of a tile
+        
+        foreach (interactibleSpriteContainer swap in _spriteSwap)
+        {
+            _tileSwap.Add(swap.defauldTile,swap);
+        }
+            
 
         for (int i = 0; i < 15; i++)
         {
             for (int j = 0; j < 15; j++)
             {
-                pos.Set(i, j, 0);
-                mapInfo[ i * lengthLine + j ] = CreateCase(dataFromTiles[tilemap.GetTile(pos)].id, tilemap.GetTile(pos), tilemap.CellToWorld(pos), i * lengthLine + j);
+                _pos.Set(i, j, 0);
+                
+                _mapInfo[ i * _lengthLine + j ] = CreateCase(_dataFromTiles[_tilemap.GetTile(_pos)].id, _tilemap.GetTile(_pos), _tilemap.CellToWorld(_pos) + new Vector3(_tilemap.cellSize.x/2, _tilemap.cellSize.y/2, 0), i * _lengthLine + j);
+
+                if (_tileSwap.ContainsKey(_tilemap.GetTile(_pos)))
+                    _tileSwapEffectiv.Add(i * _lengthLine + j, _tileSwap[_tilemap.GetTile(_pos)]);
             }
         }
 
         InitNeighbor();
-
     }
 
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            int posingrid = worldToMapInfo[tilemap.WorldToCell(Camera.main.ScreenToWorldPoint(Input.mousePosition))].GetPosInGrid();
+            int posingrid = _worldToMapInfo[_tilemap.WorldToCell(Camera.main.ScreenToWorldPoint(Input.mousePosition))].GetPosInGrid();
 
-            FindNeighbourCell(direction.west
-                , posingrid).IntroduceYourself();
+            FindNeighbourCell(Direction.west, posingrid).IntroduceYourself();
         }
     }
 
@@ -69,7 +90,7 @@ public class BoardManager : MonoBehaviour
                 break;
         }
 
-        worldToMapInfo.Add(tilemap.WorldToCell(pos), result);
+        _worldToMapInfo.Add(_tilemap.WorldToCell(_pos), result);
         return result;
     }
 
@@ -77,70 +98,86 @@ public class BoardManager : MonoBehaviour
     {
         for (int i = 0; i < 225; i++)
         {
-            if (mapInfo[i].IsWalkableByDeath)
+            if (_mapInfo[i].IsWalkableByDeath)
             {
-                if (i % lengthLine != 0 && mapInfo[i - 1].IsWalkableByDeath)
+                if (i % _lengthLine != 0 && _mapInfo[i - 1].IsWalkableByDeath)
                 {
-                    mapInfo[i].AddNeighbor(mapInfo[i - 1]);
+                    _mapInfo[i].AddNeighbor(_mapInfo[i - 1]);
                 }
-                if (i % lengthLine != lengthLine - 1 && mapInfo[i + 1].IsWalkableByDeath)
+                if (i % _lengthLine != _lengthLine - 1 && _mapInfo[i + 1].IsWalkableByDeath)
                 {
-                    mapInfo[i].AddNeighbor(mapInfo[i + 1]);
+                    _mapInfo[i].AddNeighbor(_mapInfo[i + 1]);
                 }
-                if (i > lengthLine - 1 && mapInfo[i - lengthLine].IsWalkableByDeath)
+                if (i > _lengthLine - 1 && _mapInfo[i - _lengthLine].IsWalkableByDeath)
                 {
-                    mapInfo[i].AddNeighbor(mapInfo[i - lengthLine]);
+                    _mapInfo[i].AddNeighbor(_mapInfo[i - _lengthLine]);
                 }
-                if (i < mapInfo.Length - lengthLine && mapInfo[i + lengthLine].IsWalkableByDeath)
+                if (i < _mapInfo.Length - _lengthLine && _mapInfo[i + _lengthLine].IsWalkableByDeath)
                 {
-                    mapInfo[i].AddNeighbor(mapInfo[i + lengthLine]);
+                    _mapInfo[i].AddNeighbor(_mapInfo[i + _lengthLine]);
                 }
             }
         }
     }
 
-    private Case FindNeighbourCell(direction dir, int startCellIndex)
+    public Case FindNeighbourCell(Direction dir, int startCellIndex)
     {
         //retourne la case dans la direction indique, ATTENTION, retourne null si la case est hors de la map!!!
         switch (dir) 
         {
-            case direction.north:
+            case Direction.north:
                 //make sure there's a cell above
-                if (startCellIndex%14 != 0)
+                if (startCellIndex % _lengthLine != _lengthLine - 1)
                 {
-                    return mapInfo[startCellIndex + 1];
+                    return _mapInfo[startCellIndex + 1];
                 }
                 break;
 
-            case direction.south:
-                if (startCellIndex % 15 != 0)
+            case Direction.south:
+                if (startCellIndex % _lengthLine != 0)
                 {
-                    return mapInfo[startCellIndex - 1];
+                    return _mapInfo[startCellIndex - 1];
                 }
                 break;
 
-            case direction.west:
-                if (startCellIndex > 14)
+            case Direction.west:
+                if (startCellIndex > _lengthLine - 1)
                 {
-                    return mapInfo[startCellIndex - 15];
+                    return _mapInfo[startCellIndex - 15];
                 }
                 break;
 
-            case direction.est:
-                if (startCellIndex < 220)
+            case Direction.est:
+                if (startCellIndex < _mapInfo.Length - _lengthLine)
                 {
-                    return mapInfo[startCellIndex + 15];
+                    return _mapInfo[startCellIndex + 15];
                 }
                 break;
         }
         return null;
     }
+
+    public Vector3 GetCellPos(int cellIndex)
+    {
+        return (_mapInfo[cellIndex].WorldPos);
+    }
+
+    public int GetLengthLine() { return _lengthLine; }
 }
 
-public enum direction
+public enum Direction
 {
     north,
     south,
     west,
     est
+}
+
+
+
+[Serializable]
+public struct interactibleSpriteContainer
+{
+    public TileBase defauldTile;
+    public TileBase usedTile;
 }
