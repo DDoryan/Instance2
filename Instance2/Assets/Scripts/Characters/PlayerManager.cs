@@ -73,7 +73,7 @@ public class PlayerManager : Entity
     private Player _player2;
     private bool _gotTheMoula;
     private int _currentTurn;
-    public static PlayerManager playerManager;
+    public static PlayerManager Instance;
     private int _exchangeTurn;
 
 
@@ -93,9 +93,9 @@ public class PlayerManager : Entity
 
     private void Awake()
     {
-        if (playerManager == null)
+        if (Instance == null)
         {
-            playerManager = this;
+            Instance = this;
         }
         else
         {

@@ -19,11 +19,11 @@ public class Interface : MonoBehaviour
         _color = Color.clear;
         _colorWhite = Color.white;
         StartUI();
-        PlayerManager.playerManager.MovementEvent += RefreshAPUI;
-        PlayerManager.playerManager.MovementEvent += RefreshMPUI;
-        PlayerManager.playerManager.ActionEvent += RefreshInventoryUI;
-        PlayerManager.playerManager.NavEvent += RefreshSelectedPerkUI;
-        PlayerManager.playerManager.ExchangeEndEvent += StartUI;
+        PlayerManager.Instance.MovementEvent += RefreshAPUI;
+        PlayerManager.Instance.MovementEvent += RefreshMPUI;
+        PlayerManager.Instance.ActionEvent += RefreshInventoryUI;
+        PlayerManager.Instance.NavEvent += RefreshSelectedPerkUI;
+        PlayerManager.Instance.ExchangeEndEvent += StartUI;
         RefreshAPUI();
         RefreshMPUI();
     }
@@ -44,40 +44,40 @@ public class Interface : MonoBehaviour
 
     void Update()
     {
-        _player = PlayerManager.playerManager.GetPlayer();
+        _player = PlayerManager.Instance.GetPlayer();
     }
 
     private void RefreshInventoryUI()
     {
-        for (int i = 0; i < PlayerManager.playerManager.InventoryAmmount(0) && i < _perkListP1.Count; i++)
+        for (int i = 0; i < PlayerManager.Instance.InventoryAmmount(0) && i < _perkListP1.Count; i++)
         {
-            _perkListP1[i].sprite = PlayerManager.playerManager.PlayerList[0].InventoryPlayer[i].CardSpriteGrave;
+            _perkListP1[i].sprite = PlayerManager.Instance.PlayerList[0].InventoryPlayer[i].CardSpriteGrave;
             _perkListP1[i].color = _colorWhite;
         }
-        for (int i = 0; i < PlayerManager.playerManager.InventoryAmmount(1) && i < _perkListP2.Count; i++)
+        for (int i = 0; i < PlayerManager.Instance.InventoryAmmount(1) && i < _perkListP2.Count; i++)
         {
-            _perkListP2[i].sprite = PlayerManager.playerManager.PlayerList[1].InventoryPlayer[i].CardSpriteGrave;
+            _perkListP2[i].sprite = PlayerManager.Instance.PlayerList[1].InventoryPlayer[i].CardSpriteGrave;
             _perkListP2[i].color = _colorWhite;
         }
     }
 
     private void RefreshAPUI()
     {
-        _textAP.text = PlayerManager.playerManager._actionPoints.ToString();
+        _textAP.text = PlayerManager.Instance._actionPoints.ToString();
     }
 
     private void RefreshMPUI()
     {
-        _textMP.text = PlayerManager.playerManager._magicPoints.ToString();
+        _textMP.text = PlayerManager.Instance._magicPoints.ToString();
     }
 
     private void RefreshSelectedPerkUI()
     {
-        if (PlayerManager.playerManager.CurrentTurn() == 0)
+        if (PlayerManager.Instance.CurrentTurn() == 0)
         {
-            for (int i = 0; i < PlayerManager.playerManager.InventoryAmmount(0); i++)
+            for (int i = 0; i < PlayerManager.Instance.InventoryAmmount(0); i++)
             {
-                if (i == PlayerManager.playerManager.PlayerList[PlayerManager.playerManager.CurrentTurn()].GetSelectedPerk())
+                if (i == PlayerManager.Instance.PlayerList[PlayerManager.Instance.CurrentTurn()].GetSelectedPerk())
                 {
                     if (_perkListP1[i].transform.position.y == 0)
                         _perkListP1[i].transform.position = new Vector3(_perkListP1[i].transform.position.x, 160, 0);
@@ -88,11 +88,11 @@ public class Interface : MonoBehaviour
                 }
             }
         }
-        else if (PlayerManager.playerManager.CurrentTurn() == 1)
+        else if (PlayerManager.Instance.CurrentTurn() == 1)
         {
-            for (int i = 0; i < PlayerManager.playerManager.InventoryAmmount(1); i++)
+            for (int i = 0; i < PlayerManager.Instance.InventoryAmmount(1); i++)
             {
-                if (i == PlayerManager.playerManager.PlayerList[PlayerManager.playerManager.CurrentTurn()].GetSelectedPerk())
+                if (i == PlayerManager.Instance.PlayerList[PlayerManager.Instance.CurrentTurn()].GetSelectedPerk())
                 {
                     if (_perkListP2[i].transform.position.y == 0)
                         _perkListP2[i].transform.position = new Vector3(_perkListP2[i].transform.position.x, 160, 0);

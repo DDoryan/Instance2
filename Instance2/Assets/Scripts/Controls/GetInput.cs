@@ -59,12 +59,12 @@ public class GetInput : MonoBehaviour
 
     public void ExchangeAction(InputAction.CallbackContext context)
     {
-        if (context.performed && (PlayerManager.playerManager.InventoryAmmount(0) > 0 || PlayerManager.playerManager.InventoryAmmount(1) > 0))
+        if (context.performed && (PlayerManager.Instance.InventoryAmmount(0) > 0 || PlayerManager.Instance.InventoryAmmount(1) > 0))
         {
             _playerInput.actions.FindActionMap("SelectArtefact").Disable();
             _playerInput.actions.FindActionMap("PlayerInput").Disable();
             _playerInput.actions.FindActionMap("ExchangeSystem").Enable();
-            PlayerManager.playerManager.ExchangeStart();
+            PlayerManager.Instance.ExchangeStart();
             Debug.Log("Perform");
         }
     }
@@ -76,7 +76,7 @@ public class GetInput : MonoBehaviour
             _playerInput.actions.FindActionMap("SelectArtefact").Disable();
             _playerInput.actions.FindActionMap("PlayerInput").Enable();
             _playerInput.actions.FindActionMap("ExchangeSystem").Disable();
-            PlayerManager.playerManager.ExchangeEnd();
+            PlayerManager.Instance.ExchangeEnd();
             Debug.Log("Perform");
         }
     }
@@ -85,7 +85,7 @@ public class GetInput : MonoBehaviour
     {
         if (context.performed)
         {
-            PlayerManager.playerManager.ActiveInventory();
+            PlayerManager.Instance.ActiveInventory();
         }
     }
 
@@ -93,7 +93,7 @@ public class GetInput : MonoBehaviour
     {
         if (context.performed)
         {
-            PlayerManager.playerManager.AccepteExchange();
+            PlayerManager.Instance.AccepteExchange();
             _playerInput.actions.FindActionMap("SelectArtefact").Disable();
             _playerInput.actions.FindActionMap("PlayerInput").Enable();
             _playerInput.actions.FindActionMap("ExchangeSystem").Disable();
@@ -104,7 +104,7 @@ public class GetInput : MonoBehaviour
     {
         if(context.performed)
         {
-            PlayerManager.playerManager.DeclineExchange();
+            PlayerManager.Instance.DeclineExchange();
             _playerInput.actions.FindActionMap("SelectArtefact").Disable();
             _playerInput.actions.FindActionMap("PlayerInput").Enable();
             _playerInput.actions.FindActionMap("ExchangeSystem").Disable();
