@@ -70,7 +70,7 @@ public class CameraWindowDice : MonoBehaviour
         int textureHeight = Mathf.RoundToInt(_screenHeight * (_windowHeightPercentage / 100f));
 
         _cameraToRender.targetTexture = new RenderTexture(textureWidth, textureHeight, 32);
-        _cameraToRender.targetTexture.filterMode = FilterMode.Bilinear;
+        _cameraToRender.targetTexture.filterMode = FilterMode.Trilinear;
         _cameraToRender.targetTexture.Create();
     }
 }
