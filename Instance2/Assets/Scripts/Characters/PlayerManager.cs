@@ -211,4 +211,13 @@ public class PlayerManager : Entity
     {
         return _playerList[_currentTurn].GetPerkLimit();
     }
+
+    public Player GetPlayerByInd(int ind)
+    {
+        if (ind < 0 || ind > _playerList.Count)
+        {
+            return null;
+        }
+        return _playerList[ind];
+    }
 }

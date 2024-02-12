@@ -135,6 +135,11 @@ public class BoardManager : MonoBehaviour
         }
         return null;
     }
+
+    public Case GetCell(int cellIndex)
+    {
+        return mapInfo[cellIndex];
+    }
 }
 
 public enum direction

@@ -44,9 +44,10 @@ public class GameManager : MonoBehaviour
             _playerManager.ResetActionPoints();
         }
 
-        if ( _turnCounter == 3)
+        if ( _turnCounter == 2)
         {
-            //_pullOrder.Add(_theDeath);
+            _theDeath.DeathSpawn();
+            _pullOrder.Add(_theDeath);
         }
         Debug.Log("CurrentTurn: " + _currentTurn);
         Debug.Log("TurnCounter: " + _turnCounter);
