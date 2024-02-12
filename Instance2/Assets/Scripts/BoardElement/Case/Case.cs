@@ -44,12 +44,6 @@ public abstract class Case
         _neighbor.Add(neighbor);
     }
 
-    public void IntroduceYourself()
-    {
-        Debug.Log("my name is " + _caseType.ToString() + " I got " + _neighbor.Count + " neighbors");
-    }
-
-
     public int GetPosInGrid()
     {
         return _indexInGrid;

@@ -65,16 +65,6 @@ public class BoardManager : MonoBehaviour
         InitNeighbor();
     }
 
-    private void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            int posingrid = _worldToMapInfo[_tilemap.WorldToCell(Camera.main.ScreenToWorldPoint(Input.mousePosition))].GetPosInGrid();
-
-            FindNeighbourCell(Direction.west, posingrid).IntroduceYourself();
-        }
-    }
-
     private Case CreateCase(TileKind template, TileBase tileBase, Vector3 worldPos,int posInGrid)
     {
         Case result = null;
