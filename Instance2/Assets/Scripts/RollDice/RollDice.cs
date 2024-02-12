@@ -1,9 +1,10 @@
+using System.Text;
 using TMPro;
 using UnityEngine;
 
 public class RollDice : MonoBehaviour
 {
-    private Rigidbody _body;
+    public Rigidbody _body;
     private float _gravityForce = 9.8f;
 
     [Header("Roll Values")]
@@ -15,9 +16,6 @@ public class RollDice : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _scoreText;
     [SerializeField] private string _textBeforeValue = "Dice Number : ";
 
-    private bool _isBlocked;
-
-
     private void Start()
     {
         Initialize();
@@ -25,16 +23,12 @@ public class RollDice : MonoBehaviour
 
     private void Update()
     {
-        if (_body != null)
+        if (!_body.isKinematic && _body.velocity.magnitude < 0.001f) // if the dice get stuck
         {
-            if (Input.GetMouseButton(0))
-                RollDice_GetNumber();
-
-            if (_isBlocked == false && _body.velocity.magnitude < 0.01f) // si le des reste coincer
-            {
-                RollingDice();
-            }
+            RollingDice();
         }
+
+
     }
 
     private void FixedUpdate()
@@ -65,7 +59,6 @@ public class RollDice : MonoBehaviour
     {
         _body.isKinematic = false;
         _scoreText.enabled = false;
-        _isBlocked = false;
 
         _forceX = Random.Range(-_maxRandomForceValue, _maxRandomForceValue);
         _forceY = Random.Range(-_maxRandomForceValue, _maxRandomForceValue);
@@ -92,19 +85,20 @@ public class RollDice : MonoBehaviour
         _diceFaceNum = diceFaceNum;
     }
 
-    public int RollDice_GetNumber()
-    {
-        RollingDice();
-        return _diceFaceNum;
-    }
-
-    public void SetBoolIsBlocked(bool value)
-    {
-        _isBlocked = value;
-    }
 
     public void SetBoolEnabledText(bool value)
     {
         _scoreText.enabled = value;
+    }
+
+    public void SetIsKinematic(bool value)
+    {
+        _body.isKinematic = value;
+    }
+
+    public int RollDice_GetNumber()
+    {
+        RollingDice();
+        return _diceFaceNum;
     }
 }

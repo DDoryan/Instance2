@@ -1204,6 +1204,9 @@ MonoBehaviour:
   _rollingForce: 10
   _scoreText: {fileID: 0}
   _textBeforeValue: 'Dice Number : '
+  _numberOfFaces: 4
+  _d4_Object: {fileID: 8731384945508369512}
+  _d20_Object: {fileID: 0}
 --- !u!54 &408230473813163161
 Rigidbody:
   m_ObjectHideFlags: 0

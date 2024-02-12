@@ -126,7 +126,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &8882286930879409991
 Transform:
   m_ObjectHideFlags: 0
@@ -235,6 +235,9 @@ MonoBehaviour:
   _rollingForce: 5
   _scoreText: {fileID: 0}
   _textBeforeValue: 'Dice Number : '
+  _numberOfFaces: 4
+  _d4_Object: {fileID: 0}
+  _d20_Object: {fileID: 3171810864636373549}
 --- !u!54 &1594717248218181882
 Rigidbody:
   m_ObjectHideFlags: 0
