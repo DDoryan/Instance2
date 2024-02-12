@@ -84,6 +84,11 @@ public abstract class Case
         get { return _area; }
     }
 
+    public Vector3 WorldPos
+    {
+        get { return _worldPos; }
+    }
+
     #endregion
 
     #region Setter & Getter    

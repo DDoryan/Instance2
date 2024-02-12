@@ -20,8 +20,8 @@ public class PlayerManager : Entity
     private int _baseMP;
     [SerializeField] public GameObject Player1Prefab;
     [SerializeField] public GameObject Player2Prefab;
-    [SerializeField] private Transform Player1StartPosition;
-    [SerializeField] private Transform Player2StartPosition;
+    [SerializeField] private int Player1StartCell;
+    [SerializeField] private int Player2StartCell;
     private List<Player> _playerList;
     private Player _player1;
     private Player _player2;
@@ -45,11 +45,13 @@ public class PlayerManager : Entity
     {
         _baseAP = _actionPoints;
         _baseMP = _magicPoints;
-        GameObject player1 = Instantiate(Player1Prefab, Player1StartPosition);
-        GameObject player2 = Instantiate(Player2Prefab, Player2StartPosition);
+        GameObject player1 = Instantiate(Player1Prefab, BoardManager.Instance.GetCellPos(Player1StartCell) , Quaternion.identity);
+        GameObject player2 = Instantiate(Player2Prefab, BoardManager.Instance.GetCellPos(Player2StartCell) , Quaternion.identity);
         _playerList = new List<Player>();
         _player1 = player1.GetComponent<Player>();
         _player2 = player2.GetComponent<Player>();
+        _player1.SetCellOn(Player1StartCell);
+        _player2.SetCellOn(Player2StartCell);
         _playerList.Add(_player1);
         _playerList.Add(_player2);
     }
