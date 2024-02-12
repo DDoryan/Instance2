@@ -684,6 +684,24 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ConfirmExchange"",
+                    ""type"": ""Button"",
+                    ""id"": ""5b345640-0207-4eaa-8372-22589c1ccc00"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DeclineExchange"",
+                    ""type"": ""Button"",
+                    ""id"": ""29dc804d-d2f4-4c47-aa01-8d360223117c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -774,6 +792,28 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""ExchangeEnd"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""01f6750a-a655-4254-b99d-1f6c2e5e1ecf"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ConfirmExchange"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6ae7a964-6743-4382-a0e2-944866cceda6"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DeclineExchange"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -806,6 +846,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_ExchangeSystem_ExchangeEnd = m_ExchangeSystem.FindAction("ExchangeEnd", throwIfNotFound: true);
         m_ExchangeSystem_SelectCardToExchange = m_ExchangeSystem.FindAction("SelectCardToExchange", throwIfNotFound: true);
         m_ExchangeSystem_AccepteExchange = m_ExchangeSystem.FindAction("AccepteExchange", throwIfNotFound: true);
+        m_ExchangeSystem_ConfirmExchange = m_ExchangeSystem.FindAction("ConfirmExchange", throwIfNotFound: true);
+        m_ExchangeSystem_DeclineExchange = m_ExchangeSystem.FindAction("DeclineExchange", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1075,6 +1117,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_ExchangeSystem_ExchangeEnd;
     private readonly InputAction m_ExchangeSystem_SelectCardToExchange;
     private readonly InputAction m_ExchangeSystem_AccepteExchange;
+    private readonly InputAction m_ExchangeSystem_ConfirmExchange;
+    private readonly InputAction m_ExchangeSystem_DeclineExchange;
     public struct ExchangeSystemActions
     {
         private @PlayerControls m_Wrapper;
@@ -1083,6 +1127,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @ExchangeEnd => m_Wrapper.m_ExchangeSystem_ExchangeEnd;
         public InputAction @SelectCardToExchange => m_Wrapper.m_ExchangeSystem_SelectCardToExchange;
         public InputAction @AccepteExchange => m_Wrapper.m_ExchangeSystem_AccepteExchange;
+        public InputAction @ConfirmExchange => m_Wrapper.m_ExchangeSystem_ConfirmExchange;
+        public InputAction @DeclineExchange => m_Wrapper.m_ExchangeSystem_DeclineExchange;
         public InputActionMap Get() { return m_Wrapper.m_ExchangeSystem; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1104,6 +1150,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @AccepteExchange.started += instance.OnAccepteExchange;
             @AccepteExchange.performed += instance.OnAccepteExchange;
             @AccepteExchange.canceled += instance.OnAccepteExchange;
+            @ConfirmExchange.started += instance.OnConfirmExchange;
+            @ConfirmExchange.performed += instance.OnConfirmExchange;
+            @ConfirmExchange.canceled += instance.OnConfirmExchange;
+            @DeclineExchange.started += instance.OnDeclineExchange;
+            @DeclineExchange.performed += instance.OnDeclineExchange;
+            @DeclineExchange.canceled += instance.OnDeclineExchange;
         }
 
         private void UnregisterCallbacks(IExchangeSystemActions instance)
@@ -1120,6 +1172,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @AccepteExchange.started -= instance.OnAccepteExchange;
             @AccepteExchange.performed -= instance.OnAccepteExchange;
             @AccepteExchange.canceled -= instance.OnAccepteExchange;
+            @ConfirmExchange.started -= instance.OnConfirmExchange;
+            @ConfirmExchange.performed -= instance.OnConfirmExchange;
+            @ConfirmExchange.canceled -= instance.OnConfirmExchange;
+            @DeclineExchange.started -= instance.OnDeclineExchange;
+            @DeclineExchange.performed -= instance.OnDeclineExchange;
+            @DeclineExchange.canceled -= instance.OnDeclineExchange;
         }
 
         public void RemoveCallbacks(IExchangeSystemActions instance)
@@ -1165,5 +1223,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnExchangeEnd(InputAction.CallbackContext context);
         void OnSelectCardToExchange(InputAction.CallbackContext context);
         void OnAccepteExchange(InputAction.CallbackContext context);
+        void OnConfirmExchange(InputAction.CallbackContext context);
+        void OnDeclineExchange(InputAction.CallbackContext context);
     }
 }

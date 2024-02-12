@@ -23,19 +23,21 @@ public class Interface : MonoBehaviour
         PlayerManager.playerManager.MovementEvent += RefreshMPUI;
         PlayerManager.playerManager.ActionEvent += RefreshInventoryUI;
         PlayerManager.playerManager.NavEvent += RefreshSelectedPerkUI;
-        PlayerManager.playerManager.ChangePlayerEvent += RefreshCurrentInventoryUI;
+        PlayerManager.playerManager.ExchangeEndEvent += StartUI;
+        RefreshAPUI();
+        RefreshMPUI();
     }
 
     private void StartUI()
     {
-        RefreshAPUI();
-        RefreshMPUI();
         for (int i = 0; i < _perkListP1.Count; i++)
         {
+            _perkListP1[i].sprite = null;
             _perkListP1[i].color = _color;
         }
         for (int i = 0; i < _perkListP2.Count; i++)
         {
+            _perkListP2[i].sprite = null;
             _perkListP2[i].color = _color;
         }
     }
@@ -47,20 +49,15 @@ public class Interface : MonoBehaviour
 
     private void RefreshInventoryUI()
     {
-        for (int i = 0; i < PlayerManager.playerManager.InventoryAmmount(0); i++)
+        for (int i = 0; i < PlayerManager.playerManager.InventoryAmmount(0) && i < _perkListP1.Count; i++)
         {
-            if (PlayerManager.playerManager.GetArtifactByIndex(0) != null)
-            {
-                _perkListP1[i].sprite = PlayerManager.playerManager.GetInventory(i, 0);
-                _perkListP1[i].color = _colorWhite;
-            }
+            _perkListP1[i].sprite = PlayerManager.playerManager.PlayerList[0].InventoryPlayer[i].CardSpriteGrave;
+            _perkListP1[i].color = _colorWhite;
         }
-        for (int i = 0; i < PlayerManager.playerManager.InventoryAmmount(1); i++)
+        for (int i = 0; i < PlayerManager.playerManager.InventoryAmmount(1) && i < _perkListP2.Count; i++)
         {
-            {
-                _perkListP2[i].sprite = PlayerManager.playerManager.GetInventory(i, 1);
-                _perkListP2[i].color = _colorWhite;
-            }
+            _perkListP2[i].sprite = PlayerManager.playerManager.PlayerList[1].InventoryPlayer[i].CardSpriteGrave;
+            _perkListP2[i].color = _colorWhite;
         }
     }
 
@@ -78,13 +75,12 @@ public class Interface : MonoBehaviour
     {
         if (PlayerManager.playerManager.CurrentTurn() == 0)
         {
-
             for (int i = 0; i < PlayerManager.playerManager.InventoryAmmount(0); i++)
             {
                 if (i == PlayerManager.playerManager.PlayerList[PlayerManager.playerManager.CurrentTurn()].GetSelectedPerk())
                 {
                     if (_perkListP1[i].transform.position.y == 0)
-                        _perkListP1[i].transform.position = new Vector3(_perkListP1[i].transform.position.x, 125, 0);
+                        _perkListP1[i].transform.position = new Vector3(_perkListP1[i].transform.position.x, 160, 0);
                 }
                 else
                 {
@@ -99,7 +95,7 @@ public class Interface : MonoBehaviour
                 if (i == PlayerManager.playerManager.PlayerList[PlayerManager.playerManager.CurrentTurn()].GetSelectedPerk())
                 {
                     if (_perkListP2[i].transform.position.y == 0)
-                        _perkListP2[i].transform.position = new Vector3(_perkListP2[i].transform.position.x, 125, 0);
+                        _perkListP2[i].transform.position = new Vector3(_perkListP2[i].transform.position.x, 160, 0);
                 }
                 else
                 {
@@ -107,11 +103,5 @@ public class Interface : MonoBehaviour
                 }
             }
         }
-
-    }
-
-    private void RefreshCurrentInventoryUI()
-    {
-
     }
 }

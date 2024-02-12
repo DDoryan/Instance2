@@ -1,5 +1,4 @@
 // Ignore Spelling: Desactivation,
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
@@ -30,16 +29,65 @@ public class ExchangeCanvas : MonoBehaviour
     private Image _imageExchangeP2;
     #endregion
 
+    #region Bool
+
+    private bool _p1Choose;
+    private bool _p2Choose;
+
+
+    #endregion
+
+    #region Int
+
+    private int _p1Turn = 0;
+    private int _p2Turn = 1;
+
+    [SerializeField]
+    private List<int> _basePos = new List<int>();
+    [SerializeField]
+    private List<int> _selectedPos = new List<int>();
+
+
+    #endregion
+
     #region Text
     [SerializeField]
     private TextMeshProUGUI _textPlayerTurn;
+
+    [SerializeField]
+    private GameObject _accetptanceText;
+
     #endregion
+
+    #region Artifact Selected
+    private Artefacte _artefacteP1;
+    private Artefacte _artefacteP2;
+    #endregion
+
+
+    private Color _clear = Color.clear;
+    private Color _white = Color.white;
 
     private void Awake()
     {
         PlayerManager.playerManager.ExchangeEvent += OnActivation;
-        PlayerManager.playerManager.NavEvent += NavigateInUIExchange;
+        PlayerManager.playerManager.NavEventExchange += NavigateInUIExchange;
+        PlayerManager.playerManager.RefreshUiAfterUse += GetSprite;
         PlayerManager.playerManager.SelectedArtifactToExchangeEvent += SelectedArtefactToExchange;
+        PlayerManager.playerManager.ExchangeEndEvent += OnDesactivation;
+
+        PlayerManager.playerManager.ConfirmeExchangeEvent += ConfirmeText;
+        PlayerManager.playerManager.AccepteEventExchange += Accepte;
+        PlayerManager.playerManager.DeclineExchangeEvent += Decline;
+
+        for (int i = 0; i < _imageExchangeP1List.Count; i++)
+        {
+            _imageExchangeP1List[i].color = _clear;
+        }
+        for (int i = 0; i < _imageExchangeP2List.Count; i++)
+        {
+            _imageExchangeP2List[i].color = _clear;
+        }
     }
 
     public void OnActivation()
@@ -53,6 +101,13 @@ public class ExchangeCanvas : MonoBehaviour
         _canvasToDeactivate.SetActive(false);
         GetSprite();
         SetTextPlayer();
+        SetBool();
+        _artefacteP1 = null;
+        _artefacteP2 = null;
+        _imageExchangeP1.color = _clear;
+        _imageExchangeP1.sprite = null;
+        _imageExchangeP2.color = _clear;
+        _imageExchangeP2.sprite = null;
     }
 
     public void OnDesactivation()
@@ -64,12 +119,37 @@ public class ExchangeCanvas : MonoBehaviour
     {
         _canvasToActivate.SetActive(false);
         _canvasToDeactivate.SetActive(true);
-        SetSprite();
+        SetBool();
+        SetSpriteOff();
+
+
     }
 
     private void SetTextPlayer()
     {
-        _textPlayerTurn.text = PlayerManager.playerManager.CurrentTurn().ToString();
+        _textPlayerTurn.text = PlayerManager.playerManager.ExchangeTurn.ToString();
+        _accetptanceText.SetActive(false);
+    }
+
+
+    private void SetBool()
+    {
+        _p1Choose = false;
+        _p2Choose = false;
+    }
+
+    private void SetSpriteOff()
+    {
+        for (int i = 0; i < _imageExchangeP1List.Count; i++)
+        {
+            _imageExchangeP1List[i].sprite = null;
+            _imageExchangeP1List[i].color = _clear;
+        }
+        for (int i = 0; i < _imageExchangeP2List.Count; i++)
+        {
+            _imageExchangeP2List[i].sprite = null;
+            _imageExchangeP2List[i].color = _clear;
+        }
     }
 
 
@@ -77,49 +157,43 @@ public class ExchangeCanvas : MonoBehaviour
 
     private void GetSprite()
     {
-        for (int i = 0; i < _imageExchangeP1List.Count && i < PlayerManager.playerManager.InventoryAmmount(0); i++)
+        for (int i = 0; i < _imageExchangeP1List.Count && i < PlayerManager.playerManager.InventoryAmmount(_p1Turn); i++)
         {
-            _imageExchangeP1List[i].sprite = PlayerManager.playerManager.GetInventory(i, 0);
+            _imageExchangeP1List[i].sprite = PlayerManager.playerManager.PlayerList[0].InventoryPlayer[i].CardSpriteGrave;
+            _imageExchangeP1List[i].color = _white;
         }
-        for (int i = 0; i < _imageExchangeP2List.Count && i < PlayerManager.playerManager.InventoryAmmount(1); i++)
+        for (int i = 0; i < _imageExchangeP2List.Count && i < PlayerManager.playerManager.InventoryAmmount(_p2Turn); i++)
         {
-            _imageExchangeP2List[i].sprite = PlayerManager.playerManager.GetInventory(i, 1);
+            _imageExchangeP2List[i].sprite = PlayerManager.playerManager.PlayerList[1].InventoryPlayer[i].CardSpriteGrave;
+            _imageExchangeP2List[i].color = _white;
         }
     }
 
 
     public void NavigateInUIExchange()
     {
-
-        if (PlayerManager.playerManager.CurrentTurn() == 0)
+        List<Image>[] ImageList = new List<Image>[2]
         {
-            for (int i = 0; i < PlayerManager.playerManager.InventoryAmmount(0); i++)
+            _imageExchangeP1List,
+            _imageExchangeP2List
+        };
+
+        List<int>[] PositionStart = new List<int>[2]
+        {
+            _basePos,
+            _selectedPos
+        };
+
+        for (int i = 0; i < PlayerManager.playerManager.InventoryAmmount(PlayerManager.playerManager.ExchangeTurn); i++)
+        {
+            if (i == PlayerManager.playerManager.PlayerList[PlayerManager.playerManager.ExchangeTurn].SelectedPerk)
             {
-                if (i == PlayerManager.playerManager.PlayerList[PlayerManager.playerManager.CurrentTurn()].GetSelectedPerk())
-                {
-                    if (_imageExchangeP1List[i].transform.position.x == 0)
-                        _imageExchangeP1List[i].transform.position = new Vector3(120, _imageExchangeP1List[i].transform.position.y, 0);
-                }
-                else
-                {
-                    _imageExchangeP1List[i].transform.position = new Vector3(0, _imageExchangeP1List[i].transform.position.y, 0);
-                }
+                if (ImageList[PlayerManager.playerManager.ExchangeTurn][i].transform.position.x == PositionStart[0][PlayerManager.playerManager.ExchangeTurn])
+                    ImageList[PlayerManager.playerManager.ExchangeTurn][i].transform.position = new Vector3(PositionStart[1][PlayerManager.playerManager.ExchangeTurn], ImageList[PlayerManager.playerManager.ExchangeTurn][i].transform.position.y, 0);
             }
-        }
-
-        else if (PlayerManager.playerManager.CurrentTurn() == 1)
-        {
-            for (int i = 0; i < PlayerManager.playerManager.InventoryAmmount(1); i++)
+            else
             {
-                if (i == PlayerManager.playerManager.PlayerList[PlayerManager.playerManager.CurrentTurn()].GetSelectedPerk())
-                {
-                    if (_imageExchangeP2List[i].transform.position.x == 1920)
-                        _imageExchangeP2List[i].transform.position = new Vector3(1920-120, _imageExchangeP2List[i].transform.position.y, 0);
-                }
-                else
-                {
-                    _imageExchangeP2List[i].transform.position = new Vector3(1920, _imageExchangeP2List[i].transform.position.y, 0);
-                }
+                ImageList[PlayerManager.playerManager.ExchangeTurn][i].transform.position = new Vector3(PositionStart[0][PlayerManager.playerManager.ExchangeTurn], ImageList[PlayerManager.playerManager.ExchangeTurn][i].transform.position.y, 0);
             }
         }
     }
@@ -127,45 +201,61 @@ public class ExchangeCanvas : MonoBehaviour
 
     private void SelectedArtefactToExchange()
     {
-        if (_imageExchangeP1 == null && PlayerManager.playerManager.CurrentTurn() == 0)
+        if (!_p1Choose && !_p2Choose && _imageExchangeP1.sprite == null)
         {
-            _imageExchangeP1.sprite = PlayerManager.playerManager.PlayerList[PlayerManager.playerManager.CurrentTurn()].ArtefactSelected.CardSpriteGrave;
-            _imageExchangeP1List[PlayerManager.playerManager.PlayerList[PlayerManager.playerManager.CurrentTurn()].SelectedPerk].sprite = null;
+            _imageExchangeP1.sprite = PlayerManager.playerManager.PlayerList[PlayerManager.playerManager.ExchangeTurn].ArtefactSelected.CardSpriteGrave;
+            _imageExchangeP1.color = _white;
+            _imageExchangeP1List[PlayerManager.playerManager.PlayerList[PlayerManager.playerManager.ExchangeTurn].SelectedPerk].sprite = null;
+            _imageExchangeP1List[PlayerManager.playerManager.PlayerList[PlayerManager.playerManager.ExchangeTurn].SelectedPerk].color = _clear;
+            PlayerManager.playerManager.PlayerList[_p1Turn].SelectedPerk = 0;
+
+            _artefacteP1 = PlayerManager.playerManager.PlayerList[PlayerManager.playerManager.ExchangeTurn].ArtefactSelected;
+            PlayerManager.playerManager.PlayerList[PlayerManager.playerManager.ExchangeTurn].InventoryPlayer.Remove(_artefacteP1);
+            PlayerManager.playerManager.PlayerList[_p1Turn].ArtefactSelected = null;
+
+            _p1Choose = true;
         }
-        else if (_imageExchangeP2 == null && PlayerManager.playerManager.CurrentTurn() == 1)
+        else if (!_p2Choose && _p1Choose && _imageExchangeP2.sprite == null)
         {
-            _imageExchangeP2.sprite = PlayerManager.playerManager.PlayerList[PlayerManager.playerManager.CurrentTurn()].ArtefactSelected.CardSpriteGrave;
-            _imageExchangeP2List[PlayerManager.playerManager.PlayerList[PlayerManager.playerManager.CurrentTurn()].SelectedPerk].sprite = null;
+            _imageExchangeP2.sprite = PlayerManager.playerManager.PlayerList[PlayerManager.playerManager.ExchangeTurn].ArtefactSelected.CardSpriteGrave;
+
+            _imageExchangeP2List[PlayerManager.playerManager.PlayerList[PlayerManager.playerManager.ExchangeTurn].SelectedPerk].sprite = null;
+            _imageExchangeP2List[PlayerManager.playerManager.PlayerList[PlayerManager.playerManager.ExchangeTurn].SelectedPerk].color = _clear;
+
+            PlayerManager.playerManager.PlayerList[PlayerManager.playerManager.ExchangeTurn].SelectedPerk = 0;
+            _imageExchangeP2.color = _white;
+
+            _artefacteP2 = PlayerManager.playerManager.PlayerList[PlayerManager.playerManager.ExchangeTurn].ArtefactSelected;
+            PlayerManager.playerManager.PlayerList[PlayerManager.playerManager.ExchangeTurn].InventoryPlayer.Remove(_artefacteP2);
+
+            PlayerManager.playerManager.PlayerList[_p2Turn].ArtefactSelected = null;
+            _p2Choose = true;
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    private void SetSprite()
+    private void ConfirmeText()
     {
-        for (int i = 0; i < _imageExchangeP1List.Count && i < PlayerManager.playerManager.InventoryAmmount(0); i++)
+        if(_p1Choose && _p2Choose)
         {
-            _imageExchangeP1List[i].sprite = PlayerManager.playerManager.GetArtifactByIndex(i).CardSpriteGrave;
-        }
-
-
-        for (int i = 0; i < _imageExchangeP2List.Count && i < PlayerManager.playerManager.InventoryAmmount(1); i++)
-        {
-            _imageExchangeP2List[i].sprite = PlayerManager.playerManager.GetArtifactByIndex(i).CardSpriteGrave;
-        }
+            _accetptanceText.SetActive(true);
+        } 
     }
+
+    private void Accepte()
+    {
+        PlayerManager.playerManager.PlayerList[_p1Turn].InventoryPlayer.Add(_artefacteP2);
+        PlayerManager.playerManager.PlayerList[_p2Turn].InventoryPlayer.Add(_artefacteP1);
+        PlayerManager.playerManager.PlayerList[_p2Turn].InventoryPlayer.Remove(_artefacteP2);
+        PlayerManager.playerManager.PlayerList[_p1Turn].InventoryPlayer.Remove(_artefacteP1);
+        OnDesactivation();
+    }
+
+    private void Decline()
+    {
+        PlayerManager.playerManager.PlayerList[_p2Turn].InventoryPlayer.Add(_artefacteP2);
+        PlayerManager.playerManager.PlayerList[_p1Turn].InventoryPlayer.Add(_artefacteP1);
+        OnDesactivation();
+    }
+
+
 }

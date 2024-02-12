@@ -69,20 +69,17 @@ public class GetInput : MonoBehaviour
         }
     }
 
-
-
-    public void SelectionEventStart(InputAction.CallbackContext context)
+    public void ExchangeActionEnd(InputAction.CallbackContext context)
     {
         if (context.performed)
         {
-            PlayerManager.playerManager.SelectedArtifact();
+            _playerInput.actions.FindActionMap("SelectArtefact").Disable();
+            _playerInput.actions.FindActionMap("PlayerInput").Enable();
+            _playerInput.actions.FindActionMap("ExchangeSystem").Disable();
+            PlayerManager.playerManager.ExchangeEnd();
+            Debug.Log("Perform");
         }
     }
-
-
-
-
-
 
     public void ActiveInventory(InputAction.CallbackContext context)
     {
@@ -92,8 +89,27 @@ public class GetInput : MonoBehaviour
         }
     }
 
+    public void AccepteExchange(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            PlayerManager.playerManager.AccepteExchange();
+            _playerInput.actions.FindActionMap("SelectArtefact").Disable();
+            _playerInput.actions.FindActionMap("PlayerInput").Enable();
+            _playerInput.actions.FindActionMap("ExchangeSystem").Disable();
+        }
+    }
 
-
+    public void DeclineExchange(InputAction.CallbackContext context)
+    {
+        if(context.performed)
+        {
+            PlayerManager.playerManager.DeclineExchange();
+            _playerInput.actions.FindActionMap("SelectArtefact").Disable();
+            _playerInput.actions.FindActionMap("PlayerInput").Enable();
+            _playerInput.actions.FindActionMap("ExchangeSystem").Disable();
+        }
+    }
 
     public void OpenGrave(InputAction.CallbackContext context)
     {
@@ -108,6 +124,13 @@ public class GetInput : MonoBehaviour
         if (context.performed)
         {
             _playerManager.SelectedArtifact();
+        }
+    }    
+    public void SelectArtifactToExchange(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            _playerManager.SelectArtifactToExchange();
         }
     }
 
@@ -142,6 +165,13 @@ public class GetInput : MonoBehaviour
         if (context.started)
         {
             _playerManager.NavigateInventory(context.ReadValue<Vector2>());
+        }
+    }    
+    public void GetNavigationInputExchange(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            _playerManager.NavigateInventoryExchange(context.ReadValue<Vector2>());
         }
     }
 

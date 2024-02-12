@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: "Key_n\xB01"
   m_EditorClassIdentifier: 
   _cardType: 0
-  _cardSpriteGrave: {fileID: 7482667652216324306, guid: d83518816c640834aa77b960f17d434e, type: 3}
+  _cardSpriteGrave: {fileID: 21300000, guid: a920aeb8144c1d442b069097fde41ec3, type: 3}

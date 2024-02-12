@@ -662,6 +662,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "ConfirmExchange",
+                    "type": "Button",
+                    "id": "5b345640-0207-4eaa-8372-22589c1ccc00",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "DeclineExchange",
+                    "type": "Button",
+                    "id": "29dc804d-d2f4-4c47-aa01-8d360223117c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -750,6 +768,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "ExchangeEnd",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "01f6750a-a655-4254-b99d-1f6c2e5e1ecf",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ConfirmExchange",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6ae7a964-6743-4382-a0e2-944866cceda6",
+                    "path": "<Gamepad>/dpad/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DeclineExchange",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

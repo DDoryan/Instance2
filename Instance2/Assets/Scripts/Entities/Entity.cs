@@ -30,6 +30,6 @@ public abstract class Entity : MonoBehaviour
 
         //Event
         NextTurnEvent?.Invoke();
-        print("c bon");
+        print("c'est bon");
     }
 }

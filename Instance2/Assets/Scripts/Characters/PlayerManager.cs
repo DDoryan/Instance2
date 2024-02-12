@@ -19,9 +19,20 @@ public class PlayerManager : Entity
 
     #region ExchangeEvent
     public delegate void ExchangeEventDelegate();
-    public event ExchangeEventDelegate ExchangeEvent;    
+    public event ExchangeEventDelegate ExchangeEvent;
     public delegate void ExchangeEndEventDelegate();
     public event ExchangeEventDelegate ExchangeEndEvent;
+    public delegate void NavEventDelegateExchange();
+    public event NavEventDelegateExchange NavEventExchange;
+
+    public delegate void ConfirmeExchangeEventDelegate();
+    public event ConfirmeExchangeEventDelegate ConfirmeExchangeEvent;    
+
+    public delegate void AccepteDelegateExchange();
+    public event AccepteDelegateExchange AccepteEventExchange;   
+    
+    public delegate void DeclineExchangeDelegate();
+    public event DeclineExchangeDelegate DeclineExchangeEvent;
     #endregion
 
     #region NavEvent
@@ -40,7 +51,14 @@ public class PlayerManager : Entity
     public event SelectedArtifactToExchangeDelegate SelectedArtifactToExchangeEvent;
 
 
-    #endregion  
+    #endregion
+
+    #region Refresh UI After Use
+
+    public delegate void RefreshUiAfterUseDelegate();
+    public event RefreshUiAfterUseDelegate RefreshUiAfterUse;
+
+    #endregion
 
     [SerializeField] public int _actionPoints;
     [SerializeField] public int _magicPoints;
@@ -56,6 +74,7 @@ public class PlayerManager : Entity
     private bool _gotTheMoula;
     private int _currentTurn;
     public static PlayerManager playerManager;
+    private int _exchangeTurn;
 
 
     [Header("UIElement")]
@@ -63,13 +82,14 @@ public class PlayerManager : Entity
     private GameObject _panelP1;
     [SerializeField]
     private GameObject _panelP2;
-    [SerializeField] 
+    [SerializeField]
     private GameObject _panelP3;
-    [SerializeField] 
+    [SerializeField]
     private GameObject _textInventory;
 
-    public List<Player> PlayerList {  get { return _playerList; } }
+    public List<Player> PlayerList { get { return _playerList; } }
 
+    public int ExchangeTurn { get => _exchangeTurn; set => _exchangeTurn = value; }
 
     private void Awake()
     {
@@ -108,6 +128,8 @@ public class PlayerManager : Entity
         }
     }
 
+
+
     #region Return Somethings
     public Artefacte GetArtifactByIndex(int i)
     {
@@ -116,7 +138,7 @@ public class PlayerManager : Entity
 
     public Sprite GetInventory(int index, int playerInventory)
     {
-            return _playerList[playerInventory].InventoryPlayer[index].CardSpriteGrave;
+        return _playerList[playerInventory].InventoryPlayer[index].CardSpriteGrave;
     }
 
     public Player GetPlayer()
@@ -200,33 +222,41 @@ public class PlayerManager : Entity
 
     public int InventoryAmmount(int j)
     {
-        if (j == 0)
-        {
-            return _player1.InventoryPlayer.Count;
-        }
-        else if (j == 1)
-        {
-            return _player2.InventoryPlayer.Count;
-        }
-        return 2;
+        return _playerList[j].InventoryPlayer.Count;
     }
+
 
 
     #endregion
 
     #region Inventory
-    public void NavigatePerks(Vector2 direction)
+
+    public void NavigatePerksExchange(Vector2 direction, int player)
     {
-        if (_playerList[_currentTurn].SelectedPerk + direction.x.ConvertTo<int>() < _playerList[_currentTurn].InventoryPlayer.Count && _playerList[_currentTurn].SelectedPerk + direction.x.ConvertTo<int>() >= 0)
+        if (_playerList[player].SelectedPerk + direction.x.ConvertTo<int>() < _playerList[player].InventoryPlayer.Count && _playerList[player].SelectedPerk + direction.x.ConvertTo<int>() >= 0)
         {
-            if (!_playerList[_currentTurn].InventoryPlayer[_playerList[_currentTurn].SelectedPerk + direction.x.ConvertTo<int>()].IsUnityNull())
+            if (!_playerList[player].InventoryPlayer[_playerList[player].SelectedPerk + direction.x.ConvertTo<int>()].IsUnityNull())
             {
-                _playerList[_currentTurn].SelectedPerk += direction.x.ConvertTo<int>();
-                _playerList[_currentTurn].ArtefactYouLook = _playerList[_currentTurn].InventoryPlayer[_playerList[_currentTurn].SelectedPerk];
+                _playerList[player].SelectedPerk += direction.x.ConvertTo<int>();
+                _playerList[player].ArtefactYouLook = _playerList[player].InventoryPlayer[_playerList[player].SelectedPerk];
             }
         }
     }
 
+    public void RefreshUiExchange()
+    {
+        RefreshUiAfterUse?.Invoke();
+    }
+
+
+
+
+    public void RefreshUi(int i, Artefacte artefacte)
+    {
+        _playerList[i].InventoryPlayer.Remove(artefacte);
+        RefreshUiAfterUse?.Invoke();
+        ActionEvent?.Invoke();
+    }
 
     public void ActiveInventory()
     {
@@ -243,7 +273,6 @@ public class PlayerManager : Entity
     public void SelectedArtifact()
     {
         _playerList[_currentTurn].SelectArtifact();
-        SelectedArtifactToExchangeEvent?.Invoke();
     }
 
     public void KeepArtifact()
@@ -258,30 +287,70 @@ public class PlayerManager : Entity
         ActionEvent?.Invoke();
     }
 
-    public void NavigateInventory(Vector2 direction)
+    public void NavigatePlayerInventory(Vector2 direction, int player)
     {
-        if (!_isTurn) { return; }
-        if (_playerList[_currentTurn].IsInventoryEmpty())
+        if (!_isTurn || player > 1) { return; }
+        if (_playerList[player].IsInventoryEmpty())
         {
             print("inventory empty");
             return;
         }
-        NavigatePerks(direction);
+        NavigatePerksExchange(direction, player);
         NavEvent?.Invoke();
+    }
+
+    public void NavigateInventory(Vector2 direction)
+    {
+        NavigatePlayerInventory(direction, _currentTurn);
+    }
+
+    public void NavigateInventoryExchange(Vector2 direction)
+    {
+        NavigatePlayerInventory(direction, _exchangeTurn);
+        NavEventExchange?.Invoke();
     }
 
     #endregion
 
 
+
+    #region Event Call
     public void ExchangeStart()
     {
+        _exchangeTurn = 0;
         ExchangeEvent?.Invoke();
     }
 
+    public void AccepteExchange()
+    {
+        AccepteEventExchange?.Invoke();
+        ActionEvent?.Invoke();
+    }
+
+    public void DeclineExchange()
+    {
+        DeclineExchangeEvent?.Invoke();
+        ActionEvent?.Invoke();
+    }
+
+
     public void ExchangeEnd()
     {
-
+        ExchangeEndEvent?.Invoke();
+        ActionEvent?.Invoke();
     }
+
+    public void SelectArtifactToExchange()
+    {
+        _playerList[_exchangeTurn].ArtefactSelected = _playerList[_exchangeTurn].ArtefactYouLook;
+        _playerList[_exchangeTurn].ArtefactYouLook = null;
+        SelectedArtifactToExchangeEvent?.Invoke();
+        ConfirmeExchangeEvent?.Invoke();
+        _exchangeTurn++;
+    }
+
+    #endregion
+
 
     public void ResetActionPoints()
     {
@@ -316,7 +385,7 @@ public class PlayerManager : Entity
             if (_currentTurn == 0)
             {
                 _currentTurn = 1;
-                _playerList[_currentTurn].ArtefactYouLook = null;
+                _playerList[_currentTurn].SelectedPerk = 0;
                 _panelP1.SetActive(false);
                 _panelP2.SetActive(true);
                 return;
@@ -324,7 +393,7 @@ public class PlayerManager : Entity
             if (_currentTurn == 1)
             {
                 _currentTurn = 0;
-                _playerList[_currentTurn].ArtefactYouLook = null;
+                _playerList[_currentTurn].SelectedPerk = 0;
                 _panelP1.SetActive(true);
                 _panelP2.SetActive(false);
                 EndRound();

@@ -117,7 +117,6 @@ public class Player : MonoBehaviour
 
     public void AddToInventory()
     {
-
         if (_inventoryPlayer.Count < _perkLimit)
         {
             _inventoryPlayer.Add(_grave.Interact());
