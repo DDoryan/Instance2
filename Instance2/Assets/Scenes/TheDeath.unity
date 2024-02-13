@@ -3707,11 +3707,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _boardManager: {fileID: 201728697}
-  _startPosition: {fileID: 1056056900}
   _position: {fileID: 1431321609}
   _playerManager: {fileID: 1580308598}
   _cellSize: 1
   _moveNumber: 6
+  _startCell: 7
 --- !u!4 &1431321609
 Transform:
   m_ObjectHideFlags: 0

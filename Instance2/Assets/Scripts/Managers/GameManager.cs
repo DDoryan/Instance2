@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
    private Entity _specialEventPlayer;
    private Entity _eventPlayerAfterPlayed;
    private PlayerManager _playerManager;
+   private MenuManager _menuManager;
    
    private TheDeath _theDeath;
 
@@ -20,7 +21,7 @@ public class GameManager : MonoBehaviour
         _theDeath = TheDeath.Instance;
         _pullOrder = new List<Entity>();
         _pullOrder.Add(_playerManager);
-
+        _theDeath.DeathEvent += SendToGameOver;
         _currentTurn = 0; Debug.Log("CurrentTurn: " + _currentTurn);
 
         _playerManager.NextTurnEvent += Event_NextTurn;
@@ -46,8 +47,8 @@ public class GameManager : MonoBehaviour
 
         if ( _turnCounter == 2)
         {
-            _theDeath.DeathSpawn();
             _pullOrder.Add(_theDeath);
+            _theDeath.DeathSpawn();
         }
         Debug.Log("CurrentTurn: " + _currentTurn);
         Debug.Log("TurnCounter: " + _turnCounter);
@@ -61,5 +62,10 @@ public class GameManager : MonoBehaviour
     public void SetSpecialEventPlayer(Entity player)
     {
         _specialEventPlayer = player;
+    }
+
+    private void SendToGameOver()
+    {
+        _menuManager.MainMenu();
     }
 }

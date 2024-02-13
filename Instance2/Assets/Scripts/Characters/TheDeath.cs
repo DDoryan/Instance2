@@ -1,25 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class TheDeath : Entity
 {
+    public delegate void DeathEventDelegate();
+    public event DeathEventDelegate DeathEvent;
     [SerializeField] private BoardManager _boardManager;
-    [SerializeField] private Transform _startPosition;
-    [SerializeField] private Transform _position;
+    [SerializeField] private UnityEngine.Transform _position;
     [SerializeField] private PlayerManager _playerManager;
     [SerializeField] private float _cellSize;
     [SerializeField] private int _moveNumber;
+    [SerializeField] private int _startCell;
     private int _cellOn;
-    private int _shortestPath = 1;
-    private int _currentPath = 0;
-    private List<List<Case>> _pathList = new List<List<Case>>();
-    private List<Case> _shortestPathList = new List<Case>();
-    private int _ind = 0;
-    private int _min = 255;
-    private Case _courseBeginning;
     private List<Node> _opened = new List<Node>();
     private List<Node> _closed = new List<Node>();
+    private List<Node> _pathToPlayerOne = new List<Node>();
+    private List<Node> _pathToPlayerTwo = new List<Node>();
+    private float branchWeight = 1;
     public static TheDeath Instance;
 
     private void Awake()
@@ -34,24 +33,20 @@ public class TheDeath : Entity
         }
     }
 
-    private void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            _opened.Add(new Node(_boardManager.GetCell(_cellOn), GetHeuristique(_cellOn,44),null));
-        }
-    }
-
     public override void StartRound()
     {
-        if (_position.position == null) { return; }
-        _courseBeginning = _boardManager.GetCell(_cellOn);
-        PathFinding(_boardManager.GetCell(_cellOn), direction.est);
-        if (IsEquiDist())
+        InitPath(0);
+        InitPath(1);
+        if (!IsEquiDist())
         {
             for (int i = 0; i < _moveNumber; i++)
             {
-                _cellOn = _shortestPathList[i].GetPosInGrid();
+                _cellOn = _closed[_closed.Count - 1 - i]._cell.GetPosInGrid();
+                _position.position = _closed[_closed.Count - 1 - i]._cell.GetWorldPos();
+                if (_cellOn == _playerManager.GetPlayerByInd(0).GetCellOn() || _cellOn == _playerManager.GetPlayerByInd(1).GetCellOn())
+                {
+                    DeathEvent?.Invoke();
+                }
             }
         }
         base.StartRound();
@@ -59,119 +54,163 @@ public class TheDeath : Entity
 
     public void DeathSpawn()
     {
-        _position.position = _startPosition.position;
-    }
-
-    private void PathFinding(Case _currentCase, direction dir )
-    {
-        Case _caseToLook;
-        if (_currentPath <= _shortestPath)
-        {
-            _pathList[_ind].Add(_currentCase);
-            if (_boardManager.FindNeighbourCell(direction.est, _currentCase.GetPosInGrid()) != null)
-            {
-                _caseToLook = _boardManager.FindNeighbourCell(direction.est, _currentCase.GetPosInGrid());
-                _currentPath++;
-                PathFinding(_caseToLook, direction.est);
-            }
-            else if (_boardManager.FindNeighbourCell(direction.north, _currentCase.GetPosInGrid()) != null)
-            {
-                _caseToLook = _boardManager.FindNeighbourCell(direction.north, _currentCase.GetPosInGrid());
-                _currentPath++;
-                PathFinding(_caseToLook, direction.north);
-            }
-            else if (_boardManager.FindNeighbourCell(direction.south, _currentCase.GetPosInGrid()) != null)
-            {
-                _caseToLook = _boardManager.FindNeighbourCell(direction.south, _currentCase.GetPosInGrid());
-                _currentPath++;
-                PathFinding(_caseToLook, direction.south);
-            }
-            else if (_boardManager.FindNeighbourCell(direction.west, _currentCase.GetPosInGrid()) != null)
-            {
-                _caseToLook = _boardManager.FindNeighbourCell(direction.west, _currentCase.GetPosInGrid());
-                _currentPath++;
-                PathFinding(_caseToLook, direction.west);
-            }
-        }
-        else if (_currentCase.GetPosInGrid() == _playerManager.GetPlayerByInd(0).GetCellOn() || _currentCase.GetPosInGrid() == _playerManager.GetPlayerByInd(1).GetCellOn())
-        {
-            _pathList[_ind].Add(_currentCase);
-            _ind++;
-            _currentPath = 0;
-            PathFinding(_courseBeginning, direction.north);
-            PathFinding(_courseBeginning, direction.south);
-            PathFinding(_courseBeginning, direction.west);
-        }
-        else
-        {
-            _ind++;
-            _currentPath = 0;
-            PathFinding(_courseBeginning, direction.north);
-            PathFinding(_courseBeginning, direction.south);
-            PathFinding(_courseBeginning, direction.west);
-        }
-        for (int i = 0; i < _pathList.Count; i++)
-        {
-            if (_pathList[i].Count <= _min)
-            {
-                _min = _pathList[i].Count;
-                _shortestPathList = _pathList[i];
-            }
-        }
-        for (int i=0; i < _pathList.Count; i++)
-        {
-            if (_pathList[i].Count > _min)
-            {
-                for (int j = 0; j < _pathList[i].Count; j++)
-                {
-                    _pathList[i].Remove(_pathList[i][j]);
-                }
-            }
-        }
+        _position.position = _boardManager.GetCell(_startCell).GetWorldPos();
+        _cellOn = _startCell;
     }
 
     private bool IsEquiDist()
     {
-        for (int i =0; i < _pathList.Count; ++i)
+        if (_pathToPlayerOne.Count == _pathToPlayerTwo.Count)
         {
-            if (_pathList[i][_pathList[i].Count - 1] != _pathList[0][_pathList[0].Count - 1])
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private void InitPath(int ind)
+    {
+        _opened.Add(new Node(_boardManager.GetCell(_cellOn), GetHeuristique(_boardManager.GetCell(_cellOn), _boardManager.GetCell(_playerManager.GetPlayerByInd(ind).GetCellOn())), GetHeuristique(_boardManager.GetCell(_cellOn), _boardManager.GetCell(_playerManager.GetPlayerByInd(ind).GetCellOn())), null));
+        Astar(_boardManager.GetCell(_playerManager.GetPlayer().GetCellOn()));
+        Debug.Log(_closed.Count);
+        if (ind == 0)
+        {
+            _pathToPlayerOne.Clear();
+            GetPathFromClosedList(_closed[_closed.Count - 1], _pathToPlayerOne);
+            Debug.Log("path equals " + _pathToPlayerOne.Count);
+        }
+        else
+        {
+            _pathToPlayerTwo.Clear();
+            GetPathFromClosedList(_closed[_closed.Count - 1], _pathToPlayerTwo);
+            Debug.Log("path equals " + _pathToPlayerTwo.Count);
+        }
+    }
+
+    private void Astar(Case finish)
+    {
+
+        int bestIndexInOpen = FindBestPotentialNodeIndex();
+
+        Node currentNode = _opened[bestIndexInOpen];
+
+        _opened.RemoveAt(bestIndexInOpen);
+
+        if (currentNode._cell != finish)
+        {
+            foreach (Case neighbor in currentNode._cell.Neighbor)
             {
-                return true;
+                if (ReevaluateOpen(neighbor, currentNode))
+                {
+                }
+                else if (ReevaluateClosed(neighbor, currentNode))
+                {
+                }
+                else
+                {
+                    _opened.Add(new Node(neighbor, currentNode._weight - currentNode._euristic + branchWeight + GetHeuristique(neighbor, finish), GetHeuristique(neighbor, finish), currentNode));
+                }
             }
-            
+            _closed.Add(currentNode);
+            Astar(finish);
+        }
+        else
+        {
+            _closed.Add(currentNode);
+        }
+    }
+
+    private bool ReevaluateOpen(Case value, Node currentStudy)
+    {
+        for (int i = 0; i < _opened.Count; i++)
+        {
+            if (value == _opened[i]._cell)
+            {
+                if (currentStudy._weight - currentStudy._euristic + branchWeight + _opened[i]._euristic < _opened[i]._weight)
+                {
+                    _opened[i]._weight = currentStudy._weight - currentStudy._euristic + branchWeight + _opened[i]._euristic;
+                    _opened[i]._parent = currentStudy;
+                    return true;
+                }
+                else
+                    return false;
+            }
         }
         return false;
     }
 
-    private List<Node> Astar(Case start, Case finish)
+    private bool ReevaluateClosed(Case value, Node currentStudy)
     {
-        List<Node> _result = new List<Node>();
+        for (int i = 0; i < _closed.Count; i++)
+        {
+            if (value == _closed[i]._cell)
+            {
+                if (currentStudy._weight - currentStudy._euristic + branchWeight + _opened[i]._euristic < _closed[i]._weight)
+                {
+                    _closed[i]._weight = currentStudy._weight - currentStudy._euristic + branchWeight + _opened[i]._euristic;
+                    _closed[i]._parent = currentStudy;
 
-
-
-        return _result;
+                    _opened.Add(_closed[i]);
+                    _closed.Remove(_closed[i]);
+                    return true;
+                }
+                else
+                    return false;
+            }
+        }
+        return false;
     }
 
-    private float GetHeuristique(int start, int finish)
+    private int FindBestPotentialNodeIndex()
     {
-        return Vector3.Distance(_boardManager.GetCell(start).GetWorldPos(), _boardManager.GetCell(finish).GetWorldPos());
+        int result = 0;
+        float bestPotential = _opened[0]._weight;
+
+        for (int i = 0; i < _opened.Count; i++)
+        {
+            if (_opened[i]._weight < bestPotential)
+            {
+                bestPotential = _opened[i]._weight;
+                result = i;
+            }
+        }
+        return result;
     }
-    /*private void MoveTo(Vector3 direction)
+
+    private float GetHeuristique(Case start, Case finish)
     {
-        _position.position = _position.position + direction * _cellSize;
-    }*/
+        return Vector3.Distance(start.GetWorldPos(), finish.GetWorldPos());
+    }
+
+    private void GetPathFromClosedList(Node _node, List<Node> pathToFill)
+    {
+        if (_node._parent == null)
+        {
+            pathToFill.Add(_node);
+        }
+        else
+        {
+            pathToFill.Add(_node);
+            GetPathFromClosedList(_node._parent, pathToFill);
+        }
+    }
+
 }
 
 public class Node
 {
     public Case _cell;
     public float _weight;
+    public float _euristic;
     public Node _parent;
 
-    public Node(Case myName, float weight, Node parent)
+    public Node(Case myName, float weight, float euristic, Node parent)
     {
         _cell = myName;
         _weight = weight;
+        _euristic = euristic;
         _parent = parent;
     }
 }
