@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EspritFrappeur : EventCard
+public class EspritFrappeur : MOB
 {
     public override void DoEvent()
     {
