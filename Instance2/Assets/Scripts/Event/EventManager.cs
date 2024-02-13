@@ -39,8 +39,15 @@ public class EventManager : Entity
         foreach (EventName name in System.Enum.GetValues(typeof(EventName)))
         {
             EventCard eventCard = (EventCard)Activator.CreateInstance(Type.GetType(name.ToString()));
-
             _listCards.Add(eventCard);
+        }
+        
+        foreach (EventCard eventCard in _listCards)
+        {
+            if (eventCard is MOB mobCard)
+            {
+                mobCard.OnDiceStoppedEvent += EndEvent;
+            }
         }
     }
 
@@ -59,6 +66,11 @@ public class EventManager : Entity
         _listCards.RemoveAt(_indexEvent);
         Destroy(tmp);
 
+        
+    }
+
+    public void EndEvent()
+    {
         EndRound();
     }
 }

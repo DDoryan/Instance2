@@ -23,7 +23,7 @@ public class RollDiceManager : MonoBehaviour
     {
         if (Input.GetMouseButton(0))
         {
-            DiceThrow(_numberOfFaces); // je veux recuperer la variable une fois que le des donne un nouveau resultat
+            DiceThrow(_numberOfFaces);
         }
     }
 

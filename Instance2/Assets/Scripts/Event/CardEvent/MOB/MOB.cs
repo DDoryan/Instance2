@@ -9,10 +9,17 @@ public class MOB : EventCard
     protected RollDiceManager _dice;
 
 
-    [SerializeField] protected short _numberOfFaces;
+    protected short _numberOfFaces;
 
-    [SerializeField] protected int _minNumberRequiredToWin;
-    [SerializeField] protected int _damage;
+    protected int _minNumberRequiredToWin;
+    protected int _damagePa;
+
+    private PlayerManager _playerManager;
+
+    public delegate void DiceStoppedHandler();
+    public event DiceStoppedHandler OnDiceStoppedEvent;
+
+
 
     private void Awake()
     {
@@ -22,7 +29,7 @@ public class MOB : EventCard
     public override void DoEvent()
     {
         if (detector != null)
-            detector._eventNumDice.AddListener(OnDiceStopped);
+            detector.EventNumDice.AddListener(OnDiceStopped);
 
         Debug.Log("Vous avez piochez la carte " + GetType().Name);
 
@@ -33,16 +40,19 @@ public class MOB : EventCard
     public virtual void OnDiceStopped(int num)
     {
         Debug.Log("NUM APRES AVOIR FINI DE TOURNER " + num);
-        detector._eventNumDice.RemoveListener(OnDiceStopped);
 
         if (num >= _minNumberRequiredToWin)
         {
             _cameraDice.ToggleCameraWindow();
-            //next turn
+
+            OnDiceStoppedEvent?.Invoke(); //next turn
         }
         else
         {
-
+            OnDiceStoppedEvent?.Invoke(); // next turn
+            _playerManager.SubstractActionPoints(_damagePa);
         }
+
+        detector.EventNumDice.RemoveListener(OnDiceStopped);
     }
 }

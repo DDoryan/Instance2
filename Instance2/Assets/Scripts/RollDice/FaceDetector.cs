@@ -3,10 +3,10 @@ using UnityEngine.Events;
 
 public class FaceDetector : MonoBehaviour
 {
-    public UnityEvent<int> _eventNumDice;
+    public UnityEvent<int> EventNumDice;
 
     private RollDice _dice;
-
+    
     private void OnTriggerStay(Collider other)
     {
         if (other.transform.parent != null)
@@ -23,7 +23,7 @@ public class FaceDetector : MonoBehaviour
                     
                         // si soucis mettre un invoke()
                     
-                        _eventNumDice.Invoke(int.Parse(other.name));
+                        EventNumDice.Invoke(int.Parse(other.name));
 
                         _dice.PrintDiceFace();
                     }
