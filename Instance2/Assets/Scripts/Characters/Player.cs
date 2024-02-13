@@ -53,6 +53,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        _destination = BoardManager.Instance.GetCellPos(_cellOn);
         _selectedPerk = 0;
         _myState = PlayerState.idle;
         _grave = new Grave(CaseType.Grave, false, false, 1, null, Vector2.zero, null, 1);
@@ -78,8 +79,9 @@ public class Player : MonoBehaviour
         
     }*/
 
-    public void GetDirections(Vector2 direction)
+    public bool GetDirections(Vector2 direction)
     {
+        bool result = false;
         if (_myState == PlayerState.idle)
         {
             switch (direction.y)
@@ -88,7 +90,8 @@ public class Player : MonoBehaviour
                     if (BoardManager.Instance.FindNeighbourCell(Direction.north, _cellOn) != null && BoardManager.Instance.FindNeighbourCell(Direction.north,_cellOn).IsWalkableByPlayer)
                     {
                         _destination = BoardManager.Instance.FindNeighbourCell(Direction.north, _cellOn).WorldPos;
-                        _cellOn = BoardManager.Instance.FindNeighbourCell(Direction.north, _cellOn).GetPosInGrid(); ;
+                        _cellOn = BoardManager.Instance.FindNeighbourCell(Direction.north, _cellOn).GetPosInGrid();
+                        result = true;
                     }
                     break;
 
@@ -96,7 +99,8 @@ public class Player : MonoBehaviour
                     if (BoardManager.Instance.FindNeighbourCell(Direction.south, _cellOn) != null && BoardManager.Instance.FindNeighbourCell(Direction.south, _cellOn).IsWalkableByPlayer)
                     {
                         _destination = BoardManager.Instance.FindNeighbourCell(Direction.south, _cellOn).WorldPos;
-                        _cellOn = BoardManager.Instance.FindNeighbourCell(Direction.south, _cellOn).GetPosInGrid(); ;
+                        _cellOn = BoardManager.Instance.FindNeighbourCell(Direction.south, _cellOn).GetPosInGrid();
+                        result = true;
                     }
                     break;
             }
@@ -108,6 +112,7 @@ public class Player : MonoBehaviour
                     {
                         _destination = BoardManager.Instance.FindNeighbourCell(Direction.est, _cellOn).WorldPos;
                         _cellOn = BoardManager.Instance.FindNeighbourCell(Direction.est, _cellOn).GetPosInGrid();
+                        result = true;
                     }
                     break;
 
@@ -116,11 +121,13 @@ public class Player : MonoBehaviour
                     {
                         _destination = BoardManager.Instance.FindNeighbourCell(Direction.west, _cellOn).WorldPos;
                         _cellOn = BoardManager.Instance.FindNeighbourCell(Direction.west, _cellOn).GetPosInGrid();
+                        result = true;
                     }
                     break;
             }
             _myState = PlayerState.moving;
         }
+        return result;
     }
 
     /*private void SetDestination()

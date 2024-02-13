@@ -364,8 +364,10 @@ public class PlayerManager : Entity
     {
         if (_isTurn)
         {
-            _playerList[_currentTurn].GetDirections(direction);
-            SubstractActionPoints(1);
+            if (_playerList[_currentTurn].GetDirections(direction))
+            {
+                SubstractActionPoints(1);
+            }
             return;
         }
     }
