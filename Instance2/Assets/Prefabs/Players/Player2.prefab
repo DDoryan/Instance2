@@ -47,10 +47,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _perkLimit: 2
   _canOpenTombs: 1
-  _cellSize: 1
   _playerPos: {fileID: 8302839849869670180}
   _inventoryPlayer: []
   _haveTreasure: 0
+  _artefact: {fileID: 0}
+  _artefactSelected: {fileID: 0}
 --- !u!212 &5280760811797613823
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -91,9 +92,9 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_SortingOrder: 1
+  m_Sprite: {fileID: 21300000, guid: 88b37f143fc09d0409d840933f23666a, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
