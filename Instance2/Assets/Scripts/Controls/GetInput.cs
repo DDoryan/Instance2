@@ -57,11 +57,57 @@ public class GetInput : MonoBehaviour
         }
     }
 
-    public void OpenGrave(InputAction.CallbackContext context)
+    public void ExchangeAction(InputAction.CallbackContext context)
+    {
+        if (context.performed && (PlayerManager.Instance.InventoryAmmount(0) > 0 || PlayerManager.Instance.InventoryAmmount(1) > 0))
+        {
+            _playerInput.actions.FindActionMap("SelectArtefact").Disable();
+            _playerInput.actions.FindActionMap("PlayerInput").Disable();
+            _playerInput.actions.FindActionMap("ExchangeSystem").Enable();
+            PlayerManager.Instance.ExchangeStart();
+            Debug.Log("Perform");
+        }
+    }
+
+    public void ExchangeActionEnd(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            _playerInput.actions.FindActionMap("SelectArtefact").Disable();
+            _playerInput.actions.FindActionMap("PlayerInput").Enable();
+            _playerInput.actions.FindActionMap("ExchangeSystem").Disable();
+            PlayerManager.Instance.ExchangeEnd();
+            Debug.Log("Perform");
+        }
+    }
+
+    public void ActiveInventory(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            PlayerManager.Instance.ActiveInventory();
+        }
+    }
+
+    public void AccepteExchange(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            PlayerManager.Instance.AccepteExchange();
+            _playerInput.actions.FindActionMap("SelectArtefact").Disable();
+            _playerInput.actions.FindActionMap("PlayerInput").Enable();
+            _playerInput.actions.FindActionMap("ExchangeSystem").Disable();
+        }
+    }
+
+    public void DeclineExchange(InputAction.CallbackContext context)
     {
         if(context.performed)
         {
-            _playerManager.AddToInventory();
+            PlayerManager.Instance.DeclineExchange();
+            _playerInput.actions.FindActionMap("SelectArtefact").Disable();
+            _playerInput.actions.FindActionMap("PlayerInput").Enable();
+            _playerInput.actions.FindActionMap("ExchangeSystem").Disable();
         }
     }
 
@@ -70,6 +116,13 @@ public class GetInput : MonoBehaviour
         if (context.performed)
         {
             _playerManager.SelectedArtifact();
+        }
+    }    
+    public void SelectArtifactToExchange(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            _playerManager.SelectArtifactToExchange();
         }
     }
 
@@ -104,6 +157,13 @@ public class GetInput : MonoBehaviour
         if (context.started)
         {
             _playerManager.NavigateInventory(context.ReadValue<Vector2>());
+        }
+    }    
+    public void GetNavigationInputExchange(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            _playerManager.NavigateInventoryExchange(context.ReadValue<Vector2>());
         }
     }
 

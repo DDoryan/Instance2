@@ -34,21 +34,10 @@ public abstract class Case
 
 
 
-
-
-    [SerializeField]
-    protected Sprite _defaultSprite; // getter, pas moi, a faire dans Case
-
     public void AddNeighbor(Case neighbor)
     {
         _neighbor.Add(neighbor);
     }
-
-    public void IntroduceYourself()
-    {
-        Debug.Log("my name is " + _caseType.ToString() + " I got " + _neighbor.Count + " neighbors");
-    }
-
 
     public int GetPosInGrid()
     {
@@ -72,11 +61,6 @@ public abstract class Case
         get { return _isWalkableByPlayer; }
     }
 
-    public Sprite Sprite
-    {
-        get { return _defaultSprite; }
-    }
-
     public CaseType CaseType
     {
         get { return _caseType; }
@@ -84,6 +68,11 @@ public abstract class Case
     public int Area
     {
         get { return _area; }
+    }
+
+    public Vector3 WorldPos
+    {
+        get { return _worldPos; }
     }
 
     #endregion

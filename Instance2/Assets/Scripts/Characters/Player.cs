@@ -1,39 +1,27 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.UI;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.UI;
-using static UnityEditor.Timeline.TimelinePlaybackControls;
+using static UnityEngine.InputSystem.PlayerInput;
 
 public class Player : MonoBehaviour
 {
-
-
-
-
-
     [SerializeField] private int _perkLimit;
     [SerializeField] private bool _canOpenTombs;
 
     private bool _artefactFull;
 
-    private PlayerManager _playerManager;
     private int _cellOn;
     private int _selectedPerk;
     private Vector3 _destination;
     private PlayerState _myState;
-    [SerializeField] private float _cellSize;
     [SerializeField] private Transform _playerPos;
     [SerializeField] private List<Artefacte> _inventoryPlayer = new List<Artefacte>();
     [SerializeField] private bool _haveTreasure;
 
     [SerializeField] private Artefacte _artefact;
 
-    private Artefacte _artefactSelection;
+    private Artefacte _artefactYouLook;
     [SerializeField] private Artefacte _artefactSelected;
 
-    [SerializeField] private Grave _grave;
     public List<Artefacte> InventoryPlayer
     {
         get { return _inventoryPlayer; }
@@ -42,13 +30,20 @@ public class Player : MonoBehaviour
     public int SelectedPerk
     {
         get { return _selectedPerk; }
+        set
+        {
+            _selectedPerk = value;
+        }
     }
+
+    public Artefacte ArtefactYouLook { get => _artefactYouLook; set => _artefactYouLook = value; }
+    public Artefacte ArtefactSelected { get => _artefactSelected; set => _artefactSelected = value; }
 
     void Start()
     {
+        _destination = BoardManager.Instance.GetCellPos(_cellOn);
         _selectedPerk = 0;
         _myState = PlayerState.idle;
-        //_grave = new Grave(CaseType.Grave, false, false, 1, null, Vector2.zero, null);
     }
 
     private void FixedUpdate()
@@ -64,51 +59,70 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void NavigatePerks(Vector2 direction)
-    {
-        if (_selectedPerk + direction.x.ConvertTo<int>() < _inventoryPlayer.Count && _selectedPerk + direction.x.ConvertTo<int>() >= 0)
-        {
-            if (!_inventoryPlayer[_selectedPerk + direction.x.ConvertTo<int>()].IsUnityNull())
-            {
-                _selectedPerk += direction.x.ConvertTo<int>();
-                _artefactSelection = _inventoryPlayer[_selectedPerk];
-            }
-        }
-        return;
-    }
 
+    
     /*public bool HasKey()
     {
         
     }*/
 
-    public void GetDirections(Vector2 direction)
+    public bool GetDirections(Vector2 direction)
     {
         if (_myState == PlayerState.idle)
         {
+            Case caseToCheck = null;
             switch (direction.y)
             {
                 case 1:
-                    _destination = _playerPos.position + Vector3.up * _cellSize;
+                    caseToCheck = BoardManager.Instance.FindNeighbourCell(Direction.north, _cellOn);
                     break;
 
                 case -1:
-                    _destination = _playerPos.position + Vector3.down * _cellSize;
+                    caseToCheck = BoardManager.Instance.FindNeighbourCell(Direction.south, _cellOn);
                     break;
             }
 
             switch (direction.x)
             {
                 case 1:
-                    _destination = _playerPos.position + Vector3.right * _cellSize;
+                    caseToCheck = BoardManager.Instance.FindNeighbourCell(Direction.est, _cellOn);
                     break;
 
                 case -1:
-                    _destination = _playerPos.position + Vector3.left * _cellSize;
+                    caseToCheck = BoardManager.Instance.FindNeighbourCell(Direction.west, _cellOn);
                     break;
             }
-            _myState = PlayerState.moving;
+
+            if (caseToCheck != null )
+            {
+                switch (caseToCheck.CaseType)
+                {
+                    case CaseType.Path:
+                        SetDestination(caseToCheck);
+                        _myState = PlayerState.moving;
+                        return true;
+
+                    case CaseType.Wall:
+                        return false;
+
+                    case CaseType.Grave:
+                        Grave grave = (Grave)caseToCheck;
+                        if (grave.CanInteract)
+                        {
+                            OpenGrave(grave);
+                            return true;
+                        }
+                        return false;
+                }
+            }
         }
+        return false;
+    }
+
+    private void SetDestination(Case caseToCheck)
+    {
+        _destination = caseToCheck.WorldPos;
+        _cellOn = caseToCheck.GetPosInGrid();
     }
 
     /*private void SetDestination()
@@ -117,24 +131,27 @@ public class Player : MonoBehaviour
     }*/
 
 
-    public void AddToInventory()
+    public void OpenGrave(Grave caseToCheck)
     {
-
         if (_inventoryPlayer.Count < _perkLimit)
         {
-            _inventoryPlayer.Add(_grave.Interact());
+            Artefacte cardToAdd = caseToCheck.Interact();
+            if (cardToAdd.CardType != CardType.Empty)
+            {
+                _inventoryPlayer.Add(cardToAdd);
+            }
 
         }
         else if (_inventoryPlayer.Count >= _perkLimit && _artefact == null)
         {
             _artefactFull = true;
-            _artefact = _grave.Interact();
+            _artefact = caseToCheck.Interact();
         }
     }
 
     public void SelectArtifact()
     {
-        _artefactSelected = _artefactSelection;
+        _artefactSelected = _artefactYouLook;
     }
 
     public void KeepArtifact()
@@ -177,7 +194,7 @@ public class Player : MonoBehaviour
 
     public int CastSpell(int ressource)
     {
-        if (_inventoryPlayer.Count == 0) {  return 0; }
+        if (_inventoryPlayer.Count == 0) { return 0; }
         if (ressource - _inventoryPlayer[_selectedPerk].Cost < 0)
         {
             return 0;
@@ -224,7 +241,10 @@ public class Player : MonoBehaviour
 
     public int GetCellOn() { return _cellOn; }
 
+    public void SetCellOn(int newCellPos) { _cellOn = newCellPos; }
+
     public int GetPerkLimit() { return _perkLimit; }
+
 }
 
 public enum PlayerState
