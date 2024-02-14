@@ -63,12 +63,12 @@ public class Interface : MonoBehaviour
 
     private void RefreshAPUI()
     {
-        _textAP.text = PlayerManager.Instance._actionPoints.ToString();
+        _textAP.text = "Action Points : " + PlayerManager.Instance._actionPoints.ToString();
     }
 
     private void RefreshMPUI()
     {
-        _textMP.text = PlayerManager.Instance._magicPoints.ToString();
+        _textMP.text = "Magic Points : " +PlayerManager.Instance._magicPoints.ToString();
     }
 
     private void RefreshSelectedPerkUI()
