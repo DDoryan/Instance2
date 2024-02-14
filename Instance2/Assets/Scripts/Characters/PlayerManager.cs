@@ -75,6 +75,7 @@ public class PlayerManager : Entity
     private int _currentTurn;
     public static PlayerManager Instance;
     private int _exchangeTurn;
+    private Don_Du_Ciel _donDuCiel;
 
 
     [Header("UIElement")]
@@ -107,6 +108,8 @@ public class PlayerManager : Entity
 
     private void Start()
     {
+        _passePasse.PassePasseEvent += OnPassePasseEvent;
+        _donDuCiel.DonDuCielEvent += ExchangeStart;
         _baseAP = _actionPoints;
         _baseMP = _magicPoints;
         GameObject player1 = Instantiate(Player1Prefab, BoardManager.Instance.GetCellPos(Player1StartCell) , Quaternion.identity);
