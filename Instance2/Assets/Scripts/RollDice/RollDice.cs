@@ -27,8 +27,6 @@ public class RollDice : MonoBehaviour
         {
             RollingDice();
         }
-
-
     }
 
     private void FixedUpdate()
@@ -55,7 +53,7 @@ public class RollDice : MonoBehaviour
     }
 
 
-    private void RollingDice()
+    public void RollingDice()
     {
         _body.isKinematic = false;
         _scoreText.enabled = false;
@@ -71,7 +69,7 @@ public class RollDice : MonoBehaviour
     private void Initialize()
     {
         _body = GetComponent<Rigidbody>();
-        _body.isKinematic = true;
+        _body.isKinematic = false;
         transform.rotation = new Quaternion(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360), 0);
     }
 
@@ -94,6 +92,11 @@ public class RollDice : MonoBehaviour
     public void SetIsKinematic(bool value)
     {
         _body.isKinematic = value;
+    }
+
+    public bool GetIsKinematic()
+    {
+        return _body.isKinematic;
     }
 
     public int RollDice_GetNumber()
