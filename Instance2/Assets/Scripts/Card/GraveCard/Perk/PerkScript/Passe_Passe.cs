@@ -8,8 +8,11 @@ using UnityEngine;
 
 public class Passe_Passe : BasePerk
 {
+    public delegate void PassePasseEventDelegate();
+    public event PassePasseEventDelegate PassePasseEvent;
     public override void Use()
     {
         _cost = 4;
+        PassePasseEvent?.Invoke();
     }
 }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public class GetInput : MonoBehaviour
 {
@@ -14,11 +15,20 @@ public class GetInput : MonoBehaviour
 
     private PlayerControls _playerControls;
 
+    private Passe_Muraille _passeMuraille;
+
+    private bool _canPasseMur = false;
+
 
     private void Awake()
     {
         _playerInput = GetComponent<PlayerInput>();
         _playerControls = new PlayerControls();
+    }
+
+    private void Start()
+    {
+        _passeMuraille.PasseMurailleEvent += OnPasseMurailleEvent;
     }
 
     private void FixedUpdate()
@@ -217,6 +227,19 @@ public class GetInput : MonoBehaviour
         if (context.performed)
         {
             _playerManager.CastSpell();
+        }
+    }
+
+    private void OnPasseMurailleEvent()
+    {
+        _canPasseMur = true;
+    }
+
+    public void PasseMurailleEvent(InputAction.CallbackContext context)
+    {
+        if (context.started && _canPasseMur == true)
+        {
+            _playerManager.OnPasseMurailleEvent(context.ReadValue<Vector2>());
         }
     }
 }

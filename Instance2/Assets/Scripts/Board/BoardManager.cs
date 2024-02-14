@@ -150,7 +150,7 @@ public class BoardManager : MonoBehaviour
 
     public Case GetCell(int cellIndex)
     {
-        return mapInfo[cellIndex];
+        return _mapInfo[cellIndex];
     }
     public void ChangeSpriteToDestroyed(Vector2 pos)
     {
