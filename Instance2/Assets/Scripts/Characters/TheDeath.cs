@@ -1,0 +1,216 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using static UnityEngine.RuleTile.TilingRuleOutput;
+
+public class TheDeath : Entity
+{
+    public delegate void DeathEventDelegate();
+    public event DeathEventDelegate DeathEvent;
+    [SerializeField] private BoardManager _boardManager;
+    [SerializeField] private UnityEngine.Transform _position;
+    [SerializeField] private PlayerManager _playerManager;
+    [SerializeField] private float _cellSize;
+    [SerializeField] private int _moveNumber;
+    [SerializeField] private int _startCell;
+    private int _cellOn;
+    private List<Node> _opened = new List<Node>();
+    private List<Node> _closed = new List<Node>();
+    private List<Node> _pathToPlayerOne = new List<Node>();
+    private List<Node> _pathToPlayerTwo = new List<Node>();
+    private float branchWeight = 1;
+    public static TheDeath Instance;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    public override void StartRound()
+    {
+        InitPath(0);
+        InitPath(1);
+        if (!IsEquiDist())
+        {
+            for (int i = 0; i < _moveNumber; i++)
+            {
+                _cellOn = _closed[_closed.Count - 1 - i]._cell.GetPosInGrid();
+                _position.position = _closed[_closed.Count - 1 - i]._cell.GetWorldPos();
+                if (_cellOn == _playerManager.GetPlayerByInd(0).GetCellOn() || _cellOn == _playerManager.GetPlayerByInd(1).GetCellOn())
+                {
+                    DeathEvent?.Invoke();
+                }
+            }
+        }
+        base.StartRound();
+    }
+
+    public void DeathSpawn()
+    {
+        _position.position = _boardManager.GetCell(_startCell).GetWorldPos();
+        _cellOn = _startCell;
+    }
+
+    private bool IsEquiDist()
+    {
+        if (_pathToPlayerOne.Count == _pathToPlayerTwo.Count)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private void InitPath(int ind)
+    {
+        _opened.Add(new Node(_boardManager.GetCell(_cellOn), GetHeuristique(_boardManager.GetCell(_cellOn), _boardManager.GetCell(_playerManager.GetPlayerByInd(ind).GetCellOn())), GetHeuristique(_boardManager.GetCell(_cellOn), _boardManager.GetCell(_playerManager.GetPlayerByInd(ind).GetCellOn())), null));
+        Astar(_boardManager.GetCell(_playerManager.GetPlayer().GetCellOn()));
+        Debug.Log(_closed.Count);
+        if (ind == 0)
+        {
+            _pathToPlayerOne.Clear();
+            GetPathFromClosedList(_closed[_closed.Count - 1], _pathToPlayerOne);
+            Debug.Log("path equals " + _pathToPlayerOne.Count);
+        }
+        else
+        {
+            _pathToPlayerTwo.Clear();
+            GetPathFromClosedList(_closed[_closed.Count - 1], _pathToPlayerTwo);
+            Debug.Log("path equals " + _pathToPlayerTwo.Count);
+        }
+    }
+
+    private void Astar(Case finish)
+    {
+
+        int bestIndexInOpen = FindBestPotentialNodeIndex();
+
+        Node currentNode = _opened[bestIndexInOpen];
+
+        _opened.RemoveAt(bestIndexInOpen);
+
+        if (currentNode._cell != finish)
+        {
+            foreach (Case neighbor in currentNode._cell.Neighbor)
+            {
+                if (ReevaluateOpen(neighbor, currentNode))
+                {
+                }
+                else if (ReevaluateClosed(neighbor, currentNode))
+                {
+                }
+                else
+                {
+                    _opened.Add(new Node(neighbor, currentNode._weight - currentNode._euristic + branchWeight + GetHeuristique(neighbor, finish), GetHeuristique(neighbor, finish), currentNode));
+                }
+            }
+            _closed.Add(currentNode);
+            Astar(finish);
+        }
+        else
+        {
+            _closed.Add(currentNode);
+        }
+    }
+
+    private bool ReevaluateOpen(Case value, Node currentStudy)
+    {
+        for (int i = 0; i < _opened.Count; i++)
+        {
+            if (value == _opened[i]._cell)
+            {
+                if (currentStudy._weight - currentStudy._euristic + branchWeight + _opened[i]._euristic < _opened[i]._weight)
+                {
+                    _opened[i]._weight = currentStudy._weight - currentStudy._euristic + branchWeight + _opened[i]._euristic;
+                    _opened[i]._parent = currentStudy;
+                    return true;
+                }
+                else
+                    return false;
+            }
+        }
+        return false;
+    }
+
+    private bool ReevaluateClosed(Case value, Node currentStudy)
+    {
+        for (int i = 0; i < _closed.Count; i++)
+        {
+            if (value == _closed[i]._cell)
+            {
+                if (currentStudy._weight - currentStudy._euristic + branchWeight + _opened[i]._euristic < _closed[i]._weight)
+                {
+                    _closed[i]._weight = currentStudy._weight - currentStudy._euristic + branchWeight + _opened[i]._euristic;
+                    _closed[i]._parent = currentStudy;
+
+                    _opened.Add(_closed[i]);
+                    _closed.Remove(_closed[i]);
+                    return true;
+                }
+                else
+                    return false;
+            }
+        }
+        return false;
+    }
+
+    private int FindBestPotentialNodeIndex()
+    {
+        int result = 0;
+        float bestPotential = _opened[0]._weight;
+
+        for (int i = 0; i < _opened.Count; i++)
+        {
+            if (_opened[i]._weight < bestPotential)
+            {
+                bestPotential = _opened[i]._weight;
+                result = i;
+            }
+        }
+        return result;
+    }
+
+    private float GetHeuristique(Case start, Case finish)
+    {
+        return Vector3.Distance(start.GetWorldPos(), finish.GetWorldPos());
+    }
+
+    private void GetPathFromClosedList(Node _node, List<Node> pathToFill)
+    {
+        if (_node._parent == null)
+        {
+            pathToFill.Add(_node);
+        }
+        else
+        {
+            pathToFill.Add(_node);
+            GetPathFromClosedList(_node._parent, pathToFill);
+        }
+    }
+
+}
+
+public class Node
+{
+    public Case _cell;
+    public float _weight;
+    public float _euristic;
+    public Node _parent;
+
+    public Node(Case myName, float weight, float euristic, Node parent)
+    {
+        _cell = myName;
+        _weight = weight;
+        _euristic = euristic;
+        _parent = parent;
+    }
+}

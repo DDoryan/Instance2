@@ -44,6 +44,8 @@ public abstract class Case
         return _indexInGrid;
     }
 
+    public Vector3 GetWorldPos() { return _worldPos; }
+
 
     #region Getter & Setter
 

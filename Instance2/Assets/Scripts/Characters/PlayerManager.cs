@@ -71,7 +71,7 @@ public class PlayerManager : Entity
     private List<Player> _playerList;
     private Player _player1;
     private Player _player2;
-    private bool _gotTheMoula;
+    //private bool _gotTheMoula;
     private int _currentTurn;
     public static PlayerManager Instance;
     private int _exchangeTurn;
@@ -400,5 +400,19 @@ public class PlayerManager : Entity
             }
             ChangePlayerEvent?.Invoke();
         }
+    }
+    
+    public Player GetPlayer()
+    {
+        return _playerList[_currentTurn];
+    }
+
+    public Player GetPlayerByInd(int ind)
+    {
+        if (ind < 0 || ind > _playerList.Count)
+        {
+            return null;
+        }
+        return _playerList[ind];
     }
 }

@@ -148,6 +148,10 @@ public class BoardManager : MonoBehaviour
         return null;
     }
 
+    public Case GetCell(int cellIndex)
+    {
+        return mapInfo[cellIndex];
+    }
     public void ChangeSpriteToDestroyed(Vector2 pos)
     {
         _tilemap.SetTile(_tilemap.WorldToCell(pos), _tileSwap[_tilemap.GetTile(_tilemap.WorldToCell(pos))].usedTile);
