@@ -15,7 +15,10 @@ public class TheDeath : Entity
     private List<Node> _closed = new List<Node>();
     private List<Node> _pathToPlayerOne = new List<Node>();
     private List<Node> _pathToPlayerTwo = new List<Node>();
-    private float branchWeight = 0;
+    private float branchWeight = 1;
+    private int _baseMoveNumber;
+    private Entrave _entrave;
+    private Temps_Mort _tempsMort;
     public static TheDeath Instance;
 
     private void Awake()
@@ -30,8 +33,11 @@ public class TheDeath : Entity
         }
     }
 
-    public void Start()
+    private void Start()
     {
+        _baseMoveNumber = _moveNumber;
+        _entrave.EntraveEvent += OnEntraveEvent;
+        _tempsMort.TempsMortEvent += OnTempsMortEvent;
         _playerManager = PlayerManager.Instance;
         _boardManager = BoardManager.Instance;
     }
@@ -39,6 +45,7 @@ public class TheDeath : Entity
     public override void StartRound()
     {
         base.StartRound();
+        ResetMoveNumber();
         InitPath(0);
         InitPath(1);
         if (!IsEquiDist())
@@ -220,6 +227,24 @@ public class TheDeath : Entity
     public void SetCellOn(int CellOn)
     {
         _cellOn = CellOn;
+    }
+
+    private void ResetMoveNumber()
+    {
+        if (_moveNumber != _baseMoveNumber)
+        {
+            _moveNumber = _baseMoveNumber;
+        }
+    }
+
+    private void OnEntraveEvent()
+    {
+        _moveNumber -= 2;
+    }
+
+    private void OnTempsMortEvent()
+    {
+        _moveNumber = 0;
     }
 }
 

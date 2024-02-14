@@ -78,6 +78,7 @@ public class PlayerManager : Entity
     private int _currentTurn;
     public static PlayerManager Instance;
     private int _exchangeTurn;
+    private Don_Du_Ciel _donDuCiel;
 
 
     [Header("UIElement")]
@@ -94,6 +95,8 @@ public class PlayerManager : Entity
 
     public int ExchangeTurn { get => _exchangeTurn; set => _exchangeTurn = value; }
 
+    private Passe_Passe _passePasse;
+
     private void Awake()
     {
         if (Instance == null)
@@ -108,6 +111,8 @@ public class PlayerManager : Entity
 
     private void Start()
     {
+        _passePasse.PassePasseEvent += OnPassePasseEvent;
+        _donDuCiel.DonDuCielEvent += ExchangeStart;
         _baseAP = _actionPoints;
         _baseMP = _magicPoints;
         GameObject player1 = Instantiate(Player1Prefab, BoardManager.Instance.GetCellPos(Player1StartCell) , Quaternion.identity);
@@ -420,5 +425,28 @@ public class PlayerManager : Entity
     private void MovePlayerEventCallF()
     {
         MovePlayerEventCall?.Invoke();
+    }
+
+    public void OnPasseMurailleEvent(Vector2 direction)
+    {
+        if (_isTurn)
+        {
+            if (_playerList[_currentTurn].OnPasseMurailleEvent(direction))
+            {
+                SubstractMagicPoints(2);
+            }
+            ActionEvent?.Invoke();
+            return;
+        }
+    }
+
+    private void OnPassePasseEvent()
+    {
+        if (_isTurn)
+        {
+            Case _tempCase = BoardManager.Instance.GetCell(_playerList[0].GetCellOn());
+            _playerList[0].SetDestination(BoardManager.Instance.GetCell(_playerList[1].GetCellOn()));
+            _playerList[1].SetDestination(_tempCase);
+        }
     }
 }
