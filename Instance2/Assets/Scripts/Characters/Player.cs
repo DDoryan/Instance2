@@ -119,7 +119,7 @@ public class Player : MonoBehaviour
         return false;
     }
 
-    private void SetDestination(Case caseToCheck)
+    public void SetDestination(Case caseToCheck)
     {
         _destination = caseToCheck.WorldPos;
         _cellOn = caseToCheck.GetPosInGrid();
@@ -244,6 +244,68 @@ public class Player : MonoBehaviour
     public void SetCellOn(int newCellPos) { _cellOn = newCellPos; }
 
     public int GetPerkLimit() { return _perkLimit; }
+
+    public bool OnPasseMurailleEvent(Vector2 direction)
+    {
+        if (_myState == PlayerState.idle)
+        {
+            Case caseToCheck = null;
+            Direction dir = Direction.north;
+            switch (direction.y)
+            {
+                case 1:
+                    caseToCheck = BoardManager.Instance.FindNeighbourCell(Direction.north, _cellOn);
+                    dir = Direction.north;
+                    break;
+
+                case -1:
+                    caseToCheck = BoardManager.Instance.FindNeighbourCell(Direction.south, _cellOn);
+                    dir = Direction.south;
+                    break;
+            }
+
+            switch (direction.x)
+            {
+                case 1:
+                    caseToCheck = BoardManager.Instance.FindNeighbourCell(Direction.est, _cellOn);
+                    dir = Direction.est;
+                    break;
+
+                case -1:
+                    caseToCheck = BoardManager.Instance.FindNeighbourCell(Direction.west, _cellOn);
+                    dir = Direction.west;
+                    break;
+            }
+
+            if (caseToCheck != null)
+            {
+                switch (caseToCheck.CaseType)
+                {
+                    case CaseType.Path:
+                        return false;
+
+                    case CaseType.Wall:
+                        if (BoardManager.Instance.FindNeighbourCell(dir, caseToCheck.GetPosInGrid()).CaseType == CaseType.Path)
+                        {
+                            SetDestination(BoardManager.Instance.FindNeighbourCell(dir, caseToCheck.GetPosInGrid()));
+                            _myState = PlayerState.moving;
+                            return true;
+                        }
+                        return false;
+
+                    case CaseType.Grave:
+                        if (BoardManager.Instance.FindNeighbourCell(dir, caseToCheck.GetPosInGrid()).CaseType == CaseType.Path)
+                        {
+                            SetDestination(BoardManager.Instance.FindNeighbourCell(dir, caseToCheck.GetPosInGrid()));
+                            _myState = PlayerState.moving;
+                            return true;
+                        }
+                        return false;
+                }
+            }
+        }
+        return false;
+    }
 
 }
 

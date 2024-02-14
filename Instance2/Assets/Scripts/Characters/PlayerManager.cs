@@ -91,6 +91,8 @@ public class PlayerManager : Entity
 
     public int ExchangeTurn { get => _exchangeTurn; set => _exchangeTurn = value; }
 
+    private Passe_Passe _passePasse;
+
     private void Awake()
     {
         if (Instance == null)
@@ -402,10 +404,10 @@ public class PlayerManager : Entity
         }
     }
     
-    public Player GetPlayer()
+    /*public Player GetPlayer()
     {
         return _playerList[_currentTurn];
-    }
+    }*/
 
     public Player GetPlayerByInd(int ind)
     {
@@ -414,5 +416,28 @@ public class PlayerManager : Entity
             return null;
         }
         return _playerList[ind];
+    }
+
+    public void OnPasseMurailleEvent(Vector2 direction)
+    {
+        if (_isTurn)
+        {
+            if (_playerList[_currentTurn].OnPasseMurailleEvent(direction))
+            {
+                SubstractMagicPoints(2);
+            }
+            ActionEvent?.Invoke();
+            return;
+        }
+    }
+
+    private void OnPassePasseEvent()
+    {
+        if (_isTurn)
+        {
+            Case _tempCase = BoardManager.Instance.GetCell(_playerList[0].GetCellOn());
+            _playerList[0].SetDestination(BoardManager.Instance.GetCell(_playerList[1].GetCellOn()));
+            _playerList[1].SetDestination(_tempCase);
+        }
     }
 }
