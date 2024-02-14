@@ -1,24 +1,21 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class TheDeath : Entity
 {
     public delegate void DeathEventDelegate();
     public event DeathEventDelegate DeathEvent;
-    [SerializeField] private BoardManager _boardManager;
     [SerializeField] private UnityEngine.Transform _position;
-    [SerializeField] private PlayerManager _playerManager;
     [SerializeField] private float _cellSize;
     [SerializeField] private int _moveNumber;
-    [SerializeField] private int _startCell;
+    private PlayerManager _playerManager;
+    private BoardManager _boardManager;
     private int _cellOn;
     private List<Node> _opened = new List<Node>();
     private List<Node> _closed = new List<Node>();
     private List<Node> _pathToPlayerOne = new List<Node>();
     private List<Node> _pathToPlayerTwo = new List<Node>();
-    private float branchWeight = 1;
+    private float branchWeight = 0;
     public static TheDeath Instance;
 
     private void Awake()
@@ -29,33 +26,49 @@ public class TheDeath : Entity
         }
         else
         {
-            Destroy(gameObject);
+            Destroy(this);
         }
+    }
+
+    public void Start()
+    {
+        _playerManager = PlayerManager.Instance;
+        _boardManager = BoardManager.Instance;
     }
 
     public override void StartRound()
     {
+        base.StartRound();
         InitPath(0);
         InitPath(1);
         if (!IsEquiDist())
         {
-            for (int i = 0; i < _moveNumber; i++)
+            for (int i = 0; i < _moveNumber+1; i++)
             {
-                _cellOn = _closed[_closed.Count - 1 - i]._cell.GetPosInGrid();
-                _position.position = _closed[_closed.Count - 1 - i]._cell.GetWorldPos();
                 if (_cellOn == _playerManager.GetPlayerByInd(0).GetCellOn() || _cellOn == _playerManager.GetPlayerByInd(1).GetCellOn())
                 {
                     DeathEvent?.Invoke();
                 }
-            }
+                else
+                {
+                    if (_pathToPlayerOne.Count > _pathToPlayerTwo.Count)
+                    {
+                        _cellOn = _pathToPlayerTwo[_pathToPlayerTwo.Count - 1]._cell.GetPosInGrid();
+                        _position.position = _pathToPlayerTwo[_pathToPlayerTwo.Count - 1]._cell.GetWorldPos();
+                        _pathToPlayerTwo.RemoveAt(_pathToPlayerTwo.Count - 1);
+                    }
+                    else
+                    {
+                        _cellOn = _pathToPlayerOne[_pathToPlayerOne.Count - 1]._cell.GetPosInGrid();
+                        _position.position = _pathToPlayerOne[_pathToPlayerOne.Count - 1]._cell.GetWorldPos();
+                        _pathToPlayerOne.RemoveAt(_pathToPlayerOne.Count - 1);
+                    }
+                }
+            } 
         }
-        base.StartRound();
-    }
-
-    public void DeathSpawn()
-    {
-        _position.position = _boardManager.GetCell(_startCell).GetWorldPos();
-        _cellOn = _startCell;
+        _pathToPlayerTwo.Clear();
+        _pathToPlayerOne.Clear();
+        EndRound();
     }
 
     private bool IsEquiDist()
@@ -72,20 +85,23 @@ public class TheDeath : Entity
 
     private void InitPath(int ind)
     {
-        _opened.Add(new Node(_boardManager.GetCell(_cellOn), GetHeuristique(_boardManager.GetCell(_cellOn), _boardManager.GetCell(_playerManager.GetPlayerByInd(ind).GetCellOn())), GetHeuristique(_boardManager.GetCell(_cellOn), _boardManager.GetCell(_playerManager.GetPlayerByInd(ind).GetCellOn())), null));
-        Astar(_boardManager.GetCell(_playerManager.GetPlayer().GetCellOn()));
-        Debug.Log(_closed.Count);
+        _opened.Clear();
+        _closed.Clear();
+        float heuristique = GetHeuristique(_boardManager.GetCell(_cellOn), _boardManager.GetCell(_playerManager.GetPlayerByInd(ind).GetCellOn()));
+        _opened.Add(new Node(_boardManager.GetCell(_cellOn), heuristique, heuristique, null));
+        
+        Astar(_boardManager.GetCell(_playerManager.GetPlayerByInd(ind).GetCellOn()));
         if (ind == 0)
         {
             _pathToPlayerOne.Clear();
             GetPathFromClosedList(_closed[_closed.Count - 1], _pathToPlayerOne);
-            Debug.Log("path equals " + _pathToPlayerOne.Count);
+            _pathToPlayerOne.RemoveAt(_pathToPlayerOne.Count-1);
         }
         else
         {
             _pathToPlayerTwo.Clear();
             GetPathFromClosedList(_closed[_closed.Count - 1], _pathToPlayerTwo);
-            Debug.Log("path equals " + _pathToPlayerTwo.Count);
+            _pathToPlayerTwo.RemoveAt(_pathToPlayerTwo.Count-1);
         }
     }
 
@@ -147,13 +163,13 @@ public class TheDeath : Entity
         {
             if (value == _closed[i]._cell)
             {
-                if (currentStudy._weight - currentStudy._euristic + branchWeight + _opened[i]._euristic < _closed[i]._weight)
+                if (currentStudy._weight - currentStudy._euristic + branchWeight + _closed[i]._euristic < _closed[i]._weight)
                 {
-                    _closed[i]._weight = currentStudy._weight - currentStudy._euristic + branchWeight + _opened[i]._euristic;
+                    _closed[i]._weight = currentStudy._weight - currentStudy._euristic + branchWeight + _closed[i]._euristic;
                     _closed[i]._parent = currentStudy;
 
                     _opened.Add(_closed[i]);
-                    _closed.Remove(_closed[i]);
+                    _closed.RemoveAt(i);
                     return true;
                 }
                 else
@@ -186,17 +202,25 @@ public class TheDeath : Entity
 
     private void GetPathFromClosedList(Node _node, List<Node> pathToFill)
     {
+        Node value = new Node();
+        value = _node;
+
         if (_node._parent == null)
         {
-            pathToFill.Add(_node);
+            pathToFill.Add(value);
         }
         else
         {
-            pathToFill.Add(_node);
-            GetPathFromClosedList(_node._parent, pathToFill);
+
+            pathToFill.Add(value);
+            GetPathFromClosedList(value._parent, pathToFill);
         }
     }
 
+    public void SetCellOn(int CellOn)
+    {
+        _cellOn = CellOn;
+    }
 }
 
 public class Node
@@ -212,5 +236,10 @@ public class Node
         _weight = weight;
         _euristic = euristic;
         _parent = parent;
+    }
+
+    public Node()
+    {
+
     }
 }

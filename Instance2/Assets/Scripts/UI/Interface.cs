@@ -10,6 +10,9 @@ public class Interface : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _textMP;
     [SerializeField] private List<Image> _perkListP1;
     [SerializeField] private List<Image> _perkListP2;
+    [SerializeField] private GameObject _player1Mask;
+    [SerializeField] private GameObject _player2Mask;
+    //[SerializeField] private GameObject _deathMask;
     private Color _color;
     private Color _colorWhite;
     private Player _player;
@@ -24,6 +27,7 @@ public class Interface : MonoBehaviour
         PlayerManager.Instance.ActionEvent += RefreshInventoryUI;
         PlayerManager.Instance.NavEvent += RefreshSelectedPerkUI;
         PlayerManager.Instance.ExchangeEndEvent += StartUI;
+        PlayerManager.Instance.MovePlayerEventCall += RefreshPlayerMask;
         RefreshAPUI();
         RefreshMPUI();
     }
@@ -103,5 +107,16 @@ public class Interface : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void RefreshPlayerMask()
+    {
+        _player1Mask.transform.position = PlayerManager.Instance.GetPlayerByInd(0).transform.position;
+        _player2Mask.transform.position = PlayerManager.Instance.GetPlayerByInd(1).transform.position;
+    }
+
+    private void RefreshDeathMask()
+    {
+
     }
 }

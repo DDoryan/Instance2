@@ -68,7 +68,7 @@ public class ExchangeCanvas : MonoBehaviour
     private Color _clear = Color.clear;
     private Color _white = Color.white;
 
-    private void Awake()
+    private void Start()
     {
         PlayerManager.Instance.ExchangeEvent += OnActivation;
         PlayerManager.Instance.NavEventExchange += NavigateInUIExchange;

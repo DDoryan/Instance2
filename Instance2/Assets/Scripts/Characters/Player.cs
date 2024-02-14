@@ -17,6 +17,10 @@ public class Player : MonoBehaviour
     [SerializeField] private List<Artefacte> _inventoryPlayer = new List<Artefacte>();
     [SerializeField] private bool _haveTreasure;
 
+
+    public delegate void MovePlayerEventDelegate();
+    public event MovePlayerEventDelegate MovePlayerEvent;
+
     [SerializeField] private Artefacte _artefact;
 
     private Artefacte _artefactYouLook;
@@ -52,6 +56,7 @@ public class Player : MonoBehaviour
         {
             case PlayerState.moving:
                 _playerPos.position = _destination;
+                MovePlayerEvent?.Invoke();
                 _myState = PlayerState.idle;
                 break;
             default:

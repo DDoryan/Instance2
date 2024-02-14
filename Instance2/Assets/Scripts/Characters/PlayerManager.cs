@@ -24,6 +24,9 @@ public class PlayerManager : Entity
     public event ExchangeEventDelegate ExchangeEndEvent;
     public delegate void NavEventDelegateExchange();
     public event NavEventDelegateExchange NavEventExchange;
+    public delegate void MovePlayerEventCallDelegate();
+    public event MovePlayerEventCallDelegate MovePlayerEventCall;
+    
 
     public delegate void ConfirmeExchangeEventDelegate();
     public event ConfirmeExchangeEventDelegate ConfirmeExchangeEvent;    
@@ -99,7 +102,7 @@ public class PlayerManager : Entity
         }
         else
         {
-            Destroy(gameObject);
+            Destroy(this);
         }
     }
 
@@ -116,6 +119,9 @@ public class PlayerManager : Entity
         _player2.SetCellOn(Player2StartCell);
         _playerList.Add(_player1);
         _playerList.Add(_player2);
+        _player1.MovePlayerEvent += MovePlayerEventCallF;
+        _player2.MovePlayerEvent += MovePlayerEventCallF;
+        MovePlayerEventCallF();
     }
 
     private void Update()
@@ -401,11 +407,6 @@ public class PlayerManager : Entity
             ChangePlayerEvent?.Invoke();
         }
     }
-    
-    public Player GetPlayer()
-    {
-        return _playerList[_currentTurn];
-    }
 
     public Player GetPlayerByInd(int ind)
     {
@@ -414,5 +415,10 @@ public class PlayerManager : Entity
             return null;
         }
         return _playerList[ind];
+    }
+
+    private void MovePlayerEventCallF()
+    {
+        MovePlayerEventCall?.Invoke();
     }
 }

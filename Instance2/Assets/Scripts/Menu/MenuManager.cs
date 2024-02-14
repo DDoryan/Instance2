@@ -73,7 +73,7 @@ public class MenuManager : MonoBehaviour
         SceneManager.LoadScene("Scenes/" + _menuNameButton);
     }
 
-    private void HudVictoryEnable()
+    public void HudVictoryEnable()
     {
         _defeatBool = false;
 
@@ -88,7 +88,7 @@ public class MenuManager : MonoBehaviour
         _isGamePaused = true;
     }
 
-    private void HudDefeatEnable()
+    public void HudDefeatEnable()
     {
         _victoryBool = false;
 

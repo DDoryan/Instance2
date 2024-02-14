@@ -10,26 +10,25 @@ public class GameManager : MonoBehaviour
    private Entity _specialEventPlayer;
    private Entity _eventPlayerAfterPlayed;
    private PlayerManager _playerManager;
-   private MenuManager _menuManager;
+   [SerializeField] private MenuManager _menuManager;
    
    private TheDeath _theDeath;
+   [SerializeField] private GameObject _theDeathPrefab;
+   [SerializeField] private int _theDeathStartCell;
 
     private void Start()
     {
         _turnCounter = 1;
         _playerManager = PlayerManager.Instance;
-        _theDeath = TheDeath.Instance;
         _pullOrder = new List<Entity>();
         _pullOrder.Add(_playerManager);
-        _theDeath.DeathEvent += SendToGameOver;
-        _currentTurn = 0; Debug.Log("CurrentTurn: " + _currentTurn);
-
         _playerManager.NextTurnEvent += Event_NextTurn;
         _pullOrder[_currentTurn].StartRound();
     }
 
     private void Event_NextTurn()
     {
+        print("aie");
         NextTurn();
     }
 
@@ -45,13 +44,17 @@ public class GameManager : MonoBehaviour
             _playerManager.ResetActionPoints();
         }
 
-        if ( _turnCounter == 2)
+        if ( _turnCounter == 3 && _currentTurn == 0)
         {
+            GameObject Death = Instantiate(_theDeathPrefab, BoardManager.Instance.GetCellPos(_theDeathStartCell), Quaternion.identity);
+            _theDeath = Death.GetComponent<TheDeath>();
+            _theDeath.SetCellOn(_theDeathStartCell);
+            _theDeath.NextTurnEvent += Event_NextTurn;
+            _theDeath.DeathEvent += SendToGameOver;
             _pullOrder.Add(_theDeath);
-            _theDeath.DeathSpawn();
         }
-        Debug.Log("CurrentTurn: " + _currentTurn);
-        Debug.Log("TurnCounter: " + _turnCounter);
+        /*Debug.Log("CurrentTurn: " + _currentTurn);
+        Debug.Log("TurnCounter: " + _turnCounter);*/
     }
 
     public int GetCurrentTurn()
@@ -66,6 +69,6 @@ public class GameManager : MonoBehaviour
 
     private void SendToGameOver()
     {
-        _menuManager.MainMenu();
+        _menuManager.HudDefeatEnable();
     }
 }
