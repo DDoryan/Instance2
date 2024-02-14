@@ -36,8 +36,8 @@ public class TheDeath : Entity
     private void Start()
     {
         _baseMoveNumber = _moveNumber;
-        _entrave.EntraveEvent += OnEntraveEvent;
-        _tempsMort.TempsMortEvent += OnTempsMortEvent;
+        //_entrave.EntraveEvent += OnEntraveEvent;
+        //_tempsMort.TempsMortEvent += OnTempsMortEvent;
         _playerManager = PlayerManager.Instance;
         _boardManager = BoardManager.Instance;
     }

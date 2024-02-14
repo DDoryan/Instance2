@@ -28,7 +28,7 @@ public class GetInput : MonoBehaviour
 
     private void Start()
     {
-        _passeMuraille.PasseMurailleEvent += OnPasseMurailleEvent;
+        //_passeMuraille.PasseMurailleEvent += OnPasseMurailleEvent;
     }
 
     private void FixedUpdate()
