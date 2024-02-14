@@ -4,18 +4,30 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+
+public class TheDeath : MonoBehaviour
+{
+    
+}
 public class Interface : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _textAP;
     [SerializeField] private TextMeshProUGUI _textMP;
     [SerializeField] private List<Image> _perkListP1;
     [SerializeField] private List<Image> _perkListP2;
+    [SerializeField] private Transform _arrowPlayerTransform;
+    [SerializeField] private Transform _arrowDeathTransform;
     private Color _color;
     private Color _colorWhite;
     private Player _player;
+    private SpriteRenderer _spriteArrowDeathRenderer;
+    private SpriteRenderer _spriteArrowPlayerRenderer;
+
 
     void Start()
     {
+        _spriteArrowDeathRenderer = _arrowDeathTransform.GetComponent<SpriteRenderer>();
+        _spriteArrowPlayerRenderer = _arrowPlayerTransform.GetComponent<SpriteRenderer>();    
         _color = Color.clear;
         _colorWhite = Color.white;
         StartUI();
@@ -45,6 +57,38 @@ public class Interface : MonoBehaviour
     void Update()
     {
         _player = PlayerManager.Instance.GetPlayer();
+        
+        switch (GameManager.Instance.GetCurrentTurn())
+        {
+            case 0:
+                
+                _spriteArrowDeathRenderer.enabled = false;
+                _spriteArrowPlayerRenderer.enabled = true;
+                if (PlayerManager.Instance.CurrentTurn() == 0)
+                {
+                    _arrowPlayerTransform.position = new Vector3(0, 0 + 0.2f, 0); // ajouter le getter pour la position du player
+                     
+                }
+                if (PlayerManager.Instance.CurrentTurn() == 1)
+                {
+                    _arrowPlayerTransform.position = new Vector3(0, 0 + 0.2f, 0);// ajouter le getter pour la position du player
+                }
+                break;
+            case 1:
+                _spriteArrowDeathRenderer.enabled = true;
+                _spriteArrowPlayerRenderer.enabled = false;
+
+                _arrowDeathTransform.position = new Vector3(0, 0 + 0.2f, 0); //ajouter la position de la mort a la place des 0
+                break;
+            case 2:
+                _spriteArrowDeathRenderer.enabled = false;
+                _spriteArrowPlayerRenderer.enabled = false;
+                break;
+            default:
+                _spriteArrowDeathRenderer.enabled = false;
+                _spriteArrowPlayerRenderer.enabled = false;
+                break;
+        }
     }
 
     private void RefreshInventoryUI()

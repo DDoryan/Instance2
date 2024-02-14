@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,10 +11,23 @@ public class GameManager : MonoBehaviour
    private Entity _specialEventPlayer;
    private Entity _eventPlayerAfterPlayed;
    private PlayerManager _playerManager;
-   
+
+   public static GameManager Instance;
    //private TheDeath theDeath;
 
-    private void Start()
+   private void Awake()
+   {
+       if (!Instance)
+       {
+           Instance = this;
+       }
+       else
+       {
+           Destroy(this);
+       }
+   }
+
+   private void Start()
     {
         _turnCounter = 1;
         _playerManager = PlayerManager.Instance;
