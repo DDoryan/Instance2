@@ -35,5 +35,6 @@ public enum CardType
     Teleportation,
     Don_du_ciel,
     Entrave,
-    Passe_Passe
+    Passe_Passe,
+    Empty
 }

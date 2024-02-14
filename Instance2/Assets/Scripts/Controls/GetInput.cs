@@ -111,14 +111,6 @@ public class GetInput : MonoBehaviour
         }
     }
 
-    public void OpenGrave(InputAction.CallbackContext context)
-    {
-        if(context.performed)
-        {
-            _playerManager.AddToInventory();
-        }
-    }
-
     public void SelectArtifact(InputAction.CallbackContext context)
     {
         if (context.performed)

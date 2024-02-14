@@ -266,12 +266,6 @@ public class PlayerManager : Entity
         _textInventory.SetActive(!_textInventory.activeSelf);
     }
 
-    public void AddToInventory()
-    {
-        _playerList[_currentTurn].AddToInventory();
-        ActionEvent?.Invoke();
-    }
-
     public void SelectedArtifact()
     {
         _playerList[_currentTurn].SelectArtifact();
@@ -368,6 +362,7 @@ public class PlayerManager : Entity
             {
                 SubstractActionPoints(1);
             }
+            ActionEvent?.Invoke();
             return;
         }
     }

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 836d09f0891a03c41bb346fa9f8200a1, type: 3}
-  m_Name: "Key_n\xB01 3"
+  m_Name: Key
   m_EditorClassIdentifier: 
   _cardType: 0
-  _cardSpriteGrave: {fileID: 7482667652216324306, guid: 8a7315c0ea528a740b6d8321ca797e1b, type: 3}
+  _cardSpriteGrave: {fileID: 21300000, guid: 5b729ca67b313864ea57247fed1975f8, type: 3}

@@ -34,11 +34,6 @@ public abstract class Case
 
 
 
-
-
-    [SerializeField]
-    protected Sprite _defaultSprite; // getter, pas moi, a faire dans Case
-
     public void AddNeighbor(Case neighbor)
     {
         _neighbor.Add(neighbor);
@@ -62,11 +57,6 @@ public abstract class Case
     public bool IsWalkableByPlayer
     {
         get { return _isWalkableByPlayer; }
-    }
-
-    public Sprite Sprite
-    {
-        get { return _defaultSprite; }
     }
 
     public CaseType CaseType

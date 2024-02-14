@@ -1,18 +1,9 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.UI;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.UI;
-using static UnityEditor.Timeline.TimelinePlaybackControls;
+using static UnityEngine.InputSystem.PlayerInput;
 
 public class Player : MonoBehaviour
 {
-
-
-
-
-
     [SerializeField] private int _perkLimit;
     [SerializeField] private bool _canOpenTombs;
 
@@ -30,9 +21,6 @@ public class Player : MonoBehaviour
 
     private Artefacte _artefactYouLook;
     [SerializeField] private Artefacte _artefactSelected;
-
-    [SerializeField] private Grave _grave;
-
 
     public List<Artefacte> InventoryPlayer
     {
@@ -56,7 +44,6 @@ public class Player : MonoBehaviour
         _destination = BoardManager.Instance.GetCellPos(_cellOn);
         _selectedPerk = 0;
         _myState = PlayerState.idle;
-        _grave = new Grave(CaseType.Grave, false, false, 1, null, Vector2.zero, null, 1);
     }
 
     private void FixedUpdate()
@@ -81,53 +68,61 @@ public class Player : MonoBehaviour
 
     public bool GetDirections(Vector2 direction)
     {
-        bool result = false;
         if (_myState == PlayerState.idle)
         {
+            Case caseToCheck = null;
             switch (direction.y)
             {
                 case 1:
-                    if (BoardManager.Instance.FindNeighbourCell(Direction.north, _cellOn) != null && BoardManager.Instance.FindNeighbourCell(Direction.north,_cellOn).IsWalkableByPlayer)
-                    {
-                        _destination = BoardManager.Instance.FindNeighbourCell(Direction.north, _cellOn).WorldPos;
-                        _cellOn = BoardManager.Instance.FindNeighbourCell(Direction.north, _cellOn).GetPosInGrid();
-                        result = true;
-                    }
+                    caseToCheck = BoardManager.Instance.FindNeighbourCell(Direction.north, _cellOn);
                     break;
 
                 case -1:
-                    if (BoardManager.Instance.FindNeighbourCell(Direction.south, _cellOn) != null && BoardManager.Instance.FindNeighbourCell(Direction.south, _cellOn).IsWalkableByPlayer)
-                    {
-                        _destination = BoardManager.Instance.FindNeighbourCell(Direction.south, _cellOn).WorldPos;
-                        _cellOn = BoardManager.Instance.FindNeighbourCell(Direction.south, _cellOn).GetPosInGrid();
-                        result = true;
-                    }
+                    caseToCheck = BoardManager.Instance.FindNeighbourCell(Direction.south, _cellOn);
                     break;
             }
 
             switch (direction.x)
             {
                 case 1:
-                    if (BoardManager.Instance.FindNeighbourCell(Direction.est, _cellOn) != null && BoardManager.Instance.FindNeighbourCell(Direction.est, _cellOn).IsWalkableByPlayer)
-                    {
-                        _destination = BoardManager.Instance.FindNeighbourCell(Direction.est, _cellOn).WorldPos;
-                        _cellOn = BoardManager.Instance.FindNeighbourCell(Direction.est, _cellOn).GetPosInGrid();
-                        result = true;
-                    }
+                    caseToCheck = BoardManager.Instance.FindNeighbourCell(Direction.est, _cellOn);
                     break;
 
                 case -1:
-                    if (BoardManager.Instance.FindNeighbourCell(Direction.west, _cellOn) != null && BoardManager.Instance.FindNeighbourCell(Direction.west, _cellOn).IsWalkableByPlayer)
-                    {
-                        _destination = BoardManager.Instance.FindNeighbourCell(Direction.west, _cellOn).WorldPos;
-                        _cellOn = BoardManager.Instance.FindNeighbourCell(Direction.west, _cellOn).GetPosInGrid();
-                        result = true;
-                    }
+                    caseToCheck = BoardManager.Instance.FindNeighbourCell(Direction.west, _cellOn);
                     break;
             }
-            _myState = PlayerState.moving;
+
+            if (caseToCheck != null )
+            {
+                switch (caseToCheck.CaseType)
+                {
+                    case CaseType.Path:
+                        SetDestination(caseToCheck);
+                        _myState = PlayerState.moving;
+                        return true;
+
+                    case CaseType.Wall:
+                        return false;
+
+                    case CaseType.Grave:
+                        Grave grave = (Grave)caseToCheck;
+                        if (grave.CanInteract)
+                        {
+                            OpenGrave(grave);
+                            return true;
+                        }
+                        return false;
+                }
+            }
         }
-        return result;
+        return false;
+    }
+
+    private void SetDestination(Case caseToCheck)
+    {
+        _destination = caseToCheck.WorldPos;
+        _cellOn = caseToCheck.GetPosInGrid();
     }
 
     /*private void SetDestination()
@@ -136,17 +131,21 @@ public class Player : MonoBehaviour
     }*/
 
 
-    public void AddToInventory()
+    public void OpenGrave(Grave caseToCheck)
     {
         if (_inventoryPlayer.Count < _perkLimit)
         {
-            _inventoryPlayer.Add(_grave.Interact());
+            Artefacte cardToAdd = caseToCheck.Interact();
+            if (cardToAdd.CardType != CardType.Empty)
+            {
+                _inventoryPlayer.Add(cardToAdd);
+            }
 
         }
         else if (_inventoryPlayer.Count >= _perkLimit && _artefact == null)
         {
             _artefactFull = true;
-            _artefact = _grave.Interact();
+            _artefact = caseToCheck.Interact();
         }
     }
 

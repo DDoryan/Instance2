@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 836d09f0891a03c41bb346fa9f8200a1, type: 3}
-  m_Name: "Key_n\xB01"
+  m_Script: {fileID: 11500000, guid: ece85ad021e11334085f700ed47178fe, type: 3}
+  m_Name: Empty
   m_EditorClassIdentifier: 
-  _cardType: 0
-  _cardSpriteGrave: {fileID: 21300000, guid: a920aeb8144c1d442b069097fde41ec3, type: 3}
+  _cardType: 12
+  _cardSpriteGrave: {fileID: 0}
