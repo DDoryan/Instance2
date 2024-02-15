@@ -9,59 +9,12 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private string _menuNameButton = "Menu";
 
     [Header("Canvas Button")]
-    private bool _victoryBool = false;
-    private bool _defeatBool = false;
     [SerializeField] private GameObject _victoryGameObject;
     [SerializeField] private GameObject _defeatGameObject;
 
     [Header("GameControlleur GamePad")]
     [SerializeField] private Button _buttonVictory;
     [SerializeField] private Button _buttonDefeat;
-
-    private bool _isGamePaused = false;
-
-    private void Start()
-    {
-        _victoryBool = false;
-        _defeatBool = false;
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            SetVictoryBool(!_victoryBool);
-        }
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            SetDefeatBool(!_defeatBool);
-        }
-
-        if (_victoryBool)
-        {
-            HudVictoryEnable();
-        }
-        else if (_defeatBool)
-        {
-            HudDefeatEnable();
-        }
-        else
-        {
-            HudMenuDisable();
-        }
-
-        // game pause
-        if (_isGamePaused)
-        {
-            //Debug.Log("Time.timeScale set to pause");
-            Time.timeScale = 0f;
-        }
-        else
-        {
-            //Debug.Log("Time.timeScale set to play");
-            Time.timeScale = 1f;
-        }
-    }
 
     public void PlayGame()
     {
@@ -75,8 +28,7 @@ public class MenuManager : MonoBehaviour
 
     public void HudVictoryEnable()
     {
-        _defeatBool = false;
-
+        print("win");
         _victoryGameObject.SetActive(true);
         _defeatGameObject.SetActive(false);
 
@@ -84,14 +36,11 @@ public class MenuManager : MonoBehaviour
         {
             _buttonVictory.Select();
         }
-
-        _isGamePaused = true;
     }
 
     public void HudDefeatEnable()
     {
-        _victoryBool = false;
-
+        print("dead");
         _victoryGameObject.SetActive(false);
         _defeatGameObject.SetActive(true);
 
@@ -99,8 +48,6 @@ public class MenuManager : MonoBehaviour
         {
             _buttonDefeat.Select();
         }
-
-        _isGamePaused = true;
     }
 
     private void HudMenuDisable()
@@ -116,28 +63,6 @@ public class MenuManager : MonoBehaviour
         {
             _buttonDefeat.OnDeselect(null);
         }
-
-        _isGamePaused = false;
-    }
-
-    public bool GetVicoryBool()
-    {
-        return _victoryBool;
-    }
-
-    public void SetVictoryBool(bool victoryArg)
-    {
-        _victoryBool = victoryArg;
-    }
-
-    public bool GetDefeatBool()
-    {
-        return _defeatBool;
-    }
-
-    public void SetDefeatBool(bool defeatArg)
-    {
-        _defeatBool = defeatArg;
     }
 
     public void ExitGame()

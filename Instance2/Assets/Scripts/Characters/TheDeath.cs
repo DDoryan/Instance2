@@ -5,6 +5,8 @@ public class TheDeath : Entity
 {
     public delegate void DeathEventDelegate();
     public event DeathEventDelegate DeathEvent;
+    public delegate void MoveDeathEventDelegate();
+    public event MoveDeathEventDelegate MoveDeathEvent;
     [SerializeField] private UnityEngine.Transform _position;
     [SerializeField] private float _cellSize;
     [SerializeField] private int _moveNumber;
@@ -35,6 +37,7 @@ public class TheDeath : Entity
 
     private void Start()
     {
+        MoveDeathEvent?.Invoke();
         _baseMoveNumber = _moveNumber;
         //_entrave.EntraveEvent += OnEntraveEvent;
         //_tempsMort.TempsMortEvent += OnTempsMortEvent;
@@ -73,6 +76,7 @@ public class TheDeath : Entity
                 }
             } 
         }
+        MoveDeathEvent?.Invoke();
         _pathToPlayerTwo.Clear();
         _pathToPlayerOne.Clear();
         EndRound();

@@ -12,6 +12,7 @@ public class Interface : MonoBehaviour
     [SerializeField] private List<Image> _perkListP2;
     [SerializeField] private GameObject _player1Mask;
     [SerializeField] private GameObject _player2Mask;
+    [SerializeField] private GameObject _deathMask;
     //[SerializeField] private GameObject _deathMask;
     private Color _color;
     private Color _colorWhite;
@@ -28,8 +29,10 @@ public class Interface : MonoBehaviour
         PlayerManager.Instance.NavEvent += RefreshSelectedPerkUI;
         PlayerManager.Instance.ExchangeEndEvent += StartUI;
         PlayerManager.Instance.MovePlayerEventCall += RefreshPlayerMask;
+        GameManager.Instance.DeathSpawnEvent += OnDeathSpawn;
         RefreshAPUI();
         RefreshMPUI();
+        _deathMask.SetActive(false);
     }
 
     private void StartUI()
@@ -53,6 +56,7 @@ public class Interface : MonoBehaviour
 
     private void RefreshInventoryUI()
     {
+        StartUI();
         for (int i = 0; i < PlayerManager.Instance.InventoryAmmount(0) && i < _perkListP1.Count; i++)
         {
             _perkListP1[i].sprite = PlayerManager.Instance.PlayerList[0].InventoryPlayer[i].CardSpriteGrave;
@@ -111,12 +115,18 @@ public class Interface : MonoBehaviour
 
     private void RefreshPlayerMask()
     {
-        _player1Mask.transform.position = PlayerManager.Instance.GetPlayerByInd(0).transform.position;
-        _player2Mask.transform.position = PlayerManager.Instance.GetPlayerByInd(1).transform.position;
+        _player1Mask.transform.position = PlayerManager.Instance.GetPlayerByInd(0).transform.position + new Vector3(0, 0.32f, 0);
+        _player2Mask.transform.position = PlayerManager.Instance.GetPlayerByInd(1).transform.position + new Vector3(0, 0.32f, 0);
     }
 
     private void RefreshDeathMask()
     {
+        _deathMask.transform.position = TheDeath.Instance.transform.position + new Vector3(0, 0.32f, 0);
+    }
 
+    public void OnDeathSpawn()
+    {
+        TheDeath.Instance.MoveDeathEvent += RefreshDeathMask;
+        //_deathMask.SetActive(true);
     }
 }
