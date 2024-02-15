@@ -7,7 +7,7 @@ public class MenuButtonSelect : MonoBehaviour
 {
     [SerializeField] private Button _primaryButton;
     
-    void Start()
+    void OnEnable()
     {
         _primaryButton.Select();
     }
