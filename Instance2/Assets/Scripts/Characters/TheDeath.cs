@@ -88,7 +88,7 @@ public class TheDeath : Entity
 
     private bool IsEquiDist()
     {
-        if (_pathToPlayerOne.Count == _pathToPlayerTwo.Count)
+        if (_pathToPlayerOne.Count == _pathToPlayerTwo.Count && _playerManager.GetPlayerByInd(0).transform.position != _playerManager.GetPlayerByInd(1).transform.position)
         {
             return true;
         }

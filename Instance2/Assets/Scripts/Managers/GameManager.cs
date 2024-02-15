@@ -14,6 +14,10 @@ public class GameManager : MonoBehaviour
    [SerializeField] private GameObject _theDeathPrefab;
    [SerializeField] private int _theDeathStartCell;
 
+   [SerializeField] private AudioClip _music;
+   [SerializeField] private AudioClip _deathSpawnBell;
+
+
     public static GameManager Instance;
 
     public delegate void DeathSpawnEventDelegate();
@@ -47,6 +51,7 @@ public class GameManager : MonoBehaviour
         _pullOrder[_currentTurn].StartRound();
         _getTreasure = false;
         _loose = false;
+        SoundManager.Instance.PlayMusic(_music);
     }
 
     private void Event_NextTurn()
@@ -83,9 +88,9 @@ public class GameManager : MonoBehaviour
             _theDeath.DeathEvent += SendToGameOver;
             _pullOrder.Add(_theDeath);
             DeathSpawnEvent?.Invoke();
+
+            SoundManager.Instance.PlaySfx(_deathSpawnBell);
         }
-        /*Debug.Log("CurrentTurn: " + _currentTurn);
-        Debug.Log("TurnCounter: " + _turnCounter);*/
     }
 
     public int GetCurrentTurn()

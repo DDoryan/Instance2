@@ -36,6 +36,8 @@ public class SoundManager : MonoBehaviour
         {
             audioSource = gameObject.AddComponent<AudioSource>();
         }*/
+
+        _music.loop = true; 
     }
 
 

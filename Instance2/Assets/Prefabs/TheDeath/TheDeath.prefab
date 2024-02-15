@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _position: {fileID: 3601948255099322336}
   _cellSize: 1
-  _moveNumber: 7
+  _moveNumber: 6
 --- !u!1 &4474431675514676866
 GameObject:
   m_ObjectHideFlags: 0

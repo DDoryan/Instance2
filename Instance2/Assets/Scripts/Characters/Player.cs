@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using static Player;
-using static UnityEngine.InputSystem.PlayerInput;
 
 public class Player : MonoBehaviour
 {
@@ -29,6 +27,11 @@ public class Player : MonoBehaviour
 
     private Artefacte _artefactYouLook;
     [SerializeField] private Artefacte _artefactSelected;
+    [SerializeField] private GameObject _UiTreasure;
+
+
+    [SerializeField] private AudioClip _graveSfx;
+    [SerializeField] private AudioClip _graveStoneSfx;
 
     public List<Artefacte> InventoryPlayer
     {
@@ -49,6 +52,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        _UiTreasure.SetActive(false);
         _destination = BoardManager.Instance.GetCellPos(_cellOn);
         _selectedPerk = 0;
         _myState = PlayerState.idle;
@@ -68,12 +72,6 @@ public class Player : MonoBehaviour
         }
     }
 
-
-    
-    /*public bool HasKey()
-    {
-        
-    }*/
 
     public bool GetDirections(Vector2 direction)
     {
@@ -118,6 +116,7 @@ public class Player : MonoBehaviour
                         Grave grave = (Grave)caseToCheck;
                         if (grave.CanInteract)
                         {
+                            SoundManager.Instance.PlaySfx(_graveSfx);
                             OpenGrave(grave);
                             return true;
                         }
@@ -129,7 +128,8 @@ public class Player : MonoBehaviour
                             RemoveFromInventory(CardType.Key);
                             if (graveStone.Interact())
                             {
-                                print("j'ai trouvé");
+                                SoundManager.Instance.PlaySfx(_graveStoneSfx);
+                                _UiTreasure.SetActive(true);
                                 GetTreasurePlayerEvent?.Invoke();
                             }
                             return true;

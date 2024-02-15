@@ -78,7 +78,6 @@ public class PlayerManager : Entity
     private List<Player> _playerList;
     private Player _player1;
     private Player _player2;
-    //private bool _gotTheMoula;
     private int _currentTurn;
     public static PlayerManager Instance;
     private int _exchangeTurn;
