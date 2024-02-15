@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,41 +7,57 @@ public class GameManager : MonoBehaviour
    private int _turnCounter;
 
    private List<Entity> _pullOrder;
-   private Entity _specialEventPlayer;
-   private Entity _eventPlayerAfterPlayed;
    private PlayerManager _playerManager;
+   [SerializeField] private MenuManager _menuManager;
+   
+   private TheDeath _theDeath;
+   [SerializeField] private GameObject _theDeathPrefab;
+   [SerializeField] private int _theDeathStartCell;
 
-   public static GameManager Instance;
-   //private TheDeath theDeath;
+    public static GameManager Instance;
 
-   private void Awake()
-   {
-       if (!Instance)
-       {
-           Instance = this;
-       }
-       else
-       {
-           Destroy(this);
-       }
-   }
+    public delegate void DeathSpawnEventDelegate();
+    public event DeathSpawnEventDelegate DeathSpawnEvent;
 
-   private void Start()
+    private bool _getTreasure;
+    private bool _loose;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
+
+    private void Start()
     {
         _turnCounter = 1;
         _playerManager = PlayerManager.Instance;
         _pullOrder = new List<Entity>();
         _pullOrder.Add(_playerManager);
-
-        _currentTurn = 0; Debug.Log("CurrentTurn: " + _currentTurn);
-
         _playerManager.NextTurnEvent += Event_NextTurn;
+        _playerManager.GetTreasurePlayerEventCall += setGetTreasure;
         _pullOrder[_currentTurn].StartRound();
+        _getTreasure = false;
+        _loose = false;
     }
 
     private void Event_NextTurn()
     {
-        NextTurn();
+        print(_playerManager.AreBothPlayerOnExit());
+        if (_getTreasure && _playerManager.AreBothPlayerOnExit())
+        {
+            _menuManager.HudVictoryEnable();
+        }
+        else if (!_loose)
+        {
+            NextTurn();
+        }
     }
 
     public void NextTurn()
@@ -57,12 +72,18 @@ public class GameManager : MonoBehaviour
             _playerManager.ResetActionPoints();
         }
 
-        if ( _turnCounter == 3)
+        if ( _turnCounter == 3 && _currentTurn == 0)
         {
-            //_pullOrder.Add(_theDeath);
+            GameObject Death = Instantiate(_theDeathPrefab, BoardManager.Instance.GetCellPos(_theDeathStartCell), Quaternion.identity);
+            _theDeath = Death.GetComponent<TheDeath>();
+            _theDeath.SetCellOn(_theDeathStartCell);
+            _theDeath.NextTurnEvent += Event_NextTurn;
+            _theDeath.DeathEvent += SendToGameOver;
+            _pullOrder.Add(_theDeath);
+            DeathSpawnEvent?.Invoke();
         }
-        Debug.Log("CurrentTurn: " + _currentTurn);
-        Debug.Log("TurnCounter: " + _turnCounter);
+        /*Debug.Log("CurrentTurn: " + _currentTurn);
+        Debug.Log("TurnCounter: " + _turnCounter);*/
     }
 
     public int GetCurrentTurn()
@@ -70,8 +91,15 @@ public class GameManager : MonoBehaviour
         return _currentTurn;
     }
 
-    public void SetSpecialEventPlayer(Entity player)
+    private void SendToGameOver()
     {
-        _specialEventPlayer = player;
+        _menuManager.HudDefeatEnable();
+        _loose = true;
+    }
+
+    private void setGetTreasure()
+    {
+        print("inPocket");
+        _getTreasure = true;
     }
 }

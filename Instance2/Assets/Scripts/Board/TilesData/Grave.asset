@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75fa8d66e857a364a81d2fca59f88873, type: 3}
   m_Name: Grave
   m_EditorClassIdentifier: 
-  tiles: []
-  id: 0
+  tiles:
+  - {fileID: 11400000, guid: a0a6a344438042141a57d32667363172, type: 2}
+  id: 3

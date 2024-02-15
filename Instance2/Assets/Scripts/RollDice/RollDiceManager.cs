@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class RollDiceManager : MonoBehaviour
@@ -13,23 +15,23 @@ public class RollDiceManager : MonoBehaviour
 
     void Start()
     {
-        _d4_Object.gameObject.SetActive(true);
-        _d20_Object.gameObject.SetActive(true);
+        _d4_Object.gameObject.SetActive(false);
+        _d20_Object.gameObject.SetActive(false);
     }
 
     void Update()
     {
         if (Input.GetMouseButton(0))
         {
-            Debug.Log(DiceThrow(_numberOfFaces)); // je veux recuperer la variable une fois que le des donne un nouveau resultat
+            DiceThrow(_numberOfFaces);
         }
     }
 
 
-    public int DiceThrow(short numberOfFaces)
+    public void DiceThrow(short numberOfFaces)
     {
         WichDice(numberOfFaces);
-        return _dice.RollDice_GetNumber();
+        _dice.RollingDice();
     }
 
     private void WichDice(short numberOfFaces)

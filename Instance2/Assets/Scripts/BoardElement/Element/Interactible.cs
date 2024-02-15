@@ -11,15 +11,12 @@ public abstract class Interactible : Case
 {
     protected bool _canInteract;
 
-    protected Sprite _isTrigerredSprite;
-
     protected Deck _deck;
 
 
-    protected Interactible(CaseType myType, bool walkableDeath, bool walkablePlayer, int area, TileBase myTile, Vector2 worldPos, Sprite triggerdSprite, int posInGrid) : base(myType, walkableDeath, walkablePlayer, area, myTile, worldPos, posInGrid)
+    protected Interactible(CaseType myType, bool walkableDeath, bool walkablePlayer, int area, TileBase myTile, Vector2 worldPos, int posInGrid) : base(myType, walkableDeath, walkablePlayer, area, myTile, worldPos, posInGrid)
     {
         _canInteract = true;
-        _isTrigerredSprite = triggerdSprite;
         _deck = Deck.GraveDeck;
     }
 
@@ -28,28 +25,11 @@ public abstract class Interactible : Case
 
     #region Getter
 
-
-    public bool IsTrigerredSprite
-    {
-        get { return _isTrigerredSprite; }
-    }
-    #endregion
-
-
-    #region Setter
-
-
     public bool CanInteract
     {
         get { return _canInteract; }
-        set
-        {
-            _canInteract = value;
-        }
     }
-
     #endregion
-
 
     #endregion
 

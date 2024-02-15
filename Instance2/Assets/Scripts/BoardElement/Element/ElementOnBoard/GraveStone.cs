@@ -5,7 +5,7 @@ using UnityEngine.Tilemaps;
 
 public class GraveStone : Interactible
 {
-    public GraveStone(CaseType myType, bool walkableDeath, bool walkablePlayer, int area, TileBase myTile, Vector2 worldPos, Sprite triggerdSprite, int posInGrid) : base(myType, walkableDeath, walkablePlayer, area, myTile, worldPos, triggerdSprite, posInGrid)
+    public GraveStone(CaseType myType, bool walkableDeath, bool walkablePlayer, int area, TileBase myTile, Vector2 worldPos, int posInGrid) : base(myType, walkableDeath, walkablePlayer, area, myTile, worldPos, posInGrid)
     {
         _caseType = myType;
         _isWalkableByDeath = walkableDeath;
@@ -19,7 +19,7 @@ public class GraveStone : Interactible
     {
         if (_canInteract)
         {
-            _defaultSprite = _isTrigerredSprite;
+            BoardManager.Instance.ChangeSpriteToDestroyed(WorldPos);
             bool _treasure = Deck.GraveDeck.GetRandomTreasure();
             _canInteract = false;
             return _treasure;

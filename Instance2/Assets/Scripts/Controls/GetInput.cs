@@ -14,11 +14,20 @@ public class GetInput : MonoBehaviour
 
     private PlayerControls _playerControls;
 
+    private Passe_Muraille _passeMuraille;
+
+    private bool _canPasseMur = false;
+
 
     private void Awake()
     {
         _playerInput = GetComponent<PlayerInput>();
         _playerControls = new PlayerControls();
+    }
+
+    private void Start()
+    {
+        //_passeMuraille.PasseMurailleEvent += OnPasseMurailleEvent;
     }
 
     private void FixedUpdate()
@@ -59,7 +68,7 @@ public class GetInput : MonoBehaviour
 
     public void ExchangeAction(InputAction.CallbackContext context)
     {
-        if (context.performed && (PlayerManager.Instance.InventoryAmmount(0) > 0 || PlayerManager.Instance.InventoryAmmount(1) > 0))
+        if (context.performed && (PlayerManager.Instance.InventoryAmmount(0) > 0 && PlayerManager.Instance.InventoryAmmount(1) > 0))
         {
             _playerInput.actions.FindActionMap("SelectArtefact").Disable();
             _playerInput.actions.FindActionMap("PlayerInput").Disable();
@@ -108,14 +117,6 @@ public class GetInput : MonoBehaviour
             _playerInput.actions.FindActionMap("SelectArtefact").Disable();
             _playerInput.actions.FindActionMap("PlayerInput").Enable();
             _playerInput.actions.FindActionMap("ExchangeSystem").Disable();
-        }
-    }
-
-    public void OpenGrave(InputAction.CallbackContext context)
-    {
-        if(context.performed)
-        {
-            _playerManager.AddToInventory();
         }
     }
 
@@ -225,6 +226,19 @@ public class GetInput : MonoBehaviour
         if (context.performed)
         {
             _playerManager.CastSpell();
+        }
+    }
+
+    private void OnPasseMurailleEvent()
+    {
+        _canPasseMur = true;
+    }
+
+    public void PasseMurailleEvent(InputAction.CallbackContext context)
+    {
+        if (context.started && _canPasseMur == true)
+        {
+            _playerManager.OnPasseMurailleEvent(context.ReadValue<Vector2>());
         }
     }
 }

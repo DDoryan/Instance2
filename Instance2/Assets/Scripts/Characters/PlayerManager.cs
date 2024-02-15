@@ -53,6 +53,13 @@ public class PlayerManager : Entity
 
     #endregion
 
+
+    public delegate void MovePlayerEventCallDelegate();
+    public event MovePlayerEventCallDelegate MovePlayerEventCall;
+    public delegate void GetTreasurePlayerEventCallDelegate();
+    public event GetTreasurePlayerEventCallDelegate GetTreasurePlayerEventCall;
+
+
     #region Refresh UI After Use
 
     public delegate void RefreshUiAfterUseDelegate();
@@ -71,10 +78,11 @@ public class PlayerManager : Entity
     private List<Player> _playerList;
     private Player _player1;
     private Player _player2;
-    private bool _gotTheMoula;
+    //private bool _gotTheMoula;
     private int _currentTurn;
     public static PlayerManager Instance;
     private int _exchangeTurn;
+    private Don_Du_Ciel _donDuCiel;
 
 
     [Header("UIElement")]
@@ -91,6 +99,8 @@ public class PlayerManager : Entity
 
     public int ExchangeTurn { get => _exchangeTurn; set => _exchangeTurn = value; }
 
+    private Passe_Passe _passePasse;
+
     private void Awake()
     {
         if (Instance == null)
@@ -99,12 +109,14 @@ public class PlayerManager : Entity
         }
         else
         {
-            Destroy(gameObject);
+            Destroy(this);
         }
     }
 
     private void Start()
     {
+        //_passePasse.PassePasseEvent += OnPassePasseEvent;
+        //_donDuCiel.DonDuCielEvent += ExchangeStart;
         _baseAP = _actionPoints;
         _baseMP = _magicPoints;
         GameObject player1 = Instantiate(Player1Prefab, BoardManager.Instance.GetCellPos(Player1StartCell) , Quaternion.identity);
@@ -116,6 +128,12 @@ public class PlayerManager : Entity
         _player2.SetCellOn(Player2StartCell);
         _playerList.Add(_player1);
         _playerList.Add(_player2);
+        _player1.MovePlayerEvent += MovePlayerEventCallF;
+        _player2.MovePlayerEvent += MovePlayerEventCallF;
+        _player1.SetInventoryEvent += SetInventoryEventCall;
+        _player2.SetInventoryEvent += SetInventoryEventCall;
+        _player2.GetTreasurePlayerEvent += GetTreasurePlayerEventCallF;
+        MovePlayerEventCallF();
     }
 
     private void Update()
@@ -266,12 +284,6 @@ public class PlayerManager : Entity
         _textInventory.SetActive(!_textInventory.activeSelf);
     }
 
-    public void AddToInventory()
-    {
-        _playerList[_currentTurn].AddToInventory();
-        ActionEvent?.Invoke();
-    }
-
     public void SelectedArtifact()
     {
         _playerList[_currentTurn].SelectArtifact();
@@ -368,6 +380,7 @@ public class PlayerManager : Entity
             {
                 SubstractActionPoints(1);
             }
+            ActionEvent?.Invoke();
             return;
         }
     }
@@ -405,5 +418,61 @@ public class PlayerManager : Entity
             }
             ChangePlayerEvent?.Invoke();
         }
+    }
+
+    public Player GetPlayerByInd(int ind)
+    {
+        if (ind < 0 || ind > _playerList.Count)
+        {
+            return null;
+        }
+        return _playerList[ind];
+    }
+
+    private void MovePlayerEventCallF()
+    {
+        MovePlayerEventCall?.Invoke();
+    }
+
+    public void OnPasseMurailleEvent(Vector2 direction)
+    {
+        if (_isTurn)
+        {
+            if (_playerList[_currentTurn].OnPasseMurailleEvent(direction))
+            {
+                SubstractMagicPoints(2);
+            }
+            ActionEvent?.Invoke();
+            return;
+        }
+    }
+
+    private void OnPassePasseEvent()
+    {
+        if (_isTurn)
+        {
+            Case _tempCase = BoardManager.Instance.GetCell(_playerList[0].GetCellOn());
+            _playerList[0].SetDestination(BoardManager.Instance.GetCell(_playerList[1].GetCellOn()));
+            _playerList[1].SetDestination(_tempCase);
+        }
+    }
+
+    public bool AreBothPlayerOnExit()
+    {
+        if(_player1.GetCellOn() == Player1StartCell || _player1.GetCellOn() == Player2StartCell && _player2.GetCellOn() == Player2StartCell || _player2.GetCellOn() == Player1StartCell) 
+        { 
+            return true; 
+        }
+        return false;
+    }
+
+    public void GetTreasurePlayerEventCallF()
+    {
+        GetTreasurePlayerEventCall?.Invoke();
+    }
+
+    public void SetInventoryEventCall()
+    {
+        ActionEvent?.Invoke();
     }
 }

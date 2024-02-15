@@ -10,7 +10,6 @@ public class BoardManager : MonoBehaviour
     [SerializeField] private List<interactibleSpriteContainer> _spriteSwap = new List<interactibleSpriteContainer>();
 
     private Dictionary<TileBase, interactibleSpriteContainer> _tileSwap = new Dictionary<TileBase, interactibleSpriteContainer> { };
-    private Dictionary<int, interactibleSpriteContainer> _tileSwapEffectiv = new Dictionary<int, interactibleSpriteContainer> { };
 
     private Dictionary<TileBase, TileData> _dataFromTiles = new Dictionary<TileBase, TileData>();
     private Dictionary<Vector3Int, Case> _worldToMapInfo = new Dictionary<Vector3Int, Case>();
@@ -46,6 +45,7 @@ public class BoardManager : MonoBehaviour
         foreach (interactibleSpriteContainer swap in _spriteSwap)
         {
             _tileSwap.Add(swap.defauldTile,swap);
+            _tileSwap.Add(swap.usedTile, swap);
         }
             
 
@@ -57,8 +57,6 @@ public class BoardManager : MonoBehaviour
                 
                 _mapInfo[ i * _lengthLine + j ] = CreateCase(_dataFromTiles[_tilemap.GetTile(_pos)].id, _tilemap.GetTile(_pos), _tilemap.CellToWorld(_pos) + new Vector3(_tilemap.cellSize.x/2, _tilemap.cellSize.y/2, 0), i * _lengthLine + j);
 
-                if (_tileSwap.ContainsKey(_tilemap.GetTile(_pos)))
-                    _tileSwapEffectiv.Add(i * _lengthLine + j, _tileSwap[_tilemap.GetTile(_pos)]);
             }
         }
 
@@ -77,6 +75,12 @@ public class BoardManager : MonoBehaviour
 
             case TileKind.Wall:
                 result = new Wall(CaseType.Wall, false, false, 0, tileBase, worldPos, posInGrid);
+                break;
+            case TileKind.Grave:
+                result = new Grave(CaseType.Grave, false, false, 0, tileBase, worldPos, posInGrid);
+                break;
+            case TileKind.GraveStone:
+                result = new GraveStone(CaseType.Gravestone, false, false, 0, tileBase, worldPos, posInGrid);
                 break;
         }
 
@@ -145,6 +149,15 @@ public class BoardManager : MonoBehaviour
                 break;
         }
         return null;
+    }
+
+    public Case GetCell(int cellIndex)
+    {
+        return _mapInfo[cellIndex];
+    }
+    public void ChangeSpriteToDestroyed(Vector2 pos)
+    {
+        _tilemap.SetTile(_tilemap.WorldToCell(pos), _tileSwap[_tilemap.GetTile(_tilemap.WorldToCell(pos))].usedTile);
     }
 
     public Vector3 GetCellPos(int cellIndex)
