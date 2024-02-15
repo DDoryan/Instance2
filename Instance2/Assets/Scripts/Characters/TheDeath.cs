@@ -155,10 +155,9 @@ public class TheDeath : Entity
                 {
                     _opened[i]._weight = currentStudy._weight - currentStudy._euristic + branchWeight + _opened[i]._euristic;
                     _opened[i]._parent = currentStudy;
-                    return true;
+                    
                 }
-                else
-                    return false;
+                return true;
             }
         }
         return false;
@@ -177,10 +176,8 @@ public class TheDeath : Entity
 
                     _opened.Add(_closed[i]);
                     _closed.RemoveAt(i);
-                    return true;
                 }
-                else
-                    return false;
+                return true;
             }
         }
         return false;
