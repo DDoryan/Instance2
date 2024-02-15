@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static Player;
 using static UnityEngine.InputSystem.PlayerInput;
 
 public class Player : MonoBehaviour
@@ -15,11 +16,14 @@ public class Player : MonoBehaviour
     private PlayerState _myState;
     [SerializeField] private Transform _playerPos;
     [SerializeField] private List<Artefacte> _inventoryPlayer = new List<Artefacte>();
-    [SerializeField] private bool _haveTreasure;
 
 
     public delegate void MovePlayerEventDelegate();
     public event MovePlayerEventDelegate MovePlayerEvent;
+    public delegate void GetTreasureEventDelegate();
+    public event GetTreasureEventDelegate GetTreasurePlayerEvent;
+    public delegate void SetInventoryEventDelegate();
+    public event SetInventoryEventDelegate SetInventoryEvent;
 
     [SerializeField] private Artefacte _artefact;
 
@@ -118,6 +122,19 @@ public class Player : MonoBehaviour
                             return true;
                         }
                         return false;
+                    case CaseType.Gravestone:
+                        GraveStone graveStone = (GraveStone)caseToCheck;
+                        if (graveStone.CanInteract && _canOpenTombs && IsCardInInventory(CardType.Key))
+                        {
+                            RemoveFromInventory(CardType.Key);
+                            if (graveStone.Interact())
+                            {
+                                print("j'ai trouvé");
+                                GetTreasurePlayerEvent?.Invoke();
+                            }
+                            return true;
+                        }
+                        return false;
                 }
             }
         }
@@ -180,18 +197,27 @@ public class Player : MonoBehaviour
         }
     }
 
-    public bool GetObject()
+    public bool IsCardInInventory(CardType cardType)
     {
         for (int i = 0; i < _inventoryPlayer.Count; i++)
         {
-            if (_inventoryPlayer[i].CardType == CardType.Key)
+            if (_inventoryPlayer[i].CardType == cardType)
             {
-                _inventoryPlayer.RemoveAt(i);
                 return true;
             }
-            else
+        }
+        return false;
+    }
+
+    public bool RemoveFromInventory(CardType cardType)
+    {
+        for (int i = 0; i < _inventoryPlayer.Count; i++)
+        {
+            if (_inventoryPlayer[i].CardType == cardType)
             {
-                Debug.Log("You can't open the graveStone, get a Key");
+                _inventoryPlayer.RemoveAt(i);
+                SetInventoryEvent?.Invoke();
+                return true;
             }
         }
         return false;

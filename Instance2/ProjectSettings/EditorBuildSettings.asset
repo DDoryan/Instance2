@@ -9,15 +9,15 @@ EditorBuildSettings:
     path: Assets/Scenes/Menu.unity
     guid: 1aead570dbf037243b4b46a7d6bbc54c
   - enabled: 1
-    path: Assets/Scenes/TurnBasedSystem.unity
-    guid: 7dff8e778b7f029488448f21076e544d
-  - enabled: 1
     path: Assets/Scenes/MainScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 1
+  - enabled: 0
+    path: Assets/Scenes/TurnBasedSystem.unity
+    guid: 7dff8e778b7f029488448f21076e544d
+  - enabled: 0
     path: Assets/Scenes/Victory.unity
     guid: 6561632d62d2bde44aea6858c70d4baa
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Defeat.unity
     guid: 29885b7d28f4353499eba4197a8ea912
   m_configObjects: {}

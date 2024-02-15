@@ -7,14 +7,32 @@ public class GameManager : MonoBehaviour
    private int _turnCounter;
 
    private List<Entity> _pullOrder;
-   private Entity _specialEventPlayer;
-   private Entity _eventPlayerAfterPlayed;
    private PlayerManager _playerManager;
    [SerializeField] private MenuManager _menuManager;
    
    private TheDeath _theDeath;
    [SerializeField] private GameObject _theDeathPrefab;
    [SerializeField] private int _theDeathStartCell;
+
+    public static GameManager Instance;
+
+    public delegate void DeathSpawnEventDelegate();
+    public event DeathSpawnEventDelegate DeathSpawnEvent;
+
+    private bool _getTreasure;
+    private bool _loose;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
 
     private void Start()
     {
@@ -23,13 +41,23 @@ public class GameManager : MonoBehaviour
         _pullOrder = new List<Entity>();
         _pullOrder.Add(_playerManager);
         _playerManager.NextTurnEvent += Event_NextTurn;
+        _playerManager.GetTreasurePlayerEventCall += setGetTreasure;
         _pullOrder[_currentTurn].StartRound();
+        _getTreasure = false;
+        _loose = false;
     }
 
     private void Event_NextTurn()
     {
-        print("aie");
-        NextTurn();
+        print(_playerManager.AreBothPlayerOnExit());
+        if (_getTreasure && _playerManager.AreBothPlayerOnExit())
+        {
+            _menuManager.HudVictoryEnable();
+        }
+        else if (!_loose)
+        {
+            NextTurn();
+        }
     }
 
     public void NextTurn()
@@ -52,6 +80,7 @@ public class GameManager : MonoBehaviour
             _theDeath.NextTurnEvent += Event_NextTurn;
             _theDeath.DeathEvent += SendToGameOver;
             _pullOrder.Add(_theDeath);
+            DeathSpawnEvent?.Invoke();
         }
         /*Debug.Log("CurrentTurn: " + _currentTurn);
         Debug.Log("TurnCounter: " + _turnCounter);*/
@@ -62,13 +91,15 @@ public class GameManager : MonoBehaviour
         return _currentTurn;
     }
 
-    public void SetSpecialEventPlayer(Entity player)
-    {
-        _specialEventPlayer = player;
-    }
-
     private void SendToGameOver()
     {
         _menuManager.HudDefeatEnable();
+        _loose = true;
+    }
+
+    private void setGetTreasure()
+    {
+        print("inPocket");
+        _getTreasure = true;
     }
 }

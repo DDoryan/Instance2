@@ -24,9 +24,6 @@ public class PlayerManager : Entity
     public event ExchangeEventDelegate ExchangeEndEvent;
     public delegate void NavEventDelegateExchange();
     public event NavEventDelegateExchange NavEventExchange;
-    public delegate void MovePlayerEventCallDelegate();
-    public event MovePlayerEventCallDelegate MovePlayerEventCall;
-    
 
     public delegate void ConfirmeExchangeEventDelegate();
     public event ConfirmeExchangeEventDelegate ConfirmeExchangeEvent;    
@@ -55,6 +52,13 @@ public class PlayerManager : Entity
 
 
     #endregion
+
+
+    public delegate void MovePlayerEventCallDelegate();
+    public event MovePlayerEventCallDelegate MovePlayerEventCall;
+    public delegate void GetTreasurePlayerEventCallDelegate();
+    public event GetTreasurePlayerEventCallDelegate GetTreasurePlayerEventCall;
+
 
     #region Refresh UI After Use
 
@@ -126,6 +130,9 @@ public class PlayerManager : Entity
         _playerList.Add(_player2);
         _player1.MovePlayerEvent += MovePlayerEventCallF;
         _player2.MovePlayerEvent += MovePlayerEventCallF;
+        _player1.SetInventoryEvent += SetInventoryEventCall;
+        _player2.SetInventoryEvent += SetInventoryEventCall;
+        _player2.GetTreasurePlayerEvent += GetTreasurePlayerEventCallF;
         MovePlayerEventCallF();
     }
 
@@ -448,5 +455,24 @@ public class PlayerManager : Entity
             _playerList[0].SetDestination(BoardManager.Instance.GetCell(_playerList[1].GetCellOn()));
             _playerList[1].SetDestination(_tempCase);
         }
+    }
+
+    public bool AreBothPlayerOnExit()
+    {
+        if(_player1.GetCellOn() == Player1StartCell || _player1.GetCellOn() == Player2StartCell && _player2.GetCellOn() == Player2StartCell || _player2.GetCellOn() == Player1StartCell) 
+        { 
+            return true; 
+        }
+        return false;
+    }
+
+    public void GetTreasurePlayerEventCallF()
+    {
+        GetTreasurePlayerEventCall?.Invoke();
+    }
+
+    public void SetInventoryEventCall()
+    {
+        ActionEvent?.Invoke();
     }
 }

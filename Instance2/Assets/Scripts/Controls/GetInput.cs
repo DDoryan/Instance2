@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public class GetInput : MonoBehaviour
 {
@@ -69,7 +68,7 @@ public class GetInput : MonoBehaviour
 
     public void ExchangeAction(InputAction.CallbackContext context)
     {
-        if (context.performed && (PlayerManager.Instance.InventoryAmmount(0) > 0 || PlayerManager.Instance.InventoryAmmount(1) > 0))
+        if (context.performed && (PlayerManager.Instance.InventoryAmmount(0) > 0 && PlayerManager.Instance.InventoryAmmount(1) > 0))
         {
             _playerInput.actions.FindActionMap("SelectArtefact").Disable();
             _playerInput.actions.FindActionMap("PlayerInput").Disable();

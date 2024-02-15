@@ -79,6 +79,9 @@ public class BoardManager : MonoBehaviour
             case TileKind.Grave:
                 result = new Grave(CaseType.Grave, false, false, 0, tileBase, worldPos, posInGrid);
                 break;
+            case TileKind.GraveStone:
+                result = new GraveStone(CaseType.Gravestone, false, false, 0, tileBase, worldPos, posInGrid);
+                break;
         }
 
         _worldToMapInfo.Add(_tilemap.WorldToCell(_pos), result);

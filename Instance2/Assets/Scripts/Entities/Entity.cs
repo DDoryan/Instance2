@@ -1,9 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting.Dependencies.Sqlite;
 using UnityEngine;
-using UnityEngine.Events;
 
 public abstract class Entity : MonoBehaviour
 {
@@ -30,6 +25,5 @@ public abstract class Entity : MonoBehaviour
 
         //Event
         NextTurnEvent?.Invoke();
-        print("c bon");
     }
 }
