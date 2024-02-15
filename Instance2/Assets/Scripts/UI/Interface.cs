@@ -14,7 +14,6 @@ public class Interface : MonoBehaviour
     [SerializeField] private List<Image> _perkListP2;
 
     [SerializeField] private Transform _arrowPlayerTransform;
-    [SerializeField] private Transform _arrowDeathTransform;
 
     [SerializeField] private GameObject _player1Mask;
     [SerializeField] private GameObject _player2Mask;
@@ -24,13 +23,11 @@ public class Interface : MonoBehaviour
     private Color _color;
     private Color _colorWhite;
     private Player _player;
-    private SpriteRenderer _spriteArrowDeathRenderer;
     private SpriteRenderer _spriteArrowPlayerRenderer;
 
 
     void Start()
     {
-        _spriteArrowDeathRenderer = _arrowDeathTransform.GetComponent<SpriteRenderer>();
         _spriteArrowPlayerRenderer = _arrowPlayerTransform.GetComponent<SpriteRenderer>();    
         _color = Color.clear;
         _colorWhite = Color.white;
@@ -69,30 +66,24 @@ public class Interface : MonoBehaviour
         {
             case 0:
                 
-                _spriteArrowDeathRenderer.enabled = false;
                 _spriteArrowPlayerRenderer.enabled = true;
                 if (PlayerManager.Instance.CurrentTurn() == 0)
                 {
-                    _arrowPlayerTransform.position = new Vector3(0, 0 + 0.2f, 0); // ajouter le getter pour la position du player
+                    _arrowPlayerTransform.position = PlayerManager.Instance.GetPlayerByInd(0).transform.position + new Vector3(0, 0 + 0.6f, 0); // ajouter le getter pour la position du player
                      
                 }
                 if (PlayerManager.Instance.CurrentTurn() == 1)
                 {
-                    _arrowPlayerTransform.position = new Vector3(0, 0 + 0.2f, 0);// ajouter le getter pour la position du player
+                    _arrowPlayerTransform.position = PlayerManager.Instance.GetPlayerByInd(1).transform.position + new Vector3(0, 0 + 0.6f, 0);// ajouter le getter pour la position du player
                 }
                 break;
             case 1:
-                _spriteArrowDeathRenderer.enabled = true;
                 _spriteArrowPlayerRenderer.enabled = false;
-
-                _arrowDeathTransform.position = new Vector3(0, 0 + 0.2f, 0); //ajouter la position de la mort a la place des 0
                 break;
             case 2:
-                _spriteArrowDeathRenderer.enabled = false;
                 _spriteArrowPlayerRenderer.enabled = false;
                 break;
             default:
-                _spriteArrowDeathRenderer.enabled = false;
                 _spriteArrowPlayerRenderer.enabled = false;
                 break;
         }
