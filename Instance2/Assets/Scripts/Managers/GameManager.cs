@@ -36,6 +36,8 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         _turnCounter = 1;
         _playerManager = PlayerManager.Instance;
         _pullOrder = new List<Entity>();

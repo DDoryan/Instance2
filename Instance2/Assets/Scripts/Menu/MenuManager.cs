@@ -36,6 +36,9 @@ public class MenuManager : MonoBehaviour
         {
             _buttonVictory.Select();
         }
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     public void HudDefeatEnable()
@@ -48,6 +51,9 @@ public class MenuManager : MonoBehaviour
         {
             _buttonDefeat.Select();
         }
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     private void HudMenuDisable()

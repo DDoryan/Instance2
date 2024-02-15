@@ -74,6 +74,10 @@ public class TheDeath : Entity
                         _pathToPlayerOne.RemoveAt(_pathToPlayerOne.Count - 1);
                     }
                 }
+                if (_cellOn == _playerManager.GetPlayerByInd(0).GetCellOn() || _cellOn == _playerManager.GetPlayerByInd(1).GetCellOn())
+                {
+                    DeathEvent?.Invoke();
+                }
             } 
         }
         MoveDeathEvent?.Invoke();
